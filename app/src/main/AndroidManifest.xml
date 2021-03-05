@@ -12,8 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Oikos">
-        <meta-data android:name="com.here.sdk.access_key_id" android:value="qJxIGoerZY44Fv4u1Q8mEQ" />
-        <meta-data android:name="com.here.sdk.access_key_secret" android:value="Xz274_Nva6m6vvz6xRFGBPYIAw6W95A26Hp0eeqYnkbXhpae6Y6S6NLWDd8odmLf9kQylry1tRmhYV1qKUwBuQ" />
+        <activity android:name=".fichaInmueble.FichaInmueble"></activity>
+
+        <meta-data
+            android:name="com.here.sdk.access_key_id"
+            android:value="qJxIGoerZY44Fv4u1Q8mEQ" />
+        <meta-data
+            android:name="com.here.sdk.access_key_secret"
+            android:value="Xz274_Nva6m6vvz6xRFGBPYIAw6W95A26Hp0eeqYnkbXhpae6Y6S6NLWDd8odmLf9kQylry1tRmhYV1qKUwBuQ" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

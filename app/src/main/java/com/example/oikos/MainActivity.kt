@@ -25,5 +25,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_search, R.id.navigation_user))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        //hasta encontrar como hacerlo en xml
+        supportActionBar?.elevation = 0f
     }
 }
