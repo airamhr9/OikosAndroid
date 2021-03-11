@@ -21,18 +21,13 @@ class FichaInmueble : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
     private lateinit var datosFicha : DatosInmueble
 
-    //TODO(BORRAR ESTO CUANDO HAGA PETICIÓN DE INMUEBLE)
-    val temporaryDescription = "Este inmueble se encuentra situado en el centro de Barcelona, tiene una superficie total de 2000 m2 y una superficie útil de 500m2. Está dividido en tres plantas. La planta superior tiene dos habitaciones con armarios empotrados, dos cuartos de baño completos y terraza. La planta inferior tiene una cocina totalmente equipada, salón, comedor y oficina."
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
         supportActionBar?.hide()
 
-        //TODO(cambiar esto por petición a servidor)
-        datosFicha = DatosInmueble(899f, " Calle de Angélica Luis Acosta, 2, 38760 Los Llanos", 2, 3, 105, false,
-                temporaryDescription, "Antonio Juan de la Rosa de Guadalupe", "averylongmailtoseeifitfits@gmail.com", true)
-
+        datosFicha = intent.getSerializableExtra("inmueble") as DatosInmueble
         setData(datosFicha)
 
         val adapter = ViewPagerAdapter(this, datosFicha.images)
@@ -45,8 +40,8 @@ class FichaInmueble : AppCompatActivity() {
     fun setData(data: DatosInmueble){
         val priceText = findViewById<TextView>(R.id.ficha_precio)
         val addressText = findViewById<TextView>(R.id.ficha_direccion_completa)
-        val availableCard = findViewById<CardView>(R.id.ficha_disponible_tarjeta)
-        val availableText = findViewById<TextView>(R.id.ficha_disponible_texto)
+        val availableCard = findViewById<CardView>(R.id.ficha_tipo_tarjeta)
+        val availableText = findViewById<TextView>(R.id.ficha_tipo_texto)
         val numBaths = findViewById<TextView>(R.id.ficha_baños)
         val numRooms = findViewById<TextView>(R.id.ficha_habitaciones)
         val size = findViewById<TextView>(R.id.ficha_superficie)
@@ -57,15 +52,14 @@ class FichaInmueble : AppCompatActivity() {
 
         priceText.text = "${data.price}€"
         addressText.text = "${data.direccion}"
-        if(data.disponible) {
+        if(data.tipo == "Alquiler") {
             //TODO(cambiar a valores en Res/Values)
             availableCard.setCardBackgroundColor(Color.parseColor("#4caf50"))
-            availableText.text = "Disponible"
         } else {
             //TODO(cambiar a valores en Res/Values)
             availableCard.setCardBackgroundColor(Color.parseColor("#c62828"))
-            availableText.text = "Agotado"
         }
+        availableText.text = data.tipo
         numBaths.text = "Baños: ${data.baños}"
         numRooms.text = "Habitaciones: ${data.habitaciones}"
         size.text = "Superficie: ${data.superficie}m\u00B2"

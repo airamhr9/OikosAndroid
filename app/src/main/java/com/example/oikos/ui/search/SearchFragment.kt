@@ -13,7 +13,6 @@ import com.here.sdk.core.*
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapview.*
 
-
 class SearchFragment : Fragment() {
 
     private lateinit var searchViewModel: SearchViewModel

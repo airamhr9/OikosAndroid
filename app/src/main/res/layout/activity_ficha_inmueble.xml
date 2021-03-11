@@ -75,7 +75,7 @@
             />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/ficha_disponible_tarjeta"
+                android:id="@+id/ficha_tipo_tarjeta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="#4caf50"
@@ -84,11 +84,11 @@
                 >
 
                 <TextView
-                    android:id="@+id/ficha_disponible_texto"
+                    android:id="@+id/ficha_tipo_texto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="Disponible"
+                    android:text="Alquiler"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     />
 
