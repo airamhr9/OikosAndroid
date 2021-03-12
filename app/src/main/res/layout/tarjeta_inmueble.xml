@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:padding="20dp"
-    android:layout_height="match_parent">
+    android:padding="10dp"
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/inmueble_card"
         android:layout_width="match_parent"
         android:layout_height="225dp"
         app:cardUseCompatPadding="true"
@@ -69,7 +70,7 @@
             <View android:layout_height="0dp" android:layout_width="0dp" android:layout_weight="1"/>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/inmueble_card_disponible_tarjeta"
+                android:id="@+id/inmueble_card_tipo_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardUseCompatPadding="true"
@@ -93,7 +94,7 @@
         </LinearLayout>
 
             <TextView
-                android:id="@+id/inmueble_card_direction"
+                android:id="@+id/inmueble_card_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

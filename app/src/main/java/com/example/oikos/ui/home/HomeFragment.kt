@@ -17,8 +17,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
-
     private lateinit var demoCollectionAdapter: HomeTabsAdapter
     private lateinit var viewPager: ViewPager2
 

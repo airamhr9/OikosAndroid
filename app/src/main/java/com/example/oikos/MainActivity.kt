@@ -1,14 +1,18 @@
 package com.example.oikos
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.oikos.ui.search.MapSearchFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,5 +32,16 @@ class MainActivity : AppCompatActivity() {
 
         //hasta encontrar como hacerlo en xml
         supportActionBar?.elevation = 0f
+    }
+
+
+    public fun changeToMapFragment(view: View){
+        val mapFragment: Fragment = MapSearchFragment()
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+
+        transaction.replace(R.id.nav_host_fragment, mapFragment)
+        transaction.addToBackStack(null)
+
+        transaction.commit()
     }
 }
