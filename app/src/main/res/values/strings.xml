@@ -5,4 +5,7 @@
     <string name="title_user">User</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textview">Texto</string>
+    <string name="foto_de_perfil">Foto de Perfil</string>
+    <string name="Test_Perfil">Perfil</string>
 </resources>
