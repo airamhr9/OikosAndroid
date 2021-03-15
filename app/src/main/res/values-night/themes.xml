@@ -5,6 +5,8 @@
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
+        <!--AppBar Style -->
+        <item name="toolbarStyle">@style/Theme.Oikos.DarkActionBar</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
@@ -12,5 +14,15 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.Oikos.DarkActionBar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="elevation">0dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="homeAsUpIndicator">@color/white</item>
+    </style>
+    <style name="Theme.Oikos.ActionBar.Text" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

@@ -2,21 +2,38 @@ package com.example.oikos.ui.home
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.JSONArrayRequestListener
+import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmueble
 import com.example.oikos.ui.user.UserViewModel
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import objects.DatosInmueble
+import objects.Usuario
+import org.json.JSONArray
+import org.json.JSONObject
+
+
 
 class RecommendedFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
+    private lateinit var datosFicha : DatosInmueble
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -36,15 +53,55 @@ class RecommendedFragment : Fragment() {
 
         //TODO(mover a tarjeta de inmueble)
         button.setOnClickListener {
-            //TODO(Cambiar por petición)
-            val temporaryDescription = "Este inmueble se encuentra situado en el centro de Barcelona, tiene una superficie total de 2000 m2 y una superficie útil de 500m2. Está dividido en tres plantas. La planta superior tiene dos habitaciones con armarios empotrados, dos cuartos de baño completos y terraza. La planta inferior tiene una cocina totalmente equipada, salón, comedor y oficina."
-            val datosFicha = DatosInmueble(899f, " Calle de Angélica Luis Acosta, 2, 38760 Los Llanos", 2, 3, 105, "Alquiler",
-                    temporaryDescription, "Antonio Juan de la Rosa de Guadalupe", "averylongmailtoseeifitfits@gmail.com", true)
-
-            val intent = Intent(this.context, FichaInmueble :: class.java)
+            val intent = Intent(this.context, FichaInmueble::class.java)
             intent.putExtra("inmueble", datosFicha)
             startActivity(intent)
         }
+
+        if (isNetworkConnected()) {
+            AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
+                    //.addPathParameter("pageNumber", "0")
+                    .addQueryParameter("id", "1")
+                    //.addHeaders("token", "1234")
+                    //.setTag("test")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONObject(object : JSONObjectRequestListener {
+                        override fun onResponse(response: JSONObject) {
+                            // do anything with response
+                            datosFicha = DatosInmueble.fromJson(JsonParser.parseString(response.toString()).asJsonObject)
+                        }
+
+                        override fun onError(error: ANError) {
+                            // handle error
+                            val responseText : TextView = view.findViewById(R.id.response_text)
+                            responseText.text = "Error joe"
+                        }
+                    })
+        } else {
+            Toast.makeText(
+                    activity?.applicationContext,
+                    "No internet connection",
+                    Toast.LENGTH_LONG
+            ).show()
+        }
+
     }
 
+    fun setData(view: View, text: String){
+        val responseText : TextView = view.findViewById(R.id.response_text)
+        responseText.text = text
+    }
+
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager = activity?.applicationContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+        return networkCapabilities != null &&
+                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+
 }
+
+

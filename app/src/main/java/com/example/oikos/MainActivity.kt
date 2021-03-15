@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.androidnetworking.AndroidNetworking
 import com.example.oikos.ui.search.MapSearchFragment
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
 
         //hasta encontrar como hacerlo en xml
         supportActionBar?.elevation = 0f
+
+        AndroidNetworking.initialize(applicationContext)
     }
 
 

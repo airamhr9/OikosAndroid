@@ -50,7 +50,7 @@ class FichaInmueble : AppCompatActivity() {
         val landlordName = findViewById<TextView>(R.id.ficha_propietario_name)
         val landlordMail = findViewById<TextView>(R.id.ficha_propietario_mail)
 
-        priceText.text = "${data.price}€"
+        priceText.text = "${data.precio}€"
         addressText.text = "${data.direccion}"
         if(data.tipo == "Alquiler") {
             //TODO(cambiar a valores en Res/Values)
@@ -65,14 +65,14 @@ class FichaInmueble : AppCompatActivity() {
         size.text = "Superficie: ${data.superficie}m\u00B2"
         hasGarage.text = if(data.garaje) "Garaje: Sí" else "Garaje: No"
         description.text = data.descripcion
-        landlordName.text = data.nombrePropietario
-        landlordMail.text = data.mailPropietario
+        landlordName.text = data.propietario.nombre
+        landlordMail.text = data.propietario.mail
     }
 
     fun sendMail(view: View){
         val i = Intent(Intent.ACTION_SEND)
         i.type = "message/rfc822"
-        i.putExtra(Intent.EXTRA_EMAIL, arrayOf(datosFicha.mailPropietario))
+        i.putExtra(Intent.EXTRA_EMAIL, arrayOf(datosFicha.propietario.mail))
         i.putExtra(Intent.EXTRA_SUBJECT, "Contacto por el piso de ${datosFicha.direccion}")
         try {
             startActivity(Intent.createChooser(i, "Enviar correo..."))

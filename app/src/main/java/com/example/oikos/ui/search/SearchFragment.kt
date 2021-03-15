@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.oikos.R
 import objects.DatosInmueble
+import objects.Usuario
 
 
 class SearchFragment : Fragment() {
@@ -34,16 +35,21 @@ class SearchFragment : Fragment() {
         while(i < 20){
             searchResults.add(
                 DatosInmueble(
-                    899f + i,
-                    " Calle de Angélica Luis Acosta, 2, 38760 Los Llanos",
-                    i++,
-                    3,
+                    true,
                     105,
-                    "Alquiler",
+                    899.0 + i,
+                    " Calle de Angélica Luis Acosta, 2, 38760 Los Llanos",
+                    53.9,
+                    27.8,
+                    3,
+                    i++,
+                    true,
+                    Usuario(
+                        "Antonio Juan de la Rosa de Guadalupe",
+                        "averylongmailtoseeifitfits@gmail.com",
+                    ),
                     temporaryDescription,
-                    "Antonio Juan de la Rosa de Guadalupe",
-                    "averylongmailtoseeifitfits@gmail.com",
-                    true
+                    "Alquiler",
                 )
             )
         }
