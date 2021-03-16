@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.oikos.R
-import com.example.oikos.fichaInmueble.FichaInmueble
+import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import objects.DatosInmueble
 
 
@@ -43,8 +42,8 @@ class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        //TODO(cambiar esto por el precio y poner la imagen)
-        viewHolder.priceText.text = "${dataSet[position].baños}€"
+        //TODO(poner la imagen)
+        viewHolder.priceText.text = "${dataSet[position].precio}€"
         viewHolder.addressText.text = dataSet[position].direccion
         viewHolder.tipoTextView.text = dataSet[position].tipo
         if(dataSet[position].tipo == "Alquiler")
@@ -52,7 +51,7 @@ class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
         viewHolder.numImagenes.text = "${dataSet[position].images.size} imágenes"
 
         viewHolder.inmuebleCardView.setOnClickListener {
-            val intent = Intent(viewHolder.itemView.context, FichaInmueble :: class.java)
+            val intent = Intent(viewHolder.itemView.context, FichaInmuebleActivity :: class.java)
             intent.putExtra("inmueble", dataSet[position])
             viewHolder.itemView.context.startActivity(intent)
         }

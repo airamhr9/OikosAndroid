@@ -10,7 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.oikos.R
-import com.example.oikos.fichaInmueble.FichaInmueble
+import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.here.sdk.core.*
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapview.*
@@ -123,7 +123,7 @@ class MapSearchFragment : Fragment() {
                     "Alquiler",
                 )
 
-                val intent = Intent(this.context, FichaInmueble :: class.java)
+                val intent = Intent(this.context, FichaInmuebleActivity :: class.java)
                 intent.putExtra("inmueble", datosFicha)
                 startActivity(intent)
             }

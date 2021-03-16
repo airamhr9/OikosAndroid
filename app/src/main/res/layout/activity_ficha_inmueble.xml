@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".fichaInmueble.FichaInmueble">
+        tools:context=".fichaInmueble.FichaInmuebleActivity">
 
 
         <androidx.cardview.widget.CardView
@@ -31,8 +31,7 @@
                 android:layout_height="48dp"
                 android:src="@drawable/ic_baseline_arrow_back_24"
                 android:background="@android:color/transparent"
-                android:tint="@color/white"
-                android:onClick="backButtonPressed"/>
+                android:tint="@color/white" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -158,15 +157,16 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/ficha_map_card"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp"
-                    app:cardUseCompatPadding="true">
+                    app:cardUseCompatPadding="true"
+                    android:onClick="changeToMapFragment">
 
                     <ImageView
-                        android:id="@+id/ficha_map_card"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"

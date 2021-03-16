@@ -1,5 +1,8 @@
 package com.example.oikos.serverConnection
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.view.View
 import com.example.oikos.ui.home.RecommendedFragment
 import com.google.gson.JsonParser
@@ -9,6 +12,7 @@ import java.io.IOException
 
 
 class ServerConnection {
+/*
     val client = OkHttpClient()
         fun printRequest(url: String) {
             println("ENTERED REQUEST")
@@ -50,6 +54,9 @@ class ServerConnection {
             })
             return datosInmueble
         }
+*/
+    companion object{
+    }
 
 
 }

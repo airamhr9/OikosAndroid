@@ -1,5 +1,8 @@
 package com.example.oikos
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -13,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.androidnetworking.AndroidNetworking
+import com.example.oikos.ui.search.FichaMapFragment
 import com.example.oikos.ui.search.MapSearchFragment
 
 class MainActivity : AppCompatActivity() {
@@ -46,5 +50,15 @@ class MainActivity : AppCompatActivity() {
         transaction.addToBackStack(null)
 
         transaction.commit()
+    }
+
+
+
+    fun isNetworkConnected(): Boolean {
+        val connectivityManager = this.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+        return networkCapabilities != null &&
+                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 }

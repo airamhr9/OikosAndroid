@@ -1,9 +1,6 @@
 package com.example.oikos.ui.home
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,19 +13,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.example.oikos.MainActivity
 import com.example.oikos.R
-import com.example.oikos.fichaInmueble.FichaInmueble
+import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.example.oikos.ui.user.UserViewModel
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
-import objects.Usuario
-import org.json.JSONArray
 import org.json.JSONObject
-
-
 
 class RecommendedFragment : Fragment() {
 
@@ -53,17 +45,14 @@ class RecommendedFragment : Fragment() {
 
         //TODO(mover a tarjeta de inmueble)
         button.setOnClickListener {
-            val intent = Intent(this.context, FichaInmueble::class.java)
+            val intent = Intent(this.context, FichaInmuebleActivity::class.java)
             intent.putExtra("inmueble", datosFicha)
             startActivity(intent)
         }
 
-        if (isNetworkConnected()) {
+        if ((activity as MainActivity).isNetworkConnected()) {
             AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
-                    //.addPathParameter("pageNumber", "0")
                     .addQueryParameter("id", "1")
-                    //.addHeaders("token", "1234")
-                    //.setTag("test")
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONObject(object : JSONObjectRequestListener {
@@ -93,13 +82,6 @@ class RecommendedFragment : Fragment() {
         responseText.text = text
     }
 
-    private fun isNetworkConnected(): Boolean {
-        val connectivityManager = activity?.applicationContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = connectivityManager.activeNetwork
-        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-        return networkCapabilities != null &&
-                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-    }
 
 
 }
