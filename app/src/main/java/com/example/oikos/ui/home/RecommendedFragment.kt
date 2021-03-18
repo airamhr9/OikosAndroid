@@ -25,7 +25,7 @@ import org.json.JSONObject
 class RecommendedFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
-    private lateinit var datosFicha : DatosInmueble
+    //private lateinit var datosFicha : DatosInmueble
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -37,6 +37,7 @@ class RecommendedFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home_recommended, container, false)
     }
 
+    /*
     //TODO(Borrar este método cuando se haya acabado la ficha)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,6 +83,7 @@ class RecommendedFragment : Fragment() {
         responseText.text = text
     }
 
+     */
 
 
 }

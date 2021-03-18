@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="230dp"
+    android:layout_height="440dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    app:cardUseCompatPadding="true"
+    android:layout_gravity="end"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Búsqueda filtrada"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ciudad"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filtro_ciudad"
+                android:layout_width="100dp"
+                android:layout_height="36dp"
+                android:textSize="16sp"
+                android:inputType="text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/filter_tipo_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alquiler"/>
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/filtro_tipo"
+                android:layout_width="40dp"
+                android:layout_height="36dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio mínimo"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filtro_precio_min"
+                android:layout_width="64dp"
+                android:layout_height="36dp"
+                android:textSize="16sp"
+                android:inputType="numberDecimal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio máximo"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filtro_precio_max"
+                android:layout_width="64dp"
+                android:layout_height="36dp"
+                android:textSize="16sp"
+                android:inputType="numberDecimal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Habitaciones"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filtro_habitaciones"
+                android:layout_width="48dp"
+                android:layout_height="36dp"
+                android:textSize="16sp"
+                android:inputType="number"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Baños"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filtro_baños"
+                android:layout_width="48dp"
+                android:layout_height="36dp"
+                android:textSize="16sp"
+                android:inputType="number"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Superficie mínima"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filtro_superficie_min"
+                android:layout_width="64dp"
+                android:layout_height="36dp"
+                android:textSize="16sp"
+                android:inputType="number"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Superficie máxima"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filtro_superficie_max"
+                android:layout_width="64dp"
+                android:layout_height="36dp"
+                android:textSize="16sp"
+                android:inputType="number"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Garaje"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/filtro_garaje"
+                android:layout_width="36dp"
+                android:layout_height="36dp"/>
+
+        </LinearLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_filter_search"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="end|bottom"
+            android:text="Aplicar filtros"
+            android:background="@android:color/transparent"
+            android:textColor="?colorPrimary"
+            />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

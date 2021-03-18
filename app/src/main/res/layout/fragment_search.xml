@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     >
 
     <androidx.core.widget.ContentLoadingProgressBar
@@ -79,4 +80,35 @@
             />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/filter_search_card"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="110dp"
+        android:layout_marginEnd="10dp"
+        layout="@layout/filter_card"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="end"
+        android:padding="10dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/filter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:text="Filtros"
+            android:background="@drawable/filter_button_background"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
 </RelativeLayout>
