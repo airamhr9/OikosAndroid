@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.androidnetworking.AndroidNetworking
 import com.example.oikos.ui.search.FichaMapFragment
 import com.example.oikos.ui.search.MapSearchFragment
+import objects.DatosInmueble
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,9 +43,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    public fun changeToMapFragment(view: View){
+    fun changeToMapFragment(view: View, listaInmueble : ArrayList<DatosInmueble>){
         val mapFragment: Fragment = MapSearchFragment()
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        val bundle = Bundle()
+        bundle.putSerializable("inmueble", listaInmueble)
+        mapFragment.arguments = bundle
 
         transaction.replace(R.id.nav_host_fragment, mapFragment)
         transaction.addToBackStack(null)

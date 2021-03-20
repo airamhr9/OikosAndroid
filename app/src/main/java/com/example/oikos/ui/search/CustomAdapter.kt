@@ -5,12 +5,15 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import objects.DatosInmueble
+import java.net.URL
 
 
 class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
@@ -27,6 +30,7 @@ class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
         val tipoTextView : TextView = view.findViewById(R.id.inmueble_card_tipo)
         val tipoCardView : CardView = view.findViewById(R.id.inmueble_card_tipo_card)
         val numImagenes : TextView = view.findViewById(R.id.inmueble_card_num_images)
+        val imagen : ImageView = view.findViewById(R.id.inmueble_card_image)
     }
 
     // Create new views (invoked by the layout manager)
@@ -42,7 +46,6 @@ class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        //TODO(poner la imagen)
         viewHolder.priceText.text = "${dataSet[position].precio}€"
         viewHolder.addressText.text = dataSet[position].direccion
         viewHolder.tipoTextView.text = dataSet[position].tipo
@@ -55,6 +58,10 @@ class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
             intent.putExtra("inmueble", dataSet[position])
             viewHolder.itemView.context.startActivity(intent)
         }
+        var url = URL(dataSet[position].images.first())
+        url = URL("http://10.0.2.2:9000${url.path}")
+
+        Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
 
     }
 

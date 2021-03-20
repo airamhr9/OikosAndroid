@@ -16,7 +16,7 @@ class DatosInmueble (var disponible: Boolean,
                       var propietario: Usuario,
                       var descripcion: String?,
                       var tipo : String,
-                      val images: IntArray = intArrayOf(R.drawable.viewpager1, R.drawable.viewpager2, R.drawable.viewpager3, R.drawable.viewpager4)) : Serializable {
+                      val images:  ArrayList<String>) : Serializable {
     var id: Int = 0
 
     fun toJson(): JsonObject {
@@ -52,8 +52,13 @@ class DatosInmueble (var disponible: Boolean,
             val propietario = Usuario.fromJson(jsonObject.get("propietario").asJsonObject)
             val descripcion = jsonObject.get("descripcion").asString.toString()
             val tipo = jsonObject.get("tipo").asString.toString()
+            val imageArray = ArrayList<String>()
+            val imagenes = jsonObject.get("imagenes").asJsonArray
+            imagenes.forEach {
+                imageArray.add(it.asString)
+            }
             val datosInmueble = DatosInmueble(disponible, superficie, precio, direccion, latitud, longitud,
-                    habitaciones, baños, garaje, propietario, descripcion, tipo)
+                    habitaciones, baños, garaje, propietario, descripcion, tipo, imageArray)
             datosInmueble.id = jsonObject.get("id").asInt
             return datosInmueble
         }

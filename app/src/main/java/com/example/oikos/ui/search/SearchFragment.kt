@@ -44,6 +44,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     lateinit var customAdapter: CustomAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
+    lateinit var mapCard : CardView
 
     lateinit var filterCard : CardView
     lateinit var filterButton: AppCompatButton
@@ -100,6 +101,11 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         resultsRecycler.adapter = customAdapter
         // Set layout manager to position the items
         resultsRecycler.layoutManager = LinearLayoutManager(context)
+
+        mapCard = root.findViewById(R.id.search_map_card)
+        mapCard.setOnClickListener {
+            (activity as MainActivity).changeToMapFragment(root, searchResults)
+        }
 
         return root
     }
