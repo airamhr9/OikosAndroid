@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Búsqueda filtrada"
+            android:text="Buscar"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             />
 
@@ -267,7 +267,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
             android:layout_gravity="end|bottom"
-            android:text="Aplicar filtros"
+            android:text="Aplicar"
             android:background="@android:color/transparent"
             android:textColor="?colorPrimary"
             />

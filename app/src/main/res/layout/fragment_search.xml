@@ -103,12 +103,11 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/filter_button"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="45dp"
-            android:text="Filtros"
             android:background="@drawable/filter_button_background"
-            android:textColor="@color/white"
-            />
+            android:text="Parámetros"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 </RelativeLayout>
