@@ -24,6 +24,16 @@
             android:layout_marginRight="5dp"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/text_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -33,7 +43,7 @@
 
                 <ImageView
                     android:id="@+id/imageView5"
-                    android:layout_width="82dp"
+                    android:layout_width="79dp"
                     android:layout_height="70dp"
                     android:contentDescription="Foto por defecto"
                     android:src="@drawable/iconos_redondos_flat_usuario_icn_512" />
@@ -48,19 +58,25 @@
 
             </LinearLayout>
 
-                <androidx.cardview.widget.CardView
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="386dp"
+                android:layout_margin="20dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="5dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_margin="20dp">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="15dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/textView2"
@@ -68,44 +84,196 @@
                             android:layout_height="wrap_content"
                             android:text="Mis preferencias"
                             android:textSize="24sp" />
+                    </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/textView3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Aquí debajo deben mostrarse solo las preferencias marcadas por el usuario" />
+                    <LinearLayout
+                        android:layout_width="276dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="15dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="end"
+                            android:layout_height="30dp"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <Button
-                                android:id="@+id/button"
+                            <TextView
+                                android:id="@+id/textView3"
+                                android:layout_width="96dp"
+                                android:layout_height="wrap_content"
+                                android:text="Ciudad" />
+
+                            <TextView
+                                android:id="@+id/tCiudad"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="Editar" />
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TextView" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView13"
+                                android:layout_width="3dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Tipo" />
+
+                            <TextView
+                                android:id="@+id/tTipo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TextView" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView14"
+                                android:layout_width="5dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Precio" />
+
+                            <TextView
+                                android:id="@+id/tPrecio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TextView" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView16"
+                                android:layout_width="3dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Habitaciones" />
+
+                            <TextView
+                                android:id="@+id/tHabs"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TextView" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView10"
+                                android:layout_width="6dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Baños" />
+
+                            <TextView
+                                android:id="@+id/tBaño"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TextView" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="6dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Superficie" />
+
+                            <TextView
+                                android:id="@+id/tSuperficie"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TextView" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView6"
+                                android:layout_width="5dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Garaje" />
+
+                            <TextView
+                                android:id="@+id/tGaraje"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TextView" />
                         </LinearLayout>
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/bEditar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Editar" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
     </ScrollView>
 
-    <TextView
-        android:id="@+id/text_notifications"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <include
+        android:id="@+id/filter_search_card"
+        layout="@layout/filter_card"
+        android:layout_width="230dp"
+        android:layout_height="440dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="32dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/scrollView2"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
