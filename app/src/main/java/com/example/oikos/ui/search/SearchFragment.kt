@@ -111,54 +111,84 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun getResults(){
-        val platformPositioningProvider = PlatformPositioningProvider(requireContext());
-        platformPositioningProvider.startLocating(object : PlatformLocationListener {
-            override fun onLocationUpdated(location: LocationAndroid?) {
-                 val currentLocation = location?.let { convertLocation(it) }
-
-                    println("after current location")
+        if ((activity as MainActivity).isNetworkConnected()) {
+            val platformPositioningProvider = PlatformPositioningProvider(requireContext());
+            val located = platformPositioningProvider.startLocating(object : PlatformLocationListener {
+                override fun onLocationUpdated(location: LocationAndroid?) {
+                    val currentLocation = location?.let { convertLocation(it) }
+                        AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
+                                .addQueryParameter("coordenada", "true")
+                                .addQueryParameter("x", currentLocation?.coordinates?.latitude.toString())
+                                .addQueryParameter("y", currentLocation?.coordinates?.longitude.toString())
+                                .setPriority(Priority.HIGH)
+                                .build()
+                                .getAsJSONArray(object : JSONArrayRequestListener {
+                                    override fun onResponse(response: JSONArray) {
+                                        // do anything with response
+                                        var i = 0
+                                        println("we have response")
+                                        searchResults.clear()
+                                        while(i < response.length()){
+                                            println("here")
+                                            println("search result $i ${response[i]}")
+                                            searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
+                                            i++
+                                        }
+                                        customAdapter.notifyDataSetChanged()
+                                        loadingCircle.visibility = View.GONE
+                                        resultLayout.visibility = View.VISIBLE
+                                    }
+                                    override fun onError(error: ANError) {
+                                        // handle error
+                                        println("ERROR: AAAAAAAAA " + error.message)
+                                        Toast.makeText(
+                                                activity?.applicationContext,
+                                                "Error cargando inmuebles",
+                                                Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                })
+                    }
+            })
+            if(!located){
                 if ((activity as MainActivity).isNetworkConnected()) {
                     AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
-                            .addQueryParameter("coordenada", "true")
-                            .addQueryParameter("x", currentLocation?.coordinates?.latitude.toString())
-                            .addQueryParameter("y", currentLocation?.coordinates?.longitude.toString())
+                            .addQueryParameter("default", "true")
                             .setPriority(Priority.HIGH)
-                            .build()
-                            .getAsJSONArray(object : JSONArrayRequestListener {
-                                override fun onResponse(response: JSONArray) {
-                                    // do anything with response
-                                    var i = 0
-                                    println("we have response")
-                                    searchResults.clear()
-                                    while(i < response.length()){
-                                        println("here")
-                                        println("search result $i ${response[i]}")
-                                        searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
-                                        i++
-                                    }
-                                    customAdapter.notifyDataSetChanged()
-                                    loadingCircle.visibility = View.GONE
-                                    resultLayout.visibility = View.VISIBLE
+                        .build()
+                        .getAsJSONArray(object : JSONArrayRequestListener {
+                            override fun onResponse(response: JSONArray) {
+                                // do anything with response
+                                var i = 0
+                                println("we have response")
+                                searchResults.clear()
+                                while(i < response.length()){
+                                    println("here")
+                                    println("search result $i ${response[i]}")
+                                    searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
+                                    i++
                                 }
-                                override fun onError(error: ANError) {
-                                    // handle error
-                                    println("ERROR: AAAAAAAAA " + error.message)
-                                    Toast.makeText(
-                                            activity?.applicationContext,
-                                            "Error cargando inmuebles",
-                                            Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            })
-                } else {
-                    Toast.makeText(
-                            activity?.applicationContext,
-                            "Sin conexión a internet",
-                            Toast.LENGTH_LONG
-                    ).show()
+                                customAdapter.notifyDataSetChanged()
+                                loadingCircle.visibility = View.GONE
+                                resultLayout.visibility = View.VISIBLE
+                            }
+                            override fun onError(error: ANError) {
+                                Toast.makeText(
+                                        activity?.applicationContext,
+                                        "Error cargando inmuebles",
+                                        Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        })
                 }
             }
-        })
+        } else {
+            Toast.makeText(
+                    activity?.applicationContext,
+                    "Sin conexión a internet",
+                    Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun getFilterValues(view : View) : MutableMap<String, String>{
