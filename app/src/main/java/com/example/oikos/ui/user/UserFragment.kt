@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,6 +21,8 @@ class UserFragment : Fragment() {
     private lateinit var datosFicha : DatosInmueble
     lateinit var filterCard : CardView
     lateinit var editButton : AppCompatButton
+    lateinit var filterSearchButton : AppCompatButton
+    lateinit var tipoText : TextView
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +41,25 @@ class UserFragment : Fragment() {
             filterCard.visibility = if (filterCard.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
         }
 
+        filterSearchButton = root.findViewById(R.id.button_filter_search)
+        val tipoSpinner : AppCompatSpinner = root.findViewById(R.id.filtro_tipo)
+        ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.spinner_values,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            tipoSpinner.adapter = adapter
+        }
+        tipoText = root.findViewById(R.id.filter_tipo_text)
+
+        filterSearchButton.setOnClickListener {
+            //Aplicar las nuevas preferencias
+        }
+
+
+
+        //tipoSpinner.onItemSelectedListener = this
        // datosFicha = arguments?.getSerializable("inmueble") as DatosInmueble
        // setData(root, datosFicha)
 
