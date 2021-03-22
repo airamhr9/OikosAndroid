@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
@@ -38,6 +39,8 @@ class LocalizedSearch : AppCompatActivity() {
     private lateinit var mapMarkers : ArrayList<MapMarker>
     private lateinit var mapPolygons : ArrayList<MapPolygon>
     private var searchMarker : MapMarker? = null
+    private lateinit var hideButton : AppCompatButton
+    private lateinit var infoCard : CardView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +60,11 @@ class LocalizedSearch : AppCompatActivity() {
             getResults()
         }
 
+        infoCard = findViewById(R.id.map_localized_info_card)
+        hideButton = findViewById(R.id.hide_info_card)
+        hideButton.setOnClickListener {
+            infoCard.visibility = View.INVISIBLE
+        }
     }
 
     private fun loadMapData(){

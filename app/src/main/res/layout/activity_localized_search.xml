@@ -6,6 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".ui.search.MapSearchFragment">
 
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/map_localized_info_card"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:cardUseCompatPadding="true"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentTop="true"
+        app:cardCornerRadius="5dp">
+        <ImageView
+            android:layout_margin="8dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_baseline_info_24"/>
+        <TextView
+            android:layout_marginVertical="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="40dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Toca en cualquier punto para iniciar una búsqueda en la zona"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/hide_info_card"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="end|bottom"
+            android:text="Esconder"
+            android:background="@android:color/transparent"
+            android:textColor="?colorPrimary"
+            />
+    </androidx.cardview.widget.CardView>
+
     <com.here.sdk.mapview.MapView
         android:id="@+id/map_localized_view"
         android:layout_width="match_parent"
