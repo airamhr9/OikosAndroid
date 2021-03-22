@@ -1,5 +1,6 @@
 package com.example.oikos.ui.search
 
+import android.content.Intent
 import android.opengl.Visibility
 import android.location.Location as LocationAndroid
 import android.os.Bundle
@@ -22,8 +23,10 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.example.oikos.MainActivity
 import com.example.oikos.R
+import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.example.oikos.serverConnection.PlatformPositioningProvider
 import com.example.oikos.serverConnection.PlatformPositioningProvider.PlatformLocationListener
+import com.example.oikos.ui.search.localized.LocalizedSearch
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonParser
 import com.here.sdk.core.GeoCoordinates
@@ -45,6 +48,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var mapCard : CardView
+    lateinit var seeInMapButton : AppCompatButton
 
     lateinit var filterCard : CardView
     lateinit var filterButton: AppCompatButton
@@ -54,7 +58,6 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -92,7 +95,6 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         loadingCircle.visibility = View.VISIBLE
         resultLayout.visibility = View.GONE
 
-
         getResults()
 
         val resultsRecycler = root.findViewById<View>(R.id.results_recycler) as RecyclerView
@@ -104,6 +106,13 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         mapCard = root.findViewById(R.id.search_map_card)
         mapCard.setOnClickListener {
+            val intent = Intent(context, LocalizedSearch :: class.java)
+            context?.startActivity(intent)
+        }
+
+        seeInMapButton = root.findViewById(R.id.see_in_map_button)
+        seeInMapButton.isEnabled = false
+        seeInMapButton.setOnClickListener {
             (activity as MainActivity).changeToMapFragment(root, searchResults)
         }
 
@@ -135,6 +144,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                             i++
                                         }
                                         customAdapter.notifyDataSetChanged()
+                                        seeInMapButton.isEnabled = true
                                         loadingCircle.visibility = View.GONE
                                         resultLayout.visibility = View.VISIBLE
                                     }
@@ -167,6 +177,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                     i++
                                 }
                                 customAdapter.notifyDataSetChanged()
+                                seeInMapButton.isEnabled = true
                                 loadingCircle.visibility = View.GONE
                                 resultLayout.visibility = View.VISIBLE
                             }
@@ -176,6 +187,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                         "Error cargando inmuebles",
                                         Toast.LENGTH_LONG
                                 ).show()
+                                seeInMapButton.isEnabled = false
                             }
                         })
                 }
@@ -186,6 +198,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     "Sin conexión a internet",
                     Toast.LENGTH_LONG
             ).show()
+            seeInMapButton.isEnabled = false
         }
     }
 
@@ -238,6 +251,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
             resultLayout.visibility = View.GONE
             loadingCircle.visibility = View.VISIBLE
+            seeInMapButton.isEnabled = false
             query.setPriority(Priority.HIGH)
             .build()
             .getAsJSONArray(object : JSONArrayRequestListener {
@@ -255,6 +269,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     customAdapter.notifyDataSetChanged()
                     loadingCircle.visibility = View.GONE
                     resultLayout.visibility = View.VISIBLE
+                    seeInMapButton.isEnabled = true
                 }
                 override fun onError(error: ANError) {
                     // handle error

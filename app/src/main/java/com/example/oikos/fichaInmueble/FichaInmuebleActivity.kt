@@ -46,7 +46,7 @@ class FichaInmuebleActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    fun sendMail(){
+    fun sendMail(view: View){
         val datosFicha = intent.getSerializableExtra("inmueble") as DatosInmueble
         val i = Intent(Intent.ACTION_SEND)
         i.type = "message/rfc822"
