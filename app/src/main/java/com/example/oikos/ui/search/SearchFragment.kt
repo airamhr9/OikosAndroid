@@ -163,8 +163,6 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                 println("we have response")
                                 searchResults.clear()
                                 while(i < response.length()){
-                                    println("here")
-                                    println("search result $i ${response[i]}")
                                     searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
                                     i++
                                 }
@@ -223,7 +221,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
         result["garaje"] = garaje.toString()
-        result["tipo"] = tipoText.toString()
+        result["tipo"] = tipoText.text.toString()
 
         return result
     }
