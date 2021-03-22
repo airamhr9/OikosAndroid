@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="#2196f3"
+                app:cardBackgroundColor="#4caf50"
                 app:cardCornerRadius="5dp"
                 >
                 <TextView

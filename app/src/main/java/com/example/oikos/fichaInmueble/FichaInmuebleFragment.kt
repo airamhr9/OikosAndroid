@@ -53,7 +53,7 @@ class FichaInmuebleFragment : Fragment() {
     fun setData(view : View, data: DatosInmueble){
         val priceText = view.findViewById<TextView>(R.id.ficha_precio)
         val addressText = view.findViewById<TextView>(R.id.ficha_direccion_completa)
-        val availableCard = view.findViewById<CardView>(R.id.ficha_tipo_tarjeta)
+        val typeCard = view.findViewById<CardView>(R.id.ficha_tipo_tarjeta)
         val availableText = view.findViewById<TextView>(R.id.ficha_tipo_texto)
         val numBaths = view.findViewById<TextView>(R.id.ficha_baños)
         val numRooms = view.findViewById<TextView>(R.id.ficha_habitaciones)
@@ -67,11 +67,9 @@ class FichaInmuebleFragment : Fragment() {
         addressText.text = "${data.direccion}"
         if(data.tipo == "Alquiler") {
             //TODO(cambiar a valores en Res/Values)
-            availableCard.setCardBackgroundColor(Color.parseColor("#4caf50"))
-        } else {
-            //TODO(cambiar a valores en Res/Values)
-            availableCard.setCardBackgroundColor(Color.parseColor("#c62828"))
+            typeCard.setCardBackgroundColor(Color.parseColor("#42a5f5"))
         }
+            //TODO(cambiar a valores en Res/Values)
         availableText.text = data.tipo
         numBaths.text = "Baños: ${data.baños}"
         numRooms.text = "Habitaciones: ${data.habitaciones}"

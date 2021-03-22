@@ -16,11 +16,11 @@
             android:id="@+id/map_card"
             android:layout_width="match_parent"
             android:layout_height="160dp"
+            android:visibility="invisible"
             app:cardUseCompatPadding="true"
             android:layout_marginHorizontal="40dp"
             android:layout_marginBottom="80dp"
             android:layout_alignParentBottom="true"
-            android:visibility="invisible"
             app:cardCornerRadius="5dp">
 
             <androidx.cardview.widget.CardView
@@ -84,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:cardUseCompatPadding="true"
-                        app:cardBackgroundColor="#2196f3"
+                        app:cardBackgroundColor="#4caf50"
                         app:cardCornerRadius="5dp"
                         >
                         <TextView

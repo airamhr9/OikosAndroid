@@ -190,6 +190,7 @@ class LocalizedSearch : AppCompatActivity() {
         val numImag = findViewById<TextView>(R.id.map_card_localized_num_imag)
         val price = findViewById<TextView>(R.id.map_card_localized_price)
         val type = findViewById<TextView>(R.id.map_card_localized_type)
+        val typeCard = findViewById<CardView>(R.id.map_card_localized_type_card)
         val imageView = findViewById<ImageView>(R.id.map_card_localized_image)
 
 
@@ -202,6 +203,11 @@ class LocalizedSearch : AppCompatActivity() {
         numImag?.text = "${inmueble.images.size} imágenes"
         price?.text = "${inmueble.precio}€"
         type?.text = inmueble.tipo
+        if(type?.text == "Alquiler"){
+            typeCard?.setCardBackgroundColor(android.graphics.Color.parseColor("#42a5f5"))
+        } else {
+            typeCard?.setCardBackgroundColor(android.graphics.Color.parseColor("#4caf50"))
+        }
     }
 
     private fun slideUp(view: View) {

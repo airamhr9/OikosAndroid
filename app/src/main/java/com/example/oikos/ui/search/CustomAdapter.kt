@@ -50,7 +50,7 @@ class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
         viewHolder.addressText.text = dataSet[position].direccion
         viewHolder.tipoTextView.text = dataSet[position].tipo
         if(dataSet[position].tipo == "Alquiler")
-            viewHolder.tipoCardView.setCardBackgroundColor(Color.GRAY)
+            viewHolder.tipoCardView.setCardBackgroundColor(Color.parseColor("#42a5f5"))
         viewHolder.numImagenes.text = "${dataSet[position].images.size} imágenes"
 
         viewHolder.inmuebleCardView.setOnClickListener {
@@ -62,7 +62,6 @@ class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
         url = URL("http://10.0.2.2:9000${url.path}")
 
         Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)

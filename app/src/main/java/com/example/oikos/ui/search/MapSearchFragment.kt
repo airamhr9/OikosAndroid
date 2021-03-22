@@ -143,6 +143,7 @@ class MapSearchFragment : Fragment() {
         val numImag = view?.findViewById<TextView>(R.id.map_card_num_imag)
         val price = view?.findViewById<TextView>(R.id.map_card_price)
         val type = view?.findViewById<TextView>(R.id.map_card_type)
+        val typeCard = view?.findViewById<CardView>(R.id.map_card_type_card)
         val imageView = view?.findViewById<ImageView>(R.id.map_card_image)
 
 
@@ -155,6 +156,11 @@ class MapSearchFragment : Fragment() {
         numImag?.text = "${inmueble.images.size} imágenes"
         price?.text = "${inmueble.precio}€"
         type?.text = inmueble.tipo
+        if(type?.text == "Alquiler"){
+            typeCard?.setCardBackgroundColor(android.graphics.Color.parseColor("#42a5f5"))
+        } else {
+            typeCard?.setCardBackgroundColor(android.graphics.Color.parseColor("#4caf50"))
+        }
     }
 
     private fun slideUp(view: View) {

@@ -100,11 +100,7 @@ class FichaMapFragment : Fragment() {
 
         priceText.text = "${data.precio}€"
         if(data.tipo == "Alquiler") {
-            //TODO(cambiar a valores en Res/Values)
             tipoCard.setCardBackgroundColor(android.graphics.Color.parseColor("#4caf50"))
-        } else {
-            //TODO(cambiar a valores en Res/Values)
-            tipoCard.setCardBackgroundColor(android.graphics.Color.parseColor("#c62828"))
         }
         tipoText.text = data.tipo
         numImageText.text = "${data.images.size} imágenes"
