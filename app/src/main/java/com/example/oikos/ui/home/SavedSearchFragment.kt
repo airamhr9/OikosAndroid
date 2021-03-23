@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.widget.ContentLoadingProgressBar
@@ -88,8 +89,9 @@ class SavedSearchFragment : Fragment() {
         val query = AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
         query.addQueryParameter("filtrada", "true")
         val keySet = preferences.keySet()
+        var filterString = ""
         for(key in keySet){
-            println("$key: ${preferences.get(key).asString}")
+            filterString += ("$key: ${preferences.get(key).asString}\n")
             query.addQueryParameter(key, preferences.get(key).asString)
         }
         resultLayout.visibility = View.GONE
@@ -110,6 +112,7 @@ class SavedSearchFragment : Fragment() {
                         customAdapter.notifyDataSetChanged()
                         loadingCircle.visibility = View.GONE
                         resultLayout.visibility = View.VISIBLE
+                        printFilters(preferences)
                     }
 
                     override fun onError(error: ANError) {
@@ -122,6 +125,25 @@ class SavedSearchFragment : Fragment() {
                         loadingCircle.visibility = View.GONE
                     }
                 })
+    }
+
+    fun printFilters(preferences: JsonObject){
+        val filterTextView = requireView().findViewById<TextView>(R.id.filter_text_view)
+        var filterString = ""
+        for (key in preferences.keySet()) {
+            when (key) {
+                "ciudad" -> filterString += "Ciudad: ${preferences[key].asString}\n"
+                "tipo" -> filterString += "Tipo: ${preferences[key].asString}\n"
+                "precioMin" -> filterString += "Precio mínimo: ${preferences[key].asString}€\n"
+                "precioMax" -> filterString += "Precio máximo: ${preferences[key].asString}€\n"
+                "habitaciones" -> filterString += "Habitaciones: ${preferences[key].asString}\n"
+                "baños" -> filterString += "Baños: ${preferences[key].asString}\n"
+                "supMin" -> filterString += "Superficie mínima: ${preferences[key].asString}m²\n"
+                "supMax" -> filterString += "Superficie máxima: ${preferences[key].asString}m²\n"
+                "garaje" -> filterString += "Garaje: ${if(preferences[key].asBoolean) "Sí" else "No"}\n"
+            }
+        }
+        filterTextView.text = filterString
     }
 
 }
