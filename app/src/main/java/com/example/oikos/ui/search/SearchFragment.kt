@@ -1,5 +1,6 @@
 package com.example.oikos.ui.search
 
+import android.content.Context
 import android.content.Intent
 import android.opengl.Visibility
 import android.location.Location as LocationAndroid
@@ -28,6 +29,7 @@ import com.example.oikos.serverConnection.PlatformPositioningProvider
 import com.example.oikos.serverConnection.PlatformPositioningProvider.PlatformLocationListener
 import com.example.oikos.ui.search.localized.LocalizedSearch
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.core.Location
@@ -54,6 +56,8 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     lateinit var filterButton: AppCompatButton
     lateinit var filterSearchButton : AppCompatButton
     lateinit var tipoText : TextView
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +102,6 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         getResults()
 
         val resultsRecycler = root.findViewById<View>(R.id.results_recycler) as RecyclerView
-        // TODO(Buscar inmuebles)
         customAdapter = CustomAdapter(searchResults)
         resultsRecycler.adapter = customAdapter
         // Set layout manager to position the items
@@ -240,15 +243,18 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun getFilteredResults(){
+        filterCard.visibility = View.INVISIBLE
         if ((activity as MainActivity).isNetworkConnected()) {
             val query = AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
             query.addQueryParameter("filtrada", "true")
             val parameters = getFilterValues(requireView())
             val parameterKeys = parameters.keys
-            if(parameterKeys.size <= 2) return
+            val jsonToSave = JsonObject()
             for (key in parameterKeys) {
                 query.addQueryParameter(key, parameters[key])
+                jsonToSave.addProperty(key, parameters[key])
             }
+            saveSearch(jsonToSave)
             resultLayout.visibility = View.GONE
             loadingCircle.visibility = View.VISIBLE
             seeInMapButton.isEnabled = false
@@ -318,5 +324,13 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         //TODO("Not yet implemented")
     }
 
+    fun saveSearch(jsonObject: JsonObject){
+        val sharedPrefs = activity?.getSharedPreferences("prefs", Context.MODE_PRIVATE) ?: return
+        with(sharedPrefs.edit()){
+            putString("saved_search", jsonObject.toString())
+            apply()
+            println("COMMITED")
+        }
+    }
 
 }

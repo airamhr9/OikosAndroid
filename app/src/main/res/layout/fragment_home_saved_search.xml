@@ -1,10 +1,63 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    xmlns:tools="http://schemas.android.com/tools">
 
-        <include layout="@layout/tarjeta_inmueble"/>
 
+        <LinearLayout
+            android:id="@+id/empty_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+                <ImageView
+                    android:layout_width="250dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/broke"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="No has hecho ninguna búsqueda filtrada aún"
+                    android:alpha=".7"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/no_search_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:text="Hacer búsqueda"
+                    android:textColor="@color/dark_blue" />
+        </LinearLayout>
+
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/loading_search_saved"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            style="?android:attr/progressBarStyleLarge"
+            android:indeterminate="true"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/results_saved"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="50dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            tools:context=".ui.home.SavedSearchFragment">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/results_saved_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical"
+                    />
+
+        </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>
