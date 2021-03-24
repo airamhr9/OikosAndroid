@@ -129,6 +129,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 override fun onLocationUpdated(location: LocationAndroid?) {
                     val currentLocation = location?.let { convertLocation(it) }
                         AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
+                   // AndroidNetworking.put("http://10.0.2.2:9000/api/inmueble/").addBodyParameter(miobjeto.toJason -> JsonObject)
                                 .addQueryParameter("coordenada", "true")
                                 .addQueryParameter("x", currentLocation?.coordinates?.latitude.toString())
                                 .addQueryParameter("y", currentLocation?.coordinates?.longitude.toString())
@@ -317,7 +318,6 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         tipoText.text = parent?.getItemAtPosition(position) as String
-
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

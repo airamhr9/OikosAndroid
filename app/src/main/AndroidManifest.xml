@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Oikos"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".ui.user.preferences"></activity>
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
@@ -31,7 +31,7 @@
 
         <activity
             android:name=".ui.search.localized.LocalizedSearch"
-            android:label="@string/title_activity_localized_search"></activity>
+            android:label="@string/title_activity_localized_search" />
         <activity android:name=".fichaInmueble.FichaInmuebleActivity" />
 
         <meta-data

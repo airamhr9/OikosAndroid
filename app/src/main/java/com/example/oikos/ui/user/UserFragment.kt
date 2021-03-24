@@ -5,24 +5,40 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.cardview.widget.CardView
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.JSONArrayRequestListener
+import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.example.oikos.MainActivity
 import com.example.oikos.R
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import objects.DatosInmueble
+import org.json.JSONArray
+import org.json.JSONObject
+import android.content.Intent as Intent
 
 class UserFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var datosFicha : DatosInmueble
-    lateinit var filterCard : CardView
+    lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var editButton : AppCompatButton
-    lateinit var filterSearchButton : AppCompatButton
-    lateinit var tipoText : TextView
+    lateinit var resultLayout : LinearLayout
+   // lateinit var  tCiudad : TextView
+
+
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -33,41 +49,62 @@ class UserFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_user, container, false)
         val textView: TextView = root.findViewById(R.id.text_notifications)
 
-        filterCard = root.findViewById(R.id.filter_search_card)
-        filterCard.visibility = View.INVISIBLE
+        loadingCircle = root.findViewById(R.id.loading_search2)
+        resultLayout = root.findViewById(R.id.preference_layout)
+        loadingCircle.visibility = View.VISIBLE
+        resultLayout.visibility = View.GONE
 
         editButton = root.findViewById(R.id.bEditar)
-        editButton.setOnClickListener {
-            filterCard.visibility = if (filterCard.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
-        }
-
-        filterSearchButton = root.findViewById(R.id.button_filter_search)
-        val tipoSpinner : AppCompatSpinner = root.findViewById(R.id.filtro_tipo)
-        ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.spinner_values,
-                android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            tipoSpinner.adapter = adapter
-        }
-        tipoText = root.findViewById(R.id.filter_tipo_text)
-
-        filterSearchButton.setOnClickListener {
-            //Aplicar las nuevas preferencias
-        }
-
-
-
-        //tipoSpinner.onItemSelectedListener = this
-       // datosFicha = arguments?.getSerializable("inmueble") as DatosInmueble
-       // setData(root, datosFicha)
+        editButton.visibility = View.GONE
 
         userViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
 
-
         })
+
+
+
+        editButton.setOnClickListener {
+            val menuPref = Intent(context, preferences :: class.java)
+            startActivity(menuPref)
+        }
+
+
+        if ((activity as MainActivity).isNetworkConnected()) {
+            AndroidNetworking.get("http://10.0.2.2:9000/api/preferencias/")
+                    .addQueryParameter("id", "1")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONObject(object : JSONObjectRequestListener {
+                        override fun onResponse(response: JSONObject) {
+                            val jsonPreferences = JsonParser.parseString(response.toString()).asJsonObject
+                            println("preferences: $jsonPreferences")
+                            printFilters(jsonPreferences)
+
+                            loadingCircle.visibility = View.GONE
+                            resultLayout.visibility = View.VISIBLE
+                            editButton.visibility = View.VISIBLE
+
+                        }
+
+                        override fun onError(error: ANError) {
+                            Toast.makeText(
+                                    activity?.applicationContext,
+                                    "Compruebe la conexión a internet",
+                                    Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+        } else {
+            Toast.makeText(
+                    activity?.applicationContext,
+                    "Sin conexión a internet",
+                    Toast.LENGTH_LONG
+            ).show()
+        }
+
+
+
         return root
     }
 
@@ -77,24 +114,32 @@ class UserFragment : Fragment() {
 
 
 
+    fun printFilters(preferences: JsonObject){
+        val tCiudad = requireView().findViewById<TextView>(R.id.tCiudad)
+        val tTipo = requireView().findViewById<TextView>(R.id.tTipo)
+        val tPrecio =  requireView().findViewById<TextView>(R.id.tPrecio)
+        val tHabs =  requireView().findViewById<TextView>(R.id.tHabs)
+        val tBaño =  requireView().findViewById<TextView>(R.id.tBaño)
+        val tSuperficie =  requireView().findViewById<TextView>(R.id.tSuperficie)
+        val tGaraje =  requireView().findViewById<TextView>(R.id.tGaraje)
+        var precioMin = ""
+        var supMin = ""
 
-    /*
-    fun setData(view : View, data: DatosInmueble){
-        val ciudad = view.findViewById<TextView>(R.id.tCiudad)
-        val tipo = view.findViewById<TextView>(R.id.tTipo)
-        val precio  = view.findViewById<TextView>(R.id.tPrecio)
-        val habs = view.findViewById<TextView>(R.id.tHabs)
-        val superficie = view.findViewById<TextView>(R.id.tSuperficie)
-        val garaje = view.findViewById<TextView>(R.id.tGaraje)
-        val baños = view.findViewById<TextView>(R.id.tBaño)
 
-        ciudad.text = data.direccion
-        tipo.text = data.tipo
-        precio.text = "${data.precio}€"
-        habs.text =  "${data.habitaciones}"
-        superficie.text = "${data.superficie}m\u00B2"
-        garaje.text = if(data.garaje) "Sí" else "No"
-        baños.text =  "${data.baños}"
-    }  */
+        for (key in preferences.keySet()) {
+            when (key) {
+                "ciudad" -> tCiudad.text = "${preferences[key].asString}"
+                "tipo" -> tTipo.text = "${preferences[key].asString}"
+                "precioMin" -> precioMin = "${preferences[key].asString}€"
+                "precioMax" -> tPrecio.text = precioMin + " ${preferences[key].asString}€"
+                "habitaciones" -> tHabs.text = "${preferences[key].asString}"
+                "baños" -> tBaño.text = "${preferences[key].asString}"
+                "supMin" ->  supMin = "${preferences[key].asString}m²"
+                "supMax" -> tSuperficie.text = supMin + "${preferences[key].asString}m²"
+                "garaje" -> tGaraje.text = "${if(preferences[key].asBoolean) "Sí" else "No"}"
+            }
+        }
+
+    }
 
 }
