@@ -58,20 +58,6 @@ class UserFragment : Fragment() {
         editButton = root.findViewById(R.id.bEditar)
         editButton.visibility = View.GONE
 
-        userViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-
-        })
-
-
-        editButton.setOnClickListener {
-            val menuPref = Intent(context, preferences :: class.java)
-            menuPref.putExtra("preferencias", preference)
-            startActivity(menuPref)
-
-        }
-
-
         if ((activity as MainActivity).isNetworkConnected()) {
             AndroidNetworking.get("http://10.0.2.2:9000/api/preferencias/")
                     .addQueryParameter("id", "1")
@@ -79,15 +65,19 @@ class UserFragment : Fragment() {
                     .build()
                     .getAsJSONObject(object : JSONObjectRequestListener {
                         override fun onResponse(response: JSONObject) {
-
                             var jsonPreferences = JsonParser.parseString(response.toString()).asJsonObject
                             println("preferences: $jsonPreferences")
-                            printFilters(jsonPreferences)
                             preference = Preferencia.fromJson(jsonPreferences)
                             loadingCircle.visibility = View.GONE
                             resultLayout.visibility = View.VISIBLE
                             editButton.visibility = View.VISIBLE
+                            printFilters(preference)
 
+                            editButton.setOnClickListener {
+                                val menuPref = Intent(context, preferences :: class.java)
+                                menuPref.putExtra("preferencias", preference)
+                                startActivity(menuPref)
+                            }
                         }
 
                         override fun onError(error: ANError) {
@@ -105,19 +95,10 @@ class UserFragment : Fragment() {
                     Toast.LENGTH_LONG
             ).show()
         }
-
-
-
         return root
     }
 
-
-
-
-
-
-
-    fun printFilters(preferences: JsonObject){
+    fun printFilters(preferences: Preferencia){
         val tCiudad = requireView().findViewById<TextView>(R.id.tCiudad)
         val tTipo = requireView().findViewById<TextView>(R.id.tTipo)
         val tPrecio =  requireView().findViewById<TextView>(R.id.tPrecio)
@@ -125,23 +106,14 @@ class UserFragment : Fragment() {
         val tBaño =  requireView().findViewById<TextView>(R.id.tBaño)
         val tSuperficie =  requireView().findViewById<TextView>(R.id.tSuperficie)
         val tGaraje =  requireView().findViewById<TextView>(R.id.tGaraje)
-        var precioMin = ""
-        var supMin = ""
 
-
-        for (key in preferences.keySet()) {
-            when (key) {
-                "ciudad" -> tCiudad.text = "${preferences[key].asString}"
-                "tipo" -> tTipo.text = "${preferences[key].asString}"
-                "precioMin" -> precioMin = "${preferences[key].asString}€"
-                "precioMax" -> tPrecio.text = precioMin + " ${preferences[key].asString}€"
-                "habitaciones" -> tHabs.text = "${preferences[key].asString}"
-                "baños" -> tBaño.text = "${preferences[key].asString}"
-                "supMin" ->  supMin = "${preferences[key].asString}m²"
-                "supMax" -> tSuperficie.text = supMin + "${preferences[key].asString}m²"
-                "garaje" -> tGaraje.text = "${if(preferences[key].asBoolean) "Sí" else "No"}"
-            }
-        }
+        tCiudad.text =  "${preferences.ciudad}"
+         tTipo.text = "${preferences.tipo}"
+         tPrecio.text = "${preferences.precio_min} - ${preferences.precio_max}€"
+         tHabs.text = "${preferences.habitaciones}"
+         tBaño.text = "${preferences.baños}"
+         tSuperficie.text = "${preferences.superficie_min} m² - ${preferences.superficie_max}m²"
+         tGaraje.text = "${if(preferences.garaje) "Sí" else "No"}"
 
     }
 

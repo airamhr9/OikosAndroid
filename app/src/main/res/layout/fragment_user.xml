@@ -32,14 +32,12 @@
                 tools:paddingHorizontal="10dp">
 
                 <ImageView
-                    android:id="@+id/imageView"
                     android:layout_width="1dp"
-                    android:layout_height="67dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_baseline_person_24" />
 
                 <TextView
-                    android:id="@+id/textView"
                     android:layout_width="213dp"
                     android:layout_height="21dp"
                     android:layout_weight="1"
@@ -80,7 +78,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Mis preferencias"
@@ -102,7 +99,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView3"
                                 android:layout_width="3dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -124,7 +120,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView13"
                                 android:layout_width="3dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -145,7 +140,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView14"
                                 android:layout_width="5dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -166,7 +160,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView16"
                                 android:layout_width="3dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -187,7 +180,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView10"
                                 android:layout_width="6dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -208,7 +200,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView9"
                                 android:layout_width="6dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -229,7 +220,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView6"
                                 android:layout_width="5dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
