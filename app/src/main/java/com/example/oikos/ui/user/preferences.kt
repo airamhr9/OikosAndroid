@@ -42,6 +42,12 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var tSupMax : TextInputEditText
     lateinit var tGaraje : CheckBox
 
+
+
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences)
@@ -56,6 +62,8 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         tSupMax = findViewById(R.id.filtro_superficie_max)
         tGaraje =  findViewById(R.id.filtro_garaje)
 
+
+
         filterCard = findViewById(R.id.filter_search_card)
         myPreferences = intent.getSerializableExtra("preferencias") as Preferencia
         printFilters(myPreferences.toJson())
@@ -66,6 +74,12 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             putPreferences()
 
         }
+
+
+
+
+
+
 
         val tipoSpinner : AppCompatSpinner = findViewById(R.id.filtro_tipo)
         ArrayAdapter.createFromResource(
@@ -78,6 +92,9 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
         tipoText = findViewById(R.id.filter_tipo_text)
         tipoSpinner.onItemSelectedListener = this
+
+
+
 
         cancelB = findViewById(R.id.bCancelar)
         cancelB.setOnClickListener{
@@ -94,6 +111,8 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun editarPreferencias(){
+
+
         val cityText = findViewById<TextInputEditText>(R.id.filtro_ciudad).text.toString()
         val precioMin = findViewById<TextInputEditText>(R.id.filtro_precio_min).text.toString()
         val precioMax = findViewById<TextInputEditText>(R.id.filtro_precio_max).text.toString()
@@ -102,6 +121,7 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val supMin = findViewById<TextInputEditText>(R.id.filtro_superficie_min).text.toString()
         val supMax = findViewById<TextInputEditText>(R.id.filtro_superficie_max).text.toString()
         val garaje = findViewById<CheckBox>(R.id.filtro_garaje).isChecked
+        val miTipo = findViewById<TextView>(R.id.filter_tipo_text).text.toString()
 
         myPreferences.superficie_min = if( supMin == "" ) 0 else supMin.toInt()
         myPreferences.superficie_max = if(supMax == "") Int.MAX_VALUE else supMax.toInt()
@@ -127,20 +147,30 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             Log.d("EO",myPreferences.toString())
                             finish()
                         }
+
                         override fun onError(anError: ANError?) {
                             AlertDialog.Builder(this@preferences)
                                     .setIcon(android.R.drawable.ic_menu_search)
-                                    .setTitle("Sin inmuebles en esta zona")
-                                    .setMessage("Pruebe en otro lugar")
+                                    .setTitle("Error al actualizar sus preferencias")
+                                    .setMessage("Compruebe que ha introducido bien los datos")
                                     .setPositiveButton("Ok"
                                     ) { _, _ ->}
                                     .show()
                         }
+
+
                     })
-    }
+
+
+
+        }
+
 
 
     fun printFilters(preferences: JsonObject){
+
+
+
         for (key in preferences.keySet()) {
             when (key) {
                 "ciudad" -> tCiudad.setText("${preferences[key].asString}")
@@ -154,6 +184,8 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 "garaje" -> tGaraje.isChecked = (preferences[key].asBoolean)
             }
         }
+
     }
+
 
 }
