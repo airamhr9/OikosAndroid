@@ -2,7 +2,6 @@ package com.example.oikos.ui.user
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -12,17 +11,11 @@ import androidx.cardview.widget.CardView
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.OkHttpResponseListener
-import com.example.oikos.MainActivity
 import com.example.oikos.R
 import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import objects.DatosInmueble
 import objects.Preferencia
 import okhttp3.Response
-import org.json.JSONArray
 
 class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -33,7 +26,6 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var myPreferences : Preferencia
 
     lateinit var tCiudad : TextInputEditText
-    lateinit var  tTipo : TextView
     lateinit var tPrecioMax : TextInputEditText
     lateinit var tPrecioMin : TextInputEditText
     lateinit var tHabs : TextInputEditText
@@ -42,18 +34,12 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var tSupMax : TextInputEditText
     lateinit var tGaraje : CheckBox
 
-
-
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences)
 
         tCiudad = findViewById(R.id.filtro_ciudad)
-        tTipo = findViewById(R.id.filter_tipo_text)
+        tipoText = findViewById(R.id.filter_tipo_text)
         tPrecioMax =  findViewById(R.id.filtro_precio_max)
         tPrecioMin =  findViewById(R.id.filtro_precio_min)
         tHabs =  findViewById(R.id.filtro_habitaciones)
@@ -62,24 +48,14 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         tSupMax = findViewById(R.id.filtro_superficie_max)
         tGaraje =  findViewById(R.id.filtro_garaje)
 
-
-
         filterCard = findViewById(R.id.filter_search_card)
         myPreferences = intent.getSerializableExtra("preferencias") as Preferencia
-        printFilters(myPreferences.toJson())
-
+        printFilters(myPreferences)
 
         aceptarB = findViewById(R.id.bAcpetar)
         aceptarB.setOnClickListener{
             putPreferences()
-
         }
-
-
-
-
-
-
 
         val tipoSpinner : AppCompatSpinner = findViewById(R.id.filtro_tipo)
         ArrayAdapter.createFromResource(
@@ -90,11 +66,7 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             tipoSpinner.adapter = adapter
         }
-        tipoText = findViewById(R.id.filter_tipo_text)
         tipoSpinner.onItemSelectedListener = this
-
-
-
 
         cancelB = findViewById(R.id.bCancelar)
         cancelB.setOnClickListener{
@@ -111,8 +83,6 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun editarPreferencias(){
-
-
         val cityText = findViewById<TextInputEditText>(R.id.filtro_ciudad).text.toString()
         val precioMin = findViewById<TextInputEditText>(R.id.filtro_precio_min).text.toString()
         val precioMax = findViewById<TextInputEditText>(R.id.filtro_precio_max).text.toString()
@@ -121,7 +91,6 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val supMin = findViewById<TextInputEditText>(R.id.filtro_superficie_min).text.toString()
         val supMax = findViewById<TextInputEditText>(R.id.filtro_superficie_max).text.toString()
         val garaje = findViewById<CheckBox>(R.id.filtro_garaje).isChecked
-        val miTipo = findViewById<TextView>(R.id.filter_tipo_text).text.toString()
 
         myPreferences.superficie_min = if( supMin == "" ) 0 else supMin.toInt()
         myPreferences.superficie_max = if(supMax == "") Int.MAX_VALUE else supMax.toInt()
@@ -144,7 +113,6 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     .build()
                     .getAsOkHttpResponse(object: OkHttpResponseListener{
                         override fun onResponse(response: Response?) {
-                            Log.d("EO",myPreferences.toString())
                             finish()
                         }
 
@@ -160,32 +128,23 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
 
                     })
-
-
-
         }
 
 
-
-    fun printFilters(preferences: JsonObject){
-
-
-
-        for (key in preferences.keySet()) {
-            when (key) {
-                "ciudad" -> tCiudad.setText("${preferences[key].asString}")
-                "tipo" -> tTipo.setText("${preferences[key].asString}")
-                "precioMin" -> tPrecioMin.setText("${preferences[key].asString}€")
-                "precioMax" -> if(preferences[key] as Int != Int.MAX_VALUE) tPrecioMax.setText( " ${preferences[key].asString}€")
-                "habitaciones" -> tHabs.setText("${preferences[key].asString}")
-                "baños" -> tBaño.setText( "${preferences[key].asString}")
-                "supMin" ->  tSupMin.setText("${preferences[key].asString}")
-                "supMax" ->if(preferences[key] as Double != Double.MAX_VALUE) tSupMax.setText ("${preferences[key].asString}")
-                "garaje" -> tGaraje.isChecked = (preferences[key].asBoolean)
-            }
-        }
-
+    private fun printFilters(preferences: Preferencia){
+        tCiudad.setText(preferences.ciudad)
+        tipoText.text = preferences.tipo
+        if(preferences.precio_max != Double.MAX_VALUE)
+            tPrecioMax.setText(preferences.precio_max.toString())
+        tPrecioMin.setText(preferences.precio_min.toString())
+        if(preferences.habitaciones != null)
+            tHabs.setText(preferences.habitaciones.toString())
+        if(preferences.baños != null)
+            tBaño.setText(preferences.baños.toString())
+        tSupMin.setText(preferences.superficie_min.toString())
+        if(preferences.superficie_max != Int.MAX_VALUE)
+            tSupMax.setText(preferences.superficie_max.toString())
+        tGaraje.isChecked = preferences.garaje
     }
-
 
 }
