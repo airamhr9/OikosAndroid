@@ -1,17 +1,20 @@
 package objects
 
 import com.google.gson.JsonObject
+import java.io.Serializable
 
-class Preferencia(private var superficie_min: Int,
-                  private var superficie_max: Int,
-                  private var precio_min: Double,
-                  private var precio_max: Double,
-                  private var habitaciones: Int,
-                  private var baños: Int,
-                  private var garaje: Boolean,
-                  private var ciudad: String,
-                  private var usuario: Usuario,
-) {
+class Preferencia(
+        var superficie_min: Int,
+         var superficie_max: Int,
+        var precio_min: Double,
+         var precio_max: Double,
+         var habitaciones: Int?,
+         var baños: Int?,
+         var garaje: Boolean,
+         var ciudad: String,
+         var usuario: Usuario,
+         var tipo: Tipo,
+) :Serializable {
 
     fun toJson(): JsonObject {
         val result = JsonObject()
@@ -23,6 +26,7 @@ class Preferencia(private var superficie_min: Int,
         result.addProperty("baños", this.baños)
         result.addProperty("garaje", this.garaje)
         result.addProperty("ciudad", this.ciudad)
+        result.addProperty("tipo",this.tipo )
         result.add("usuario", this.usuario.toJson())
         return result
     }
@@ -37,8 +41,9 @@ class Preferencia(private var superficie_min: Int,
             val baños = jsonObject.get("baños").asInt
             val garaje = jsonObject.get("garaje").asBoolean
             val ciudad = jsonObject.get("ciudad").asString.toString()
+            val tipo = jsonObject.get("tipo").asString.toString()
             val usuario = Usuario.fromJson(jsonObject.get("usuario").asJsonObject)
-            return Preferencia(superficie_min, superficie_max, precio_min, precio_max, habitaciones,baños, garaje, ciudad, usuario)
+            return Preferencia(superficie_min, superficie_max, precio_min, precio_max, habitaciones,baños, garaje, ciudad, usuario,tipo)
         }
     }
 }

@@ -25,6 +25,7 @@ import com.example.oikos.R
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
+import objects.Preferencia
 import org.json.JSONArray
 import org.json.JSONObject
 import android.content.Intent as Intent
@@ -37,7 +38,7 @@ class UserFragment : Fragment() {
     lateinit var editButton : AppCompatButton
     lateinit var resultLayout : LinearLayout
    // lateinit var  tCiudad : TextView
-
+    lateinit var preference : Preferencia
 
 
     override fun onCreateView(
@@ -63,10 +64,11 @@ class UserFragment : Fragment() {
         })
 
 
-
         editButton.setOnClickListener {
             val menuPref = Intent(context, preferences :: class.java)
+            menuPref.putExtra("preferencias", preference)
             startActivity(menuPref)
+
         }
 
 
@@ -77,10 +79,11 @@ class UserFragment : Fragment() {
                     .build()
                     .getAsJSONObject(object : JSONObjectRequestListener {
                         override fun onResponse(response: JSONObject) {
-                            val jsonPreferences = JsonParser.parseString(response.toString()).asJsonObject
+
+                            var jsonPreferences = JsonParser.parseString(response.toString()).asJsonObject
                             println("preferences: $jsonPreferences")
                             printFilters(jsonPreferences)
-
+                            preference = Preferencia.fromJson(jsonPreferences)
                             loadingCircle.visibility = View.GONE
                             resultLayout.visibility = View.VISIBLE
                             editButton.visibility = View.VISIBLE
