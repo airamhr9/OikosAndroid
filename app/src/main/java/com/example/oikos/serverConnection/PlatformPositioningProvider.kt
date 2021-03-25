@@ -53,6 +53,7 @@ class PlatformPositioningProvider(private val context: Context) : LocationListen
                 ActivityCompat.checkSelfPermission(context,
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(LOG_TAG, "Positioning permissions denied.")
+            println("SIN PERMISOS")
             return false
         }
         platformLocationListener = locationCallback

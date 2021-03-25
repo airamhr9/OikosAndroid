@@ -139,7 +139,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                     override fun onResponse(response: JSONArray) {
                                         // do anything with response
                                         var i = 0
-                                        println("we have response")
+                                        println("we have response localizada")
                                         searchResults.clear()
                                         while(i < response.length()){
                                             println("here")
@@ -174,7 +174,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                             override fun onResponse(response: JSONArray) {
                                 // do anything with response
                                 var i = 0
-                                println("we have response")
+                                println("we have response default")
                                 searchResults.clear()
                                 while(i < response.length()){
                                     searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))

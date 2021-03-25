@@ -13,7 +13,7 @@ class Preferencia(
          var garaje: Boolean,
          var ciudad: String,
          var usuario: Usuario,
-         var tipo: Tipo,
+         var tipo: String,
 ) :Serializable {
 
     fun toJson(): JsonObject {
@@ -43,7 +43,7 @@ class Preferencia(
             val ciudad = jsonObject.get("ciudad").asString.toString()
             val tipo = jsonObject.get("tipo").asString.toString()
             val usuario = Usuario.fromJson(jsonObject.get("usuario").asJsonObject)
-            return Preferencia(superficie_min, superficie_max, precio_min, precio_max, habitaciones,baños, garaje, ciudad, usuario,tipo)
+            return Preferencia(superficie_min, superficie_max, precio_min, precio_max, habitaciones,baños, garaje, ciudad, usuario, tipo)
         }
     }
 }
