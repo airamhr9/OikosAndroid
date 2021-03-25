@@ -107,11 +107,17 @@ class UserFragment : Fragment() {
         val tSuperficie =  requireView().findViewById<TextView>(R.id.tSuperficie)
         val tGaraje =  requireView().findViewById<TextView>(R.id.tGaraje)
 
-        tCiudad.text =  "${preferences.ciudad}"
+         tCiudad.text =  "${preferences.ciudad}"
          tTipo.text = "${preferences.tipo}"
-         tPrecio.text = "${preferences.precio_min} - ${preferences.precio_max}€"
-         tHabs.text = "${preferences.habitaciones}"
-         tBaño.text = "${preferences.baños}"
+         if(preferences.precio_max != Double.MAX_VALUE)
+            tPrecio.text = "${preferences.precio_min} - ${preferences.precio_max}€"
+         else {
+             tPrecio.text = "${preferences.precio_min} - Sin límite"
+         }
+         if(preferences.habitaciones != null)
+            tHabs.text = "${preferences.habitaciones}"
+         if(preferences.baños != null)
+            tBaño.text = "${preferences.baños}"
          tSuperficie.text = "${preferences.superficie_min} m² - ${preferences.superficie_max}m²"
          tGaraje.text = "${if(preferences.garaje) "Sí" else "No"}"
 
