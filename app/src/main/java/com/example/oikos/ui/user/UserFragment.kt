@@ -98,6 +98,48 @@ class UserFragment : Fragment() {
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if ((activity as MainActivity).isNetworkConnected()) {
+            AndroidNetworking.get("http://10.0.2.2:9000/api/preferencias/")
+                    .addQueryParameter("id", "1")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONObject(object : JSONObjectRequestListener {
+                        override fun onResponse(response: JSONObject) {
+                            var jsonPreferences = JsonParser.parseString(response.toString()).asJsonObject
+                            println("preferences: $jsonPreferences")
+                            preference = Preferencia.fromJson(jsonPreferences)
+                            loadingCircle.visibility = View.GONE
+                            resultLayout.visibility = View.VISIBLE
+                            editButton.visibility = View.VISIBLE
+                            printFilters(preference)
+
+                            editButton.setOnClickListener {
+                                val menuPref = Intent(context, preferences :: class.java)
+                                menuPref.putExtra("preferencias", preference)
+                                startActivity(menuPref)
+                            }
+                        }
+
+                        override fun onError(error: ANError) {
+                            Toast.makeText(
+                                    activity?.applicationContext,
+                                    "Compruebe la conexión a internet",
+                                    Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+        } else {
+            Toast.makeText(
+                    activity?.applicationContext,
+                    "Sin conexión a internet",
+                    Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     fun printFilters(preferences: Preferencia){
         val tCiudad = requireView().findViewById<TextView>(R.id.tCiudad)
         val tTipo = requireView().findViewById<TextView>(R.id.tTipo)

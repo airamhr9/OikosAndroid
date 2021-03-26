@@ -107,29 +107,27 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun putPreferences(){
         editarPreferencias()
-            AndroidNetworking.put("http://10.0.2.2:9000/api/preferencias/")
-                    .addBodyParameter(myPreferences.toJson())
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsOkHttpResponse(object: OkHttpResponseListener{
-                        override fun onResponse(response: Response?) {
-                            finish()
-                        }
+        val jsonPreferences = myPreferences.toJson()
+        AndroidNetworking.put("http://10.0.2.2:9000/api/preferencias/")
+                .addBodyParameter("prefs", jsonPreferences.toString())
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsOkHttpResponse(object: OkHttpResponseListener{
+                    override fun onResponse(response: Response?) {
+                        finish()
+                    }
 
-                        override fun onError(anError: ANError?) {
-                            AlertDialog.Builder(this@preferences)
-                                    .setIcon(android.R.drawable.ic_menu_search)
-                                    .setTitle("Error al actualizar sus preferencias")
-                                    .setMessage("Compruebe que ha introducido bien los datos")
-                                    .setPositiveButton("Ok"
-                                    ) { _, _ ->}
-                                    .show()
-                        }
-
-
-                    })
+                    override fun onError(anError: ANError?) {
+                        AlertDialog.Builder(this@preferences)
+                                .setIcon(android.R.drawable.ic_menu_search)
+                                .setTitle("Error al actualizar sus preferencias")
+                                .setMessage("Compruebe que ha introducido bien los datos")
+                                .setPositiveButton("Ok"
+                                ) { _, _ ->}
+                                .show()
+                    }
+                })
         }
-
 
     private fun printFilters(preferences: Preferencia){
         tCiudad.setText(preferences.ciudad)
