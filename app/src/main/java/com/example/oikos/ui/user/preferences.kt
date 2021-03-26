@@ -54,7 +54,25 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         aceptarB = findViewById(R.id.bAcpetar)
         aceptarB.setOnClickListener{
-            putPreferences()
+            editarPreferencias()
+            if(myPreferences.superficie_min > myPreferences.superficie_max ){
+                AlertDialog.Builder(this@preferences)
+                        .setIcon(android.R.drawable.ic_menu_search)
+                        .setTitle("Error en superficie")
+                        .setMessage("La superficie mínima debe ser menor que la máxima")
+                        .setPositiveButton("Ok"
+                        ) { _, _ ->}
+                        .show()
+            }else if(myPreferences.precio_min > myPreferences.precio_max){
+
+                    AlertDialog.Builder(this@preferences)
+                            .setIcon(android.R.drawable.ic_menu_search)
+                            .setTitle("Error en el precio")
+                            .setMessage("El precio mínimo debe ser menor que el máximo")
+                            .setPositiveButton("Ok"
+                            ) { _, _ ->}
+                            .show()
+                }else putPreferences()
         }
 
         val tipoSpinner : AppCompatSpinner = findViewById(R.id.filtro_tipo)
