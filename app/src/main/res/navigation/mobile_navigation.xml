@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/navigation_gestion_inmueble"
+        android:name="com.example.oikos.ui.inmuebles.GestionInmuebleFragment"
+        android:label="Gestión de Inmuebles"
+        tools:layout="@layout/fragment_gestion_inmueble" />
+
+    <fragment
         android:id="@+id/navigation_search"
         android:name="com.example.oikos.ui.search.SearchFragment"
         android:label="Búsqueda"

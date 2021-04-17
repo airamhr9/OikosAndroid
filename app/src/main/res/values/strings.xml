@@ -3,6 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
     <string name="title_user">User</string>
+    <string name="title_dashboard">Gestión de Inmuebles</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="textview">Texto</string>
