@@ -20,7 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Oikos"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.user.preferences"></activity>
+        <activity android:name=".ui.inmuebles.PublicarAnunciosActivity"></activity>
+        <activity android:name=".ui.search.SearchResultsActivity" />
+        <activity android:name=".ui.user.preferences" />
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.

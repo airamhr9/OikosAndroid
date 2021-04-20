@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
         <string-array name="spinner_values">
-            <item>Alquiler</item>
-            <item>Venta</item>
+            <item>Piso</item>
+            <item>Habitación</item>
+            <item>Garaje</item>
+            <item>Local</item>
         </string-array>
     </resources>
 

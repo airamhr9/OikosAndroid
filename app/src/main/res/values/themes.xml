@@ -7,6 +7,24 @@
         <item name="colorOnPrimary">@color/white</item>
         <!--AppBar Style -->
         <item name="toolbarStyle">@style/Theme.Oikos.ActionBar</item>
+        <item name="colorControlNormal">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/marine_blue</item>
+        <item name="colorSecondaryVariant">@color/dark_marine_blue</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+
+    <!-- Base application theme. -->
+    <style name="Theme.Oikos.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/dark_blue</item>
+        <item name="colorPrimaryVariant">@color/dark_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/marine_blue</item>
         <item name="colorSecondaryVariant">@color/dark_marine_blue</item>
@@ -18,9 +36,11 @@
 
     <style name="Theme.Oikos.ActionBar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="elevation">0dp</item>
+        <item name="android:textColorPrimary">@color/black</item>
         <item name="android:background">@color/white</item>
+        <item name="android:textColorSecondary">@color/black</item>
         <item name="titleTextColor">@color/black</item>
-        <item name="homeAsUpIndicator">@color/black</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_baseline_arrow_back_24</item>
     </style>
     <style name="Theme.Oikos.ActionBar.Text" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/black</item>
@@ -29,4 +49,5 @@
     <style name="Theme.Oikos.RecommendedTabs" parent="Theme.Oikos">
         <item name="android:backgroundTint">@color/white</item>
     </style>
+
 </resources>

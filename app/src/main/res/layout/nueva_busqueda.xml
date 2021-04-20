@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     >
+
+
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/results"
         android:layout_width="match_parent"
@@ -64,6 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:animateLayoutChanges="true"
                 android:layout_margin="10dp">
 
                 <LinearLayout
@@ -86,11 +90,13 @@
                         android:layout_weight="1" />
 
                     <RadioGroup
+                        android:id="@+id/tipo_busqueda_radio_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
                         <androidx.appcompat.widget.AppCompatRadioButton
+                            android:id="@+id/compra_radio_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
@@ -98,6 +104,7 @@
                             android:text="Compra"/>
 
                         <androidx.appcompat.widget.AppCompatRadioButton
+                            android:id="@+id/alquiler_radio_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
@@ -170,20 +177,37 @@
 
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/see_in_map_button"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_height="25dp"
-                    android:background="@android:color/transparent"
-                    android:textAllCaps="false"
-                    android:textSize="17sp"
-                    android:text="Filtros avanzados"
-                    android:textColor="@color/dark_blue" />
 
+                <LinearLayout
+                    android:id="@+id/filtros_avanzados_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical">
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:background="@android:color/transparent"
+                        android:textAllCaps="false"
+                        android:textSize="17sp"
+                        android:text="Filtros avanzados"
+                        android:textColor="@color/dark_blue" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/filtros_avanzados_arrow"
+                        android:layout_marginTop="1dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_baseline_arrow_drop_down_24"
+                        android:tint="?android:colorPrimary"
+                        />
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/filtros_avanzados_layout"
                     android:visibility="gone"
+                    android:paddingHorizontal="5dp"
+                    android:paddingTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -370,7 +394,7 @@
                 </LinearLayout>
             </LinearLayout>
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/filter_button"
+                android:id="@+id/search_button"
                 android:layout_width="match_parent"
                 android:layout_marginVertical="15dp"
                 android:layout_marginHorizontal="10dp"

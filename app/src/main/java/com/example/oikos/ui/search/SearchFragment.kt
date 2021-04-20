@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatSpinner
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.core.widget.NestedScrollView
@@ -45,38 +47,43 @@ import kotlin.collections.ArrayList
 
 
 class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
-    lateinit var searchResults: ArrayList<DatosInmueble>
-    lateinit var customAdapter: CustomAdapter
-    lateinit var resultLayout : NestedScrollView
-    lateinit var loadingCircle : ContentLoadingProgressBar
-    lateinit var mapCard : CardView
-    lateinit var seeInMapButton : AppCompatButton
-
-    lateinit var filterCard : CardView
-    lateinit var filterButton: AppCompatButton
-    lateinit var filterSearchButton : AppCompatButton
-    lateinit var tipoText : TextView
-
-
+    lateinit var expandFiltersButton : LinearLayout
+    lateinit var tipoBusqueda : RadioGroup
+    lateinit var tipoInmuebleText : AppCompatTextView
+    lateinit var cityInputText : TextInputEditText
+    lateinit var advancedFiltersLayout : LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        /*
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+        */
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        val root = inflater.inflate(R.layout.fragment_search, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        val root = inflater.inflate(R.layout.nueva_busqueda, container, false)
 
+        expandFiltersButton = root.findViewById(R.id.filtros_avanzados_button)
+        advancedFiltersLayout = root.findViewById(R.id.filtros_avanzados_layout)
+        val expandFiltersArrow = root.findViewById<AppCompatImageView>(R.id.filtros_avanzados_arrow)
 
-        filterCard = root.findViewById(R.id.filter_search_card)
-        filterCard.visibility = View.INVISIBLE
-        filterButton = root.findViewById(R.id.filter_button)
-        filterButton.setOnClickListener {
-            filterCard.visibility = if (filterCard.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
+        expandFiltersButton.setOnClickListener {
+            if(advancedFiltersLayout.visibility == View.GONE){
+                advancedFiltersLayout.visibility = View.VISIBLE
+                expandFiltersArrow.animate().rotation(180f).start();
+            } else {
+                advancedFiltersLayout.visibility = View.GONE
+                expandFiltersArrow.animate().rotation(0f).start();
+            }
         }
-        filterSearchButton = root.findViewById(R.id.button_filter_search)
+        tipoBusqueda = root.findViewById(R.id.tipo_busqueda_radio_group)
+        tipoBusqueda.check(R.id.alquiler_radio_button)
+
         val tipoSpinner : AppCompatSpinner = root.findViewById(R.id.filtro_tipo)
         ArrayAdapter.createFromResource(
                 requireContext(),
@@ -86,251 +93,97 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             tipoSpinner.adapter = adapter
         }
-        tipoText = root.findViewById(R.id.filter_tipo_text)
+        tipoInmuebleText = root.findViewById(R.id.filter_tipo_text)
         tipoSpinner.onItemSelectedListener = this
 
-        filterSearchButton.setOnClickListener {
-            getFilteredResults()
-        }
+        cityInputText = root.findViewById(R.id.filtro_ciudad)
 
-        searchResults = ArrayList()
-        loadingCircle = root.findViewById(R.id.loading_search)
-        resultLayout = root.findViewById(R.id.results)
-        loadingCircle.visibility = View.VISIBLE
-        resultLayout.visibility = View.GONE
-
-        getResults()
-
-        val resultsRecycler = root.findViewById<View>(R.id.results_recycler) as RecyclerView
-        customAdapter = CustomAdapter(searchResults)
-        resultsRecycler.adapter = customAdapter
-        // Set layout manager to position the items
-        resultsRecycler.layoutManager = LinearLayoutManager(context)
-
-        mapCard = root.findViewById(R.id.search_map_card)
+        val mapCard = root.findViewById<CardView>(R.id.search_map_card)
         mapCard.setOnClickListener {
             val intent = Intent(context, LocalizedSearch :: class.java)
             context?.startActivity(intent)
         }
 
-        seeInMapButton = root.findViewById(R.id.see_in_map_button)
-        seeInMapButton.isEnabled = false
-        seeInMapButton.setOnClickListener {
-            (activity as MainActivity).changeToMapFragment(root, searchResults)
+        val searchButton = root.findViewById<AppCompatButton>(R.id.search_button)
+        searchButton.setOnClickListener {
+            val filters = getFilters(root)
+            val intent = Intent(context, SearchResultsActivity :: class.java)
+            intent.putExtra("filters", filters)
+            context?.startActivity(intent)
         }
 
         return root
     }
 
-    private fun getResults(){
-        if ((activity as MainActivity).isNetworkConnected()) {
-            val platformPositioningProvider = PlatformPositioningProvider(requireContext());
-            val located = platformPositioningProvider.startLocating(object : PlatformLocationListener {
-                override fun onLocationUpdated(location: LocationAndroid?) {
-                    val currentLocation = location?.let { convertLocation(it) }
-                        AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
-                   // AndroidNetworking.put("http://10.0.2.2:9000/api/inmueble/").addBodyParameter(miobjeto.toJason -> JsonObject)
-                                .addQueryParameter("coordenada", "true")
-                                .addQueryParameter("x", currentLocation?.coordinates?.latitude.toString())
-                                .addQueryParameter("y", currentLocation?.coordinates?.longitude.toString())
-                                .setPriority(Priority.HIGH)
-                                .build()
-                                .getAsJSONArray(object : JSONArrayRequestListener {
-                                    override fun onResponse(response: JSONArray) {
-                                        // do anything with response
-                                        var i = 0
-                                        println("we have response localizada")
-                                        searchResults.clear()
-                                        while(i < response.length()){
-                                            println("here")
-                                            println("search result $i ${response[i]}")
-                                            searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
-                                            i++
-                                        }
-                                        customAdapter.notifyDataSetChanged()
-                                        seeInMapButton.isEnabled = true
-                                        loadingCircle.visibility = View.GONE
-                                        resultLayout.visibility = View.VISIBLE
-                                    }
-                                    override fun onError(error: ANError) {
-                                        // handle error
-                                        println("ERROR: AAAAAAAAA " + error.message)
-                                        Toast.makeText(
-                                                activity?.applicationContext,
-                                                "Error cargando inmuebles",
-                                                Toast.LENGTH_LONG
-                                        ).show()
-                                    }
-                                })
-                    }
-            })
-            if(!located){
-                if ((activity as MainActivity).isNetworkConnected()) {
-                    AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
-                            .addQueryParameter("default", "true")
-                            .setPriority(Priority.HIGH)
-                        .build()
-                        .getAsJSONArray(object : JSONArrayRequestListener {
-                            override fun onResponse(response: JSONArray) {
-                                // do anything with response
-                                var i = 0
-                                println("we have response default")
-                                searchResults.clear()
-                                while(i < response.length()){
-                                    searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
-                                    i++
-                                }
-                                customAdapter.notifyDataSetChanged()
-                                seeInMapButton.isEnabled = true
-                                loadingCircle.visibility = View.GONE
-                                resultLayout.visibility = View.VISIBLE
-                            }
-                            override fun onError(error: ANError) {
-                                Toast.makeText(
-                                        activity?.applicationContext,
-                                        "Error cargando inmuebles",
-                                        Toast.LENGTH_LONG
-                                ).show()
-                                seeInMapButton.isEnabled = false
-                            }
-                        })
+    private fun getFilters(view: View) : HashMap<String, String>{
+        val result = hashMapOf<String, String>()
+
+        val cityText = cityInputText.text.toString()
+        if(cityText != "") result["ciudad"] = cityText
+        result["modelo"] = tipoInmuebleText.text.toString()
+        result["tipo"] = if (tipoBusqueda.checkedRadioButtonId == R.id.alquiler_radio_button)  "Alquiler" else "Venta"
+
+        if(advancedFiltersLayout.visibility == View.VISIBLE){
+            val precioMin = view.findViewById<TextInputEditText>(R.id.filtro_precio_min).text.toString()
+            val precioMax = view.findViewById<TextInputEditText>(R.id.filtro_precio_max).text.toString()
+            val habs = view.findViewById<TextInputEditText>(R.id.filtro_habitaciones).text.toString()
+            val baños = view.findViewById<TextInputEditText>(R.id.filtro_baños).text.toString()
+            val supMin = view.findViewById<TextInputEditText>(R.id.filtro_superficie_min).text.toString()
+            val supMax = view.findViewById<TextInputEditText>(R.id.filtro_superficie_max).text.toString()
+            val garaje = view.findViewById<CheckBox>(R.id.filtro_garaje).isChecked
+            if(precioMin != "") result["precioMin"] = precioMin
+            if(precioMax != "") result["precioMax"] = precioMax
+            if(result["precioMin"] != null && result["precioMax"] != null){
+                if(precioMin.toInt() > precioMax.toInt()){
+                    view.findViewById<TextInputEditText>(R.id.filtro_precio_max).error = "Precio mínimo mayor que el máximo"
+                    return hashMapOf()
                 }
             }
-        } else {
-            Toast.makeText(
-                    activity?.applicationContext,
-                    "Sin conexión a internet",
-                    Toast.LENGTH_LONG
-            ).show()
-            seeInMapButton.isEnabled = false
-        }
-    }
-
-    private fun getFilterValues(view : View) : MutableMap<String, String>{
-        val result = mutableMapOf<String, String>()
-
-        val cityText = view.findViewById<TextInputEditText>(R.id.filtro_ciudad).text.toString()
-        val precioMin = view.findViewById<TextInputEditText>(R.id.filtro_precio_min).text.toString()
-        val precioMax = view.findViewById<TextInputEditText>(R.id.filtro_precio_max).text.toString()
-        val habs = view.findViewById<TextInputEditText>(R.id.filtro_habitaciones).text.toString()
-        val baños = view.findViewById<TextInputEditText>(R.id.filtro_baños).text.toString()
-        val supMin = view.findViewById<TextInputEditText>(R.id.filtro_superficie_min).text.toString()
-        val supMax = view.findViewById<TextInputEditText>(R.id.filtro_superficie_max).text.toString()
-        val garaje = view.findViewById<CheckBox>(R.id.filtro_garaje).isChecked
-
-        if(cityText != "") result["ciudad"] = cityText
-        if(precioMin != "") result["precioMin"] = precioMin
-        if(precioMax != "") result["precioMax"] = precioMax
-        if(result["precioMin"] != null && result["precioMax"] != null){
-            if(precioMin.toInt() > precioMax.toInt()){
-                view.findViewById<TextInputEditText>(R.id.filtro_precio_max).error = "Precio mínimo mayor que el máximo"
-                return mutableMapOf()
+            if(habs != "") result["habitaciones"] = habs
+            if(baños != "") result["baños"] = baños
+            if(supMin != "") result["supMin"] = supMin
+            if(supMax != "") result["supMax"] = supMax
+            if(result["supMin"] != null && result["supMax"] != null) {
+                if (supMin.toInt() > supMax.toInt()) {
+                    view.findViewById<TextInputEditText>(R.id.filtro_superficie_max).error = "Superficie mínima mayor que la máxima"
+                    return hashMapOf()
+                }
             }
+            result["garaje"] = garaje.toString()
         }
-        if(habs != "") result["habitaciones"] = habs
-        if(baños != "") result["baños"] = baños
-        if(supMin != "") result["supMin"] = supMin
-        if(supMax != "") result["supMax"] = supMax
-        if(result["supMin"] != null && result["supMax"] != null) {
-            if (supMin.toInt() > supMax.toInt()) {
-                view.findViewById<TextInputEditText>(R.id.filtro_superficie_max).error = "Superficie mínima mayor que la máxima"
-                return mutableMapOf()
-            }
-        }
-        result["garaje"] = garaje.toString()
-        result["tipo"] = tipoText.text.toString()
 
         return result
     }
 
-    private fun getFilteredResults(){
-        filterCard.visibility = View.INVISIBLE
-        if ((activity as MainActivity).isNetworkConnected()) {
-            val query = AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
-            query.addQueryParameter("filtrada", "true")
-            val parameters = getFilterValues(requireView())
-            val parameterKeys = parameters.keys
-            val jsonToSave = JsonObject()
-            for (key in parameterKeys) {
-                query.addQueryParameter(key, parameters[key])
-                jsonToSave.addProperty(key, parameters[key])
-            }
-            saveSearch(jsonToSave)
-            resultLayout.visibility = View.GONE
-            loadingCircle.visibility = View.VISIBLE
-            seeInMapButton.isEnabled = false
-            query.setPriority(Priority.HIGH)
-            .build()
-            .getAsJSONArray(object : JSONArrayRequestListener {
-                override fun onResponse(response: JSONArray) {
-                    // do anything with response
-                    var i = 0
-                    println("we have response")
-                    searchResults.clear()
-                    while(i < response.length()){
-                        println("here")
-                        println("search result $i ${response[i]}")
-                        searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
-                        i++
-                    }
-                    customAdapter.notifyDataSetChanged()
-                    loadingCircle.visibility = View.GONE
-                    resultLayout.visibility = View.VISIBLE
-                    seeInMapButton.isEnabled = true
-                }
-                override fun onError(error: ANError) {
-                    // handle error
-                    println("ERROR: AAAAAAAAA " + error.message)
-                    Toast.makeText(
-                            activity?.applicationContext,
-                            "Error cargando inmuebles",
-                            Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
-        } else {
-            Toast.makeText(
-                    activity?.applicationContext,
-                    "Sin conexión a internet",
-                    Toast.LENGTH_LONG
-            ).show()
-            loadingCircle.visibility = View.GONE
-        }
-    }
-
-    private fun convertLocation(nativeLocation: LocationAndroid): Location {
-        val geoCoordinates = GeoCoordinates(
-                nativeLocation.latitude,
-                nativeLocation.longitude,
-                nativeLocation.altitude)
-        val location = Location(geoCoordinates, Date())
-        if (nativeLocation.hasBearing()) {
-            location.bearingInDegrees = nativeLocation.bearing.toDouble()
-        }
-        if (nativeLocation.hasSpeed()) {
-            location.speedInMetersPerSecond = nativeLocation.speed.toDouble()
-        }
-        if (nativeLocation.hasAccuracy()) {
-            location.horizontalAccuracyInMeters = nativeLocation.accuracy.toDouble()
-        }
-        return location
-    }
-
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        tipoText.text = parent?.getItemAtPosition(position) as String
+        tipoInmuebleText.text = parent?.getItemAtPosition(position) as String
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        //TODO("Not yet implemented")
+        TODO("Not yet implemented")
     }
 
-    fun saveSearch(jsonObject: JsonObject){
-        val sharedPrefs = activity?.getSharedPreferences("prefs", Context.MODE_PRIVATE) ?: return
-        with(sharedPrefs.edit()){
-            putString("saved_search", jsonObject.toString())
-            apply()
-            println("COMMITED")
-        }
+    /*
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment GestionInmuebleFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+                GestionInmuebleFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(ARG_PARAM1, param1)
+                        putString(ARG_PARAM2, param2)
+                    }
+                }
     }
+     */
+
 
 }
