@@ -8,8 +8,6 @@
     android:animateLayoutChanges="true"
     >
 
-
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/results"
         android:layout_width="match_parent"
@@ -264,6 +262,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_habs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -290,6 +289,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_baños"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -308,6 +308,33 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/filtro_baños"
+                            android:layout_width="48dp"
+                            android:layout_height="40dp"
+                            android:textSize="16sp"
+                            android:inputType="number"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_compas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Compañeros máximos"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            />
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/filtro_num_compas"
                             android:layout_width="48dp"
                             android:layout_height="40dp"
                             android:textSize="16sp"
@@ -369,6 +396,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/layout_garaje"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"

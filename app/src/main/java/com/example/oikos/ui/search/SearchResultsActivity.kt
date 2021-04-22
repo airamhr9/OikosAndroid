@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.core.widget.NestedScrollView
@@ -27,6 +28,7 @@ class SearchResultsActivity : AppCompatActivity() {
     lateinit var customAdapter: CustomAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
+    lateinit var emptyLayout : LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,8 @@ class SearchResultsActivity : AppCompatActivity() {
         searchResults = ArrayList()
         loadingCircle = findViewById(R.id.loading_search)
         resultLayout = findViewById(R.id.results)
+        emptyLayout = findViewById(R.id.empty_layout)
+        emptyLayout.visibility = View.GONE
 
         val filters : HashMap<String, String> = intent.extras!!.get("filters") as HashMap<String, String>
         getFilteredResults(filters)
@@ -76,7 +80,9 @@ class SearchResultsActivity : AppCompatActivity() {
                         }
                         customAdapter.notifyDataSetChanged()
                         loadingCircle.visibility = View.GONE
-                        resultLayout.visibility = View.VISIBLE
+                        if(searchResults.size == 0){
+                          emptyLayout.visibility = View.VISIBLE
+                        } else resultLayout.visibility = View.VISIBLE
                     }
                     override fun onError(error: ANError) {
                         // handle error

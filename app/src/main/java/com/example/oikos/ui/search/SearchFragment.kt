@@ -47,11 +47,30 @@ import kotlin.collections.ArrayList
 
 
 class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
+    val pisoPos = 0
+    val habitacionPos = 1
+    val garajePos = 2
+    val localPos = 3
+
     lateinit var expandFiltersButton : LinearLayout
     lateinit var tipoBusqueda : RadioGroup
     lateinit var tipoInmuebleText : AppCompatTextView
     lateinit var cityInputText : TextInputEditText
     lateinit var advancedFiltersLayout : LinearLayout
+
+    lateinit var precioMinText : TextInputEditText
+    lateinit var precioMaxText : TextInputEditText
+    lateinit var habsText : TextInputEditText
+    lateinit var bañosText : TextInputEditText
+    lateinit var numCompText : TextInputEditText
+    lateinit var supMinText : TextInputEditText
+    lateinit var supMaxText : TextInputEditText
+    lateinit var garajeCheckbox : CheckBox
+
+    lateinit var numCompLayout : LinearLayout
+    lateinit var habsLayout : LinearLayout
+    lateinit var bañosLayout : LinearLayout
+    lateinit var garajeLayout : LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +86,20 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.nueva_busqueda, container, false)
+
+        precioMinText = root.findViewById(R.id.filtro_precio_min)
+        precioMaxText = root.findViewById(R.id.filtro_precio_max)
+        habsText = root.findViewById(R.id.filtro_habitaciones)
+        bañosText = root.findViewById(R.id.filtro_baños)
+        numCompText = root.findViewById(R.id.filtro_num_compas)
+        supMinText = root.findViewById(R.id.filtro_superficie_min)
+        supMaxText = root.findViewById(R.id.filtro_superficie_max)
+        garajeCheckbox = root.findViewById(R.id.filtro_garaje)
+
+        numCompLayout = root.findViewById(R.id.layout_compas)
+        habsLayout = root.findViewById(R.id.layout_habs)
+        bañosLayout = root.findViewById(R.id.layout_baños)
+        garajeLayout = root.findViewById(R.id.layout_garaje)
 
         expandFiltersButton = root.findViewById(R.id.filtros_avanzados_button)
         advancedFiltersLayout = root.findViewById(R.id.filtros_avanzados_layout)
@@ -119,18 +152,25 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val result = hashMapOf<String, String>()
 
         val cityText = cityInputText.text.toString()
+        if(cityText == ""){
+            cityInputText.error = "Ciudad es obligatorio"
+            return hashMapOf()
+        }
         if(cityText != "") result["ciudad"] = cityText
-        result["modelo"] = tipoInmuebleText.text.toString()
+        val modeloInm = tipoInmuebleText.text.toString().toLowerCase(Locale.ROOT)
         result["tipo"] = if (tipoBusqueda.checkedRadioButtonId == R.id.alquiler_radio_button)  "Alquiler" else "Venta"
+        result["modelo"] = if(modeloInm == "habitación") "habitacion" else modeloInm
 
         if(advancedFiltersLayout.visibility == View.VISIBLE){
-            val precioMin = view.findViewById<TextInputEditText>(R.id.filtro_precio_min).text.toString()
-            val precioMax = view.findViewById<TextInputEditText>(R.id.filtro_precio_max).text.toString()
-            val habs = view.findViewById<TextInputEditText>(R.id.filtro_habitaciones).text.toString()
-            val baños = view.findViewById<TextInputEditText>(R.id.filtro_baños).text.toString()
-            val supMin = view.findViewById<TextInputEditText>(R.id.filtro_superficie_min).text.toString()
-            val supMax = view.findViewById<TextInputEditText>(R.id.filtro_superficie_max).text.toString()
-            val garaje = view.findViewById<CheckBox>(R.id.filtro_garaje).isChecked
+            val precioMin = precioMinText.text.toString()
+            val precioMax = precioMaxText.text.toString()
+            val habs = habsText.text.toString()
+            val baños = bañosText.text.toString()
+            val numComps = numCompText.text.toString()
+            val supMin = supMinText.text.toString()
+            val supMax = supMaxText.text.toString()
+            val garaje = garajeCheckbox.isChecked
+
             if(precioMin != "") result["precioMin"] = precioMin
             if(precioMax != "") result["precioMax"] = precioMax
             if(result["precioMin"] != null && result["precioMax"] != null){
@@ -143,20 +183,50 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             if(baños != "") result["baños"] = baños
             if(supMin != "") result["supMin"] = supMin
             if(supMax != "") result["supMax"] = supMax
+            if(numComps != "") result["numCompañeros"]
             if(result["supMin"] != null && result["supMax"] != null) {
                 if (supMin.toInt() > supMax.toInt()) {
                     view.findViewById<TextInputEditText>(R.id.filtro_superficie_max).error = "Superficie mínima mayor que la máxima"
                     return hashMapOf()
                 }
             }
-            result["garaje"] = garaje.toString()
+            if(modeloInm == "piso" || modeloInm == "habitacion")
+                result["garaje"] = garaje.toString()
         }
 
         return result
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        tipoInmuebleText.text = parent?.getItemAtPosition(position) as String
+        val selectedModel = parent?.getItemAtPosition(position) as String
+        tipoInmuebleText.text = selectedModel
+
+        habsLayout.visibility = View.GONE
+        habsText.setText("")
+        bañosLayout.visibility = View.GONE
+        bañosText.setText("")
+        garajeLayout.visibility = View.GONE
+        garajeCheckbox.isChecked = false
+        numCompLayout.visibility = View.GONE
+        numCompText.setText("")
+
+        when (position) {
+            pisoPos -> {
+                habsLayout.visibility = View.VISIBLE
+                bañosLayout.visibility = View.VISIBLE
+                garajeLayout.visibility = View.VISIBLE
+            }
+            habitacionPos -> {
+                tipoBusqueda.check(R.id.alquiler_radio_button)
+                bañosLayout.visibility = View.VISIBLE
+                numCompLayout.visibility = View.VISIBLE
+                garajeLayout.visibility = View.VISIBLE
+                habsLayout.visibility = View.VISIBLE
+            }
+            localPos -> {
+                bañosLayout.visibility = View.VISIBLE
+            }
+        }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
