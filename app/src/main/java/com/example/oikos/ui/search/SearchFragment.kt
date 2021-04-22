@@ -203,6 +203,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         habsLayout.visibility = View.GONE
         habsText.setText("")
+        tipoBusqueda.getChildAt(0).isEnabled = true
         bañosLayout.visibility = View.GONE
         bañosText.setText("")
         garajeLayout.visibility = View.GONE
@@ -218,6 +219,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
             habitacionPos -> {
                 tipoBusqueda.check(R.id.alquiler_radio_button)
+                tipoBusqueda.getChildAt(0).isEnabled = false
                 bañosLayout.visibility = View.VISIBLE
                 numCompLayout.visibility = View.VISIBLE
                 garajeLayout.visibility = View.VISIBLE
