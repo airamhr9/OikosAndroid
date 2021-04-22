@@ -141,8 +141,10 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         searchButton.setOnClickListener {
             val filters = getFilters(root)
             val intent = Intent(context, SearchResultsActivity :: class.java)
-            intent.putExtra("filters", filters)
-            context?.startActivity(intent)
+            if(filters.isNotEmpty()){
+                intent.putExtra("filters", filters)
+                context?.startActivity(intent)
+            }
         }
 
         return root
