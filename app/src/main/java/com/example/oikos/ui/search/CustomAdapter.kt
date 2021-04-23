@@ -13,16 +13,13 @@ import com.bumptech.glide.Glide
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import objects.DatosInmueble
+import objects.InmuebleForList
 import java.net.URL
 
 
-class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
+class CustomAdapter(private val dataSet: ArrayList<InmuebleForList>) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder).
-     */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val inmuebleCardView : CardView = view.findViewById(R.id.inmueble_card)
         val priceText : TextView = view.findViewById(R.id.inmueble_card_price)
@@ -46,19 +43,21 @@ class CustomAdapter(private val dataSet: ArrayList<DatosInmueble>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.priceText.text = "${dataSet[position].precio}€"
-        viewHolder.addressText.text = dataSet[position].direccion
-        viewHolder.tipoTextView.text = dataSet[position].tipo
-        if(dataSet[position].tipo == "Alquiler")
+        println("ON BIND MODELO IS " + dataSet[position].modelo)
+        viewHolder.priceText.text = "${dataSet[position].inmueble.precio}€"
+        viewHolder.addressText.text = dataSet[position].inmueble.direccion
+        viewHolder.tipoTextView.text = dataSet[position].inmueble.tipo
+        if(dataSet[position].inmueble.tipo == "Alquiler")
             viewHolder.tipoCardView.setCardBackgroundColor(Color.parseColor("#42a5f5"))
-        viewHolder.numImagenes.text = "${dataSet[position].images.size} imágenes"
+        viewHolder.numImagenes.text = "${dataSet[position].inmueble.images.size} imágenes"
 
         viewHolder.inmuebleCardView.setOnClickListener {
             val intent = Intent(viewHolder.itemView.context, FichaInmuebleActivity :: class.java)
-            intent.putExtra("inmueble", dataSet[position])
+            intent.putExtra("inmueble", dataSet[position].inmueble)
+            intent.putExtra("modelo", dataSet[position].modelo)
             viewHolder.itemView.context.startActivity(intent)
         }
-        var url = URL(dataSet[position].images.first())
+        var url = URL(dataSet[position].inmueble.images.first())
         url = URL("http://10.0.2.2:9000${url.path}")
 
         Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)

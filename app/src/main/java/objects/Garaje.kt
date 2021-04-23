@@ -1,6 +1,7 @@
 package objects
 
 import com.google.gson.JsonObject
+import java.io.Serializable
 
 class Garaje(id: Int,
              disponible: Boolean,
@@ -14,7 +15,7 @@ class Garaje(id: Int,
              latitud: Double,
              longitud: Double,
              imagenes: ArrayList<String>,
-) : DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
+) : Serializable, DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
         direccion, ciudad, latitud, longitud, imagenes) {
 
     companion object {

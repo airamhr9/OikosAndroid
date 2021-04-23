@@ -1,6 +1,7 @@
 package objects
 
 import com.google.gson.JsonObject
+import java.io.Serializable
 
 class Habitacion(id: Int,
                  disponible: Boolean,
@@ -18,7 +19,7 @@ class Habitacion(id: Int,
                  baños: Int,
                  garaje: Boolean,
                  var numCompañeros: Int,
-) : Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
+) : Serializable, Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
         direccion, ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje) {
 
     companion object {

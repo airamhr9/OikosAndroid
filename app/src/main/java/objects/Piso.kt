@@ -1,6 +1,8 @@
 package objects
 
+import com.example.oikos.serverConnection.ServerConnection
 import com.google.gson.JsonObject
+import java.io.Serializable
 
 open class Piso(id: Int,
                 disponible: Boolean,
@@ -17,7 +19,7 @@ open class Piso(id: Int,
                 var habitaciones: Int,
                 var baños: Int,
                 var garaje: Boolean,
-) : DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
+) : Serializable, DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
         direccion, ciudad, latitud, longitud, imagenes) {
 
     companion object {

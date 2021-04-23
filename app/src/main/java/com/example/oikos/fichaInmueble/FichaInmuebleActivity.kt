@@ -22,8 +22,10 @@ class FichaInmuebleActivity : AppCompatActivity() {
 
         if(savedInstanceState == null){
             val datosFicha = intent.getSerializableExtra("inmueble") as DatosInmueble
+            val modelo = intent.getStringExtra("modelo") as String
             val bundle = Bundle()
             bundle.putSerializable("inmueble", datosFicha)
+            bundle.putString("modelo", modelo)
             val fichaMainFragment: Fragment = FichaInmuebleFragment()
             fichaMainFragment.arguments = bundle
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()

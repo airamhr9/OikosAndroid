@@ -65,8 +65,8 @@ class RecommendedFragment : Fragment() {
         resultLayout.visibility = View.GONE
 
         val resultsRecycler = view.findViewById<View>(R.id.results_recommended_recycler) as RecyclerView
-        customAdapter = CustomAdapter(searchResults)
-        resultsRecycler.adapter = customAdapter
+        //customAdapter = CustomAdapter(searchResults)
+        //resultsRecycler.adapter = customAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(context)
 
         if ((activity as MainActivity).isNetworkConnected()) {

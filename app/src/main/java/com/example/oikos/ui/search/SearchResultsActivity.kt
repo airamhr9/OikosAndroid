@@ -23,10 +23,11 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
 import objects.InmuebleFactory
+import objects.InmuebleForList
 import org.json.JSONArray
 
 class SearchResultsActivity : AppCompatActivity() {
-    lateinit var searchResults: ArrayList<DatosInmueble>
+    lateinit var searchResults: ArrayList<InmuebleForList>
     lateinit var customAdapter: CustomAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -49,7 +50,6 @@ class SearchResultsActivity : AppCompatActivity() {
         val resultsRecycler = findViewById<View>(R.id.results_recycler) as RecyclerView
         customAdapter = CustomAdapter(searchResults)
         resultsRecycler.adapter = customAdapter
-        // Set layout manager to position the items
         resultsRecycler.layoutManager = LinearLayoutManager(this)
     }
 
@@ -67,6 +67,7 @@ class SearchResultsActivity : AppCompatActivity() {
                 .build()
                 .getAsJSONArray(object : JSONArrayRequestListener {
                     override fun onResponse(response: JSONArray) {
+                        println("MODELO ES " + filters["modelo"])
                         processResponse(response, filters["modelo"]!!)
                     }
                     override fun onError(error: ANError) {
@@ -90,10 +91,10 @@ class SearchResultsActivity : AppCompatActivity() {
     private fun processResponse(response : JSONArray, modelo : String){
         var i = 0
         println("we have response")
-        searchResults.clear()
         while(i < response.length()){
-            println("search result $i ${response[i]}")
-            searchResults.add(InmuebleFactory.new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo))
+            val inmueble = InmuebleFactory.new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
+            searchResults.add(InmuebleForList(inmueble, modelo))
+            println("MODELO AGAIN IS " + modelo)
             i++
         }
         customAdapter.notifyDataSetChanged()

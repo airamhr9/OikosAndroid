@@ -1,6 +1,7 @@
 package objects
 
 import com.google.gson.JsonObject
+import java.io.Serializable
 
 class Local(id: Int,
             disponible: Boolean,
@@ -15,7 +16,7 @@ class Local(id: Int,
             longitud: Double,
             imagenes: ArrayList<String>,
             var baños: Int,
-) : DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
+) : Serializable, DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
         direccion, ciudad, latitud, longitud, imagenes) {
 
     companion object {
