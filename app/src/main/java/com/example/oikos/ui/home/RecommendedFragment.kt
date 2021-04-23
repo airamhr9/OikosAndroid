@@ -30,6 +30,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.here.sdk.core.GeoCoordinates
 import objects.DatosInmueble
+import objects.InmuebleFactory
 import objects.Preferencia
 import org.json.JSONArray
 import org.json.JSONObject
@@ -121,7 +122,7 @@ class RecommendedFragment : Fragment() {
                                     while(i < response.length()){
                                         println("here")
                                         println("search result $i ${response[i]}")
-                                        searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
+                                        //searchResults.add(InmuebleFactory.new(JsonParser.parseString(response[i].toString()).asJsonObject))
                                         i++
                                     }
                                     customAdapter.notifyDataSetChanged()
@@ -153,7 +154,7 @@ class RecommendedFragment : Fragment() {
                                     println("we have response")
                                     searchResults.clear()
                                     while(i < response.length()){
-                                        searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
+                                        //searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
                                         i++
                                     }
                                     customAdapter.notifyDataSetChanged()
@@ -219,7 +220,7 @@ class RecommendedFragment : Fragment() {
                         while(i < response.length()){
                             println("here")
                             println("search result $i ${response[i]}")
-                            searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
+                            //searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
                             i++
                         }
                         customAdapter.notifyDataSetChanged()

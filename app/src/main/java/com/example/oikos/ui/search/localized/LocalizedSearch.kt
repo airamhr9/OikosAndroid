@@ -25,6 +25,7 @@ import com.here.sdk.core.*
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapview.*
 import objects.DatosInmueble
+import objects.InmuebleFactory
 import org.json.JSONArray
 import java.net.URL
 import java.util.*
@@ -274,11 +275,13 @@ class LocalizedSearch : AppCompatActivity() {
                                 listaInmuebles.clear()
                                 while (i < response.length()) {
                                     println("search result $i ${response[i]}")
+                                    val inmuebleJson = JsonParser.parseString(
+                                            response[i].toString()
+                                    ).asJsonObject
                                     listaInmuebles.add(
-                                        DatosInmueble.fromJson(
-                                            JsonParser.parseString(
-                                                response[i].toString()
-                                            ).asJsonObject
+                                        InmuebleFactory.new(
+                                            inmuebleJson,
+                                            inmuebleJson.get("modelo").asString!!
                                         )
                                     )
                                     i++
@@ -322,11 +325,13 @@ class LocalizedSearch : AppCompatActivity() {
                                 println("we have response")
                                 listaInmuebles.clear()
                                 while (i < response.length()) {
+                                    val inmuebleJson = JsonParser.parseString(
+                                            response[i].toString()
+                                    ).asJsonObject
                                     listaInmuebles.add(
-                                        DatosInmueble.fromJson(
-                                            JsonParser.parseString(
-                                                response[i].toString()
-                                            ).asJsonObject
+                                        InmuebleFactory.new(
+                                            inmuebleJson,
+                                            inmuebleJson.get("modelo").asString!!
                                         )
                                     )
                                     i++
@@ -368,13 +373,14 @@ class LocalizedSearch : AppCompatActivity() {
                     println("we have response")
                     listaInmuebles.clear()
                     while (i < response.length()) {
-                        println("search result $i ${response[i]}")
+                        val inmuebleJson = JsonParser.parseString(
+                                response[i].toString()
+                        ).asJsonObject
                         listaInmuebles.add(
-                            DatosInmueble.fromJson(
-                                JsonParser.parseString(
-                                    response[i].toString()
-                                ).asJsonObject
-                            )
+                                InmuebleFactory.new(
+                                        inmuebleJson,
+                                        inmuebleJson.get("modelo").asString!!
+                                )
                         )
                         i++
                     }

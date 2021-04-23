@@ -3,7 +3,22 @@ package objects
 import com.example.oikos.R
 import com.google.gson.JsonObject
 import java.io.Serializable
+abstract class DatosInmueble(val id: Int,
+                               var disponible: Boolean,
+                               var tipo: String,
+                               var superficie: Int,
+                               var precio: Double,
+                               var propietario: Usuario,
+                               var descripcion: String,
+                               var direccion: String,
+                               var ciudad: String,
+                               var latitud: Double,
+                               var longitud: Double,
+                               var images: ArrayList<String>,
+) : Serializable {
 
+
+/*
 class DatosInmueble (var disponible: Boolean,
                      var superficie: Int,
                       var precio: Double,
@@ -18,6 +33,7 @@ class DatosInmueble (var disponible: Boolean,
                       var tipo : String,
                       val images:  ArrayList<String>) : Serializable {
     var id: Int = 0
+*/
 
     fun toJson(): JsonObject {
         val result = JsonObject()
@@ -29,9 +45,11 @@ class DatosInmueble (var disponible: Boolean,
         result.addProperty("direccion", this.direccion)
         result.addProperty("latitud", this.latitud)
         result.addProperty("longitud", this.longitud)
+/*
         result.addProperty("habitaciones", this.habitaciones)
         result.addProperty("baños", this.baños)
         result.addProperty("garaje", this.garaje)
+*/
         result.add("propietario", this.propietario.toJson())
         result.addProperty("descripcion", this.descripcion)
         // Falta añadir las imagenes
@@ -39,6 +57,8 @@ class DatosInmueble (var disponible: Boolean,
     }
 
     companion object {
+
+/*
         fun fromJson(jsonObject: JsonObject): DatosInmueble {
             val disponible = jsonObject.get("disponible").asBoolean
             val superficie = jsonObject.get("superficie").asInt
@@ -62,6 +82,7 @@ class DatosInmueble (var disponible: Boolean,
             datosInmueble.id = jsonObject.get("id").asInt
             return datosInmueble
         }
+*/
     }
                           }
 

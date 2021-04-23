@@ -18,9 +18,11 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.example.oikos.MainActivity
 import com.example.oikos.R
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
+import objects.InmuebleFactory
 import org.json.JSONArray
 
 class SearchResultsActivity : AppCompatActivity() {
@@ -56,37 +58,18 @@ class SearchResultsActivity : AppCompatActivity() {
             val query = AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
             query.addQueryParameter("filtrada", "true")
             val filterKeys = filters.keys
-            val jsonToSave = JsonObject()
             for (key in filterKeys) {
                 query.addQueryParameter(key, filters[key])
-                jsonToSave.addProperty(key, filters[key])
             }
-            saveSearch(jsonToSave)
             resultLayout.visibility = View.GONE
             loadingCircle.visibility = View.VISIBLE
             query.setPriority(Priority.HIGH)
                 .build()
                 .getAsJSONArray(object : JSONArrayRequestListener {
                     override fun onResponse(response: JSONArray) {
-                        // do anything with response
-                        var i = 0
-                        println("we have response")
-                        searchResults.clear()
-                        while(i < response.length()){
-                            println("here")
-                            println("search result $i ${response[i]}")
-                            searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
-                            i++
-                        }
-                        customAdapter.notifyDataSetChanged()
-                        loadingCircle.visibility = View.GONE
-                        if(searchResults.size == 0){
-                          emptyLayout.visibility = View.VISIBLE
-                        } else resultLayout.visibility = View.VISIBLE
+                        processResponse(response, filters["modelo"]!!)
                     }
                     override fun onError(error: ANError) {
-                        // handle error
-                        println("ERROR: AAAAAAAAA " + error.message)
                         Toast.makeText(
                             applicationContext,
                             "Error cargando inmuebles",
@@ -102,6 +85,22 @@ class SearchResultsActivity : AppCompatActivity() {
             ).show()
             loadingCircle.visibility = View.GONE
         }
+    }
+
+    private fun processResponse(response : JSONArray, modelo : String){
+        var i = 0
+        println("we have response")
+        searchResults.clear()
+        while(i < response.length()){
+            println("search result $i ${response[i]}")
+            searchResults.add(InmuebleFactory.new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo))
+            i++
+        }
+        customAdapter.notifyDataSetChanged()
+        loadingCircle.visibility = View.GONE
+        if(searchResults.size == 0){
+            emptyLayout.visibility = View.VISIBLE
+        } else resultLayout.visibility = View.VISIBLE
     }
 
     private fun isNetworkConnected(): Boolean {

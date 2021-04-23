@@ -105,7 +105,7 @@ class SavedSearchFragment : Fragment() {
                         while (i < response.length()) {
                             println("here")
                             println("search result $i ${response[i]}")
-                            searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
+                            //searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
                             i++
                         }
                         customAdapter.notifyDataSetChanged()

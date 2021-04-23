@@ -72,39 +72,14 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     lateinit var bañosLayout : LinearLayout
     lateinit var garajeLayout : LinearLayout
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        /*
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-        */
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.nueva_busqueda, container, false)
 
-        precioMinText = root.findViewById(R.id.filtro_precio_min)
-        precioMaxText = root.findViewById(R.id.filtro_precio_max)
-        habsText = root.findViewById(R.id.filtro_habitaciones)
-        bañosText = root.findViewById(R.id.filtro_baños)
-        numCompText = root.findViewById(R.id.filtro_num_compas)
-        supMinText = root.findViewById(R.id.filtro_superficie_min)
-        supMaxText = root.findViewById(R.id.filtro_superficie_max)
-        garajeCheckbox = root.findViewById(R.id.filtro_garaje)
+        initializeFields(root)
 
-        numCompLayout = root.findViewById(R.id.layout_compas)
-        habsLayout = root.findViewById(R.id.layout_habs)
-        bañosLayout = root.findViewById(R.id.layout_baños)
-        garajeLayout = root.findViewById(R.id.layout_garaje)
-
-        expandFiltersButton = root.findViewById(R.id.filtros_avanzados_button)
-        advancedFiltersLayout = root.findViewById(R.id.filtros_avanzados_layout)
         val expandFiltersArrow = root.findViewById<AppCompatImageView>(R.id.filtros_avanzados_arrow)
-
         expandFiltersButton.setOnClickListener {
             if(advancedFiltersLayout.visibility == View.GONE){
                 advancedFiltersLayout.visibility = View.VISIBLE
@@ -114,9 +89,8 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 expandFiltersArrow.animate().rotation(0f).start();
             }
         }
-        tipoBusqueda = root.findViewById(R.id.tipo_busqueda_radio_group)
-        tipoBusqueda.check(R.id.alquiler_radio_button)
 
+        tipoBusqueda.check(R.id.alquiler_radio_button)
         val tipoSpinner : AppCompatSpinner = root.findViewById(R.id.filtro_tipo)
         ArrayAdapter.createFromResource(
                 requireContext(),
@@ -126,7 +100,6 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             tipoSpinner.adapter = adapter
         }
-        tipoInmuebleText = root.findViewById(R.id.filter_tipo_text)
         tipoSpinner.onItemSelectedListener = this
 
         cityInputText = root.findViewById(R.id.filtro_ciudad)
@@ -148,6 +121,28 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
         return root
+    }
+
+    private fun initializeFields(view : View){
+        precioMinText = view.findViewById(R.id.filtro_precio_min)
+        precioMaxText = view.findViewById(R.id.filtro_precio_max)
+        habsText = view.findViewById(R.id.filtro_habitaciones)
+        bañosText = view.findViewById(R.id.filtro_baños)
+        numCompText = view.findViewById(R.id.filtro_num_compas)
+        supMinText = view.findViewById(R.id.filtro_superficie_min)
+        supMaxText = view.findViewById(R.id.filtro_superficie_max)
+        garajeCheckbox = view.findViewById(R.id.filtro_garaje)
+
+        numCompLayout = view.findViewById(R.id.layout_compas)
+        habsLayout = view.findViewById(R.id.layout_habs)
+        bañosLayout = view.findViewById(R.id.layout_baños)
+        garajeLayout = view.findViewById(R.id.layout_garaje)
+
+        expandFiltersButton = view.findViewById(R.id.filtros_avanzados_button)
+        advancedFiltersLayout = view.findViewById(R.id.filtros_avanzados_layout)
+
+        tipoBusqueda = view.findViewById(R.id.tipo_busqueda_radio_group)
+        tipoInmuebleText = view.findViewById(R.id.filter_tipo_text)
     }
 
     private fun getFilters(view: View) : HashMap<String, String>{
@@ -202,7 +197,11 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedModel = parent?.getItemAtPosition(position) as String
         tipoInmuebleText.text = selectedModel
+        resetModelFilters()
+        showModelFilters(position)
+    }
 
+    private fun resetModelFilters(){
         habsLayout.visibility = View.GONE
         habsText.setText("")
         tipoBusqueda.getChildAt(0).isEnabled = true
@@ -212,7 +211,9 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         garajeCheckbox.isChecked = false
         numCompLayout.visibility = View.GONE
         numCompText.setText("")
+    }
 
+    private fun showModelFilters(position: Int){
         when (position) {
             pisoPos -> {
                 habsLayout.visibility = View.VISIBLE
@@ -233,31 +234,8 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
+     override fun onNothingSelected(parent: AdapterView<*>?) {
+         return
     }
-
-    /*
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GestionInmuebleFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                GestionInmuebleFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
-     */
-
 
 }

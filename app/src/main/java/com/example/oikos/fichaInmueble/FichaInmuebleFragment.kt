@@ -50,6 +50,7 @@ class FichaInmuebleFragment : Fragment() {
     }
 
 
+    //TODO: CAMBIA CON EL MODELO
     fun setData(view : View, data: DatosInmueble){
         val priceText = view.findViewById<TextView>(R.id.ficha_precio)
         val addressText = view.findViewById<TextView>(R.id.ficha_direccion_completa)
@@ -71,10 +72,10 @@ class FichaInmuebleFragment : Fragment() {
         }
             //TODO(cambiar a valores en Res/Values)
         availableText.text = data.tipo
-        numBaths.text = "Baños: ${data.baños}"
-        numRooms.text = "Habitaciones: ${data.habitaciones}"
+        //numBaths.text = "Baños: ${data.baños}"
+        //numRooms.text = "Habitaciones: ${data.habitaciones}"
         size.text = "Superficie: ${data.superficie}m\u00B2"
-        hasGarage.text = if(data.garaje) "Garaje: Sí" else "Garaje: No"
+        //hasGarage.text = if(data.garaje) "Garaje: Sí" else "Garaje: No"
         description.text = data.descripcion
         landlordName.text = data.propietario.nombre
         landlordMail.text = data.propietario.mail
