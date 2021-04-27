@@ -26,6 +26,7 @@ import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapview.*
 import objects.DatosInmueble
 import objects.InmuebleFactory
+import objects.InmuebleForList
 import org.json.JSONArray
 import java.net.URL
 import java.util.*
@@ -35,7 +36,7 @@ import kotlin.collections.ArrayList
 class LocalizedSearch : AppCompatActivity() {
     private lateinit var mapView : MapView
     private lateinit var mapCard : CardView
-    private lateinit var listaInmuebles : ArrayList<DatosInmueble>
+    private lateinit var listaInmuebles : ArrayList<InmuebleForList>
     private var inmueblesDisplayed : Boolean = false
     private lateinit var mapMarkers : ArrayList<MapMarker>
     private lateinit var mapPolygons : ArrayList<MapPolygon>
@@ -69,7 +70,7 @@ class LocalizedSearch : AppCompatActivity() {
     }
 
     private fun loadMapData(){
-        val coordList = listaInmuebles.map { GeoCoordinates(it.latitud, it.longitud) }
+        val coordList = listaInmuebles.map { GeoCoordinates(it.inmueble.latitud, it.inmueble.longitud) }
         drawCircles(coordList)
     }
 
@@ -156,7 +157,7 @@ class LocalizedSearch : AppCompatActivity() {
         }
         val topmostMapMarker = mapMarkerList[0]
         val selectedInmueble = listaInmuebles.first {
-            it.latitud == topmostMapMarker.coordinates.latitude && it.longitud == topmostMapMarker.coordinates.longitude}
+            it.inmueble.latitud == topmostMapMarker.coordinates.latitude && it.inmueble.longitud == topmostMapMarker.coordinates.longitude}
 
         if (mapCard.visibility == View.INVISIBLE){
             mapCard.visibility = View.VISIBLE
@@ -167,7 +168,8 @@ class LocalizedSearch : AppCompatActivity() {
         }
         mapCard.setOnClickListener {
             val intent = Intent(this, FichaInmuebleActivity::class.java)
-            intent.putExtra("inmueble", selectedInmueble)
+            intent.putExtra("inmueble", selectedInmueble.inmueble)
+            intent.putExtra("modelo", selectedInmueble.modelo)
             startActivity(intent)
         }
     }
@@ -187,7 +189,8 @@ class LocalizedSearch : AppCompatActivity() {
         mapView.onDestroy()
     }
 
-    fun setCardData(inmueble: DatosInmueble){
+    fun setCardData(inmuebleData: InmuebleForList){
+        val inmueble = inmuebleData.inmueble
         val numImag = findViewById<TextView>(R.id.map_card_localized_num_imag)
         val price = findViewById<TextView>(R.id.map_card_localized_price)
         val type = findViewById<TextView>(R.id.map_card_localized_type)
@@ -278,11 +281,13 @@ class LocalizedSearch : AppCompatActivity() {
                                     val inmuebleJson = JsonParser.parseString(
                                             response[i].toString()
                                     ).asJsonObject
+                                    val modelo = inmuebleJson.get("modelo").asString!!
                                     listaInmuebles.add(
-                                        InmuebleFactory.new(
-                                            inmuebleJson,
-                                            inmuebleJson.get("modelo").asString!!
-                                        )
+                                        InmuebleForList(
+                                            InmuebleFactory.new(
+                                                inmuebleJson,
+                                                modelo
+                                            ), modelo)
                                     )
                                     i++
                                 }
@@ -290,8 +295,8 @@ class LocalizedSearch : AppCompatActivity() {
                                 loadMapData()
                                 mapView.camera.lookAt(
                                     GeoCoordinates(
-                                        listaInmuebles.first().latitud,
-                                        listaInmuebles.first().longitud
+                                        listaInmuebles.first().inmueble.latitud,
+                                        listaInmuebles.first().inmueble.longitud
                                     ), (1000 * 10).toDouble()
                                 )
                                 /*
@@ -328,11 +333,13 @@ class LocalizedSearch : AppCompatActivity() {
                                     val inmuebleJson = JsonParser.parseString(
                                             response[i].toString()
                                     ).asJsonObject
+                                    val modelo = inmuebleJson.get("modelo").asString!!
                                     listaInmuebles.add(
-                                        InmuebleFactory.new(
-                                            inmuebleJson,
-                                            inmuebleJson.get("modelo").asString!!
-                                        )
+                                        InmuebleForList(
+                                            InmuebleFactory.new(
+                                                    inmuebleJson,
+                                                    modelo
+                                            ), modelo)
                                     )
                                     i++
                                 }
@@ -376,11 +383,13 @@ class LocalizedSearch : AppCompatActivity() {
                         val inmuebleJson = JsonParser.parseString(
                                 response[i].toString()
                         ).asJsonObject
+                        val modelo = inmuebleJson.get("modelo").asString!!
                         listaInmuebles.add(
+                            InmuebleForList(
                                 InmuebleFactory.new(
                                         inmuebleJson,
-                                        inmuebleJson.get("modelo").asString!!
-                                )
+                                        modelo
+                                ), modelo)
                         )
                         i++
                     }
@@ -389,8 +398,8 @@ class LocalizedSearch : AppCompatActivity() {
                     if(listaInmuebles.isNotEmpty()){
                         mapView.camera.lookAt(
                             GeoCoordinates(
-                                listaInmuebles.first().latitud,
-                                listaInmuebles.first().longitud
+                                listaInmuebles.first().inmueble.latitud,
+                                listaInmuebles.first().inmueble.longitud
                             ), (1000 * 10).toDouble()
                         )
                     } else {
