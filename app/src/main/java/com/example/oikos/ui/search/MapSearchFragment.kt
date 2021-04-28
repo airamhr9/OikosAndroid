@@ -18,7 +18,6 @@ import com.here.sdk.core.*
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapview.*
 import objects.DatosInmueble
-import objects.Usuario
 import java.net.URL
 
 class MapSearchFragment : Fragment() {
@@ -148,12 +147,12 @@ class MapSearchFragment : Fragment() {
 
 
         //TODO(solo para emulador)
-        var url = URL(inmueble.images.first())
+        var url = URL(inmueble.imagenes.first())
         url = URL("http://10.0.2.2:9000${url.path}")
 
         Glide.with(requireContext()).asBitmap().load(url.toString()).into(imageView!!)
 
-        numImag?.text = "${inmueble.images.size} imágenes"
+        numImag?.text = "${inmueble.imagenes.size} imágenes"
         price?.text = "${inmueble.precio}€"
         type?.text = inmueble.tipo
         if(type?.text == "Alquiler"){

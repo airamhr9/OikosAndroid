@@ -32,6 +32,70 @@ class InmuebleFactory {
             }
         }
 
+        fun new(
+                id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
+                propietario: Usuario, descripcion: String, direccion: String, ciudad: String,
+                latitud: Double, longitud: Double, imagenes: ArrayList<String>, habitaciones: Int,
+                baños: Int, garaje: Boolean,
+        ): Piso {
+            return Piso(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje)
+        }
+        fun new(
+                id: Int,
+                disponible: Boolean,
+                tipo: String,
+                superficie: Int,
+                precio: Double,
+                propietario: Usuario,
+                descripcion: String,
+                direccion: String,
+                ciudad: String,
+                latitud: Double,
+                longitud: Double,
+                imagenes: ArrayList<String>,
+                baños: Int,
+        ) : Local {
+            return Local(id, disponible, tipo, superficie, precio, propietario, descripcion,
+                    direccion, ciudad, latitud, longitud, imagenes, baños)
+
+        }
+        fun new(id: Int,
+                 disponible: Boolean,
+                 tipo: String,
+                 superficie: Int,
+                 precio: Double,
+                 propietario: Usuario,
+                 descripcion: String,
+                 direccion: String,
+                 ciudad: String,
+                 latitud: Double,
+                 longitud: Double,
+                 imagenes: ArrayList<String>,) : Garaje {
+            return Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion,
+                    direccion, ciudad, latitud, longitud, imagenes)
+        }
+        fun new(id: Int,
+                disponible: Boolean,
+                tipo: String,
+                superficie: Int,
+                precio: Double,
+                propietario: Usuario,
+                descripcion: String,
+                direccion: String,
+                ciudad: String,
+                latitud: Double,
+                longitud: Double,
+                imagenes: ArrayList<String>,
+                habitaciones: Int,
+                baños: Int,
+                garaje: Boolean,
+                numCompañeros: Int,
+        ) : Habitacion {
+            return Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion,
+                    direccion, ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje, numCompañeros)
+        }
+
         fun fromJsonPiso(jsonObject: JsonObject): Piso {
             val id = jsonObject.get("id").asInt
             val disponible = jsonObject.get("disponible").asBoolean

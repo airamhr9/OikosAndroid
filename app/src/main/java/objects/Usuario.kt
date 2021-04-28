@@ -8,8 +8,7 @@ class Usuario(
     var nombre: String,
     var mail: String,
 ) : Serializable{
-    var id : Int = 0
-    private val token = UUID.randomUUID()
+    var id : Int = 1
 
     fun toJson(): JsonObject {
         val result = JsonObject()

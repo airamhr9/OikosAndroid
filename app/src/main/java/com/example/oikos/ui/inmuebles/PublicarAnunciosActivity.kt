@@ -13,9 +13,25 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
+import androidx.core.net.toFile
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.JSONArrayRequestListener
+import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.example.oikos.R
 import com.google.android.flexbox.FlexboxLayout
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import objects.DatosInmueble
+import objects.InmuebleFactory
+import objects.Piso
+import objects.Usuario
+import org.json.JSONArray
+import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 
 class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -39,6 +55,12 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
     lateinit var garajeCheckbox : CheckBox
     lateinit var tipoBusqueda : RadioGroup
     lateinit var tipoInmuebleText : AppCompatTextView
+    lateinit var locationImage : ImageView
+    lateinit var locationText : TextView
+    lateinit var locationButton : Button
+    var latitud : Double? = null
+    var longitud : Double? = null
+    var currentType = pisoPos
 
     lateinit var numCompLayout : LinearLayout
     lateinit var habsLayout : LinearLayout
@@ -73,7 +95,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         tipoSpinner.onItemSelectedListener = this
 
         findViewById<AppCompatButton>(R.id.publicar_button).setOnClickListener {
-            //Publicar
+            getFormData()
         }
     }
 
@@ -87,6 +109,11 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         habitacionesTextField = findViewById(R.id.publicar_habs)
         garajeCheckbox = findViewById(R.id.publicar_garaje)
         descripcionTextField = findViewById(R.id.publicar_desc)
+        locationButton = findViewById(R.id.publicar_add_location)
+        locationImage = findViewById(R.id.publicar_add_loc_image)
+        locationText = findViewById(R.id.publicar_add_loc_text)
+        locationImage.visibility = View.INVISIBLE
+        locationText.text = "Sin añadir"
 
         bañosLayout = findViewById(R.id.baños_layout)
         habsLayout = findViewById(R.id.habitaciones_layout)
@@ -103,7 +130,6 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         i.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(i, "Seleccione una imagen"), ResultLoadImage)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -122,6 +148,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
             }
         }
     }
+
     private fun resetModelFilters(){
         habsLayout.visibility = View.GONE
         habitacionesTextField.setText("")
@@ -155,14 +182,153 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         }
     }
 
+    private fun getFormData() {
+        if(imageUris.size <= 0) {
+            Snackbar.make(window.decorView.rootView, "Se necesita al menos una foto", Snackbar.LENGTH_LONG).show()
+            fotoLayout.requestFocus()
+            return
+        }
+
+        val tipo = if (tipoBusqueda.checkedRadioButtonId == R.id.alquiler_radio_button)  "Alquiler" else "Venta"
+        val modeloInm = tipoInmuebleText.text.toString().toLowerCase(Locale.ROOT)
+        val modelo = if(modeloInm == "habitación") "habitacion" else modeloInm
+
+        val precio = precioTextField.text.toString()
+        if(precio == ""){
+            precioTextField.error = "Precio es obligatorio"
+            precioTextField.requestFocus()
+            return
+        }
+        val ciudad = ciudadTextField.text.toString()
+        if(ciudad == ""){
+            ciudadTextField.error = "Ciudad es obligatorio"
+            ciudadTextField.requestFocus()
+            return
+        }
+        val direccion = direccionTextField.text.toString()
+        if(direccion == ""){
+            direccionTextField.error = "La dirección es obligatoria"
+            direccionTextField.requestFocus()
+            return
+        }
+        if(latitud == null){
+            Snackbar.make(window.decorView.rootView, "La localización es obligatoria", Snackbar.LENGTH_LONG).show()
+            locationButton.requestFocus()
+            return
+        }
+        val superficie = superficieTextField.text.toString()
+        if(superficie == ""){
+            superficieTextField.error = "La superficie es obligatoria"
+            superficieTextField.requestFocus()
+            return
+        }
+        val descripcion = descripcionTextField.text.toString()
+        if(descripcion == ""){
+            descripcionTextField.error = "La descripción es obligatoria"
+            descripcionTextField.requestFocus()
+            return
+        }
+
+        lateinit var inmueble : DatosInmueble
+
+        when (currentType) {
+            pisoPos -> {
+                val baños = bañosTextField.text.toString()
+                if(baños == ""){
+                    bañosTextField.error = "Los baños son obligatorios"
+                    bañosTextField.requestFocus()
+                    return
+                }
+                val habitaciones = bañosTextField.text.toString()
+                if(habitaciones == ""){
+                    habitacionesTextField.error = "Las habitaciones son obligatorias"
+                    habitacionesTextField.requestFocus()
+                    return
+                }
+                val garaje = garajeCheckbox.isChecked
+                inmueble = InmuebleFactory.new(0, true, tipo, superficie.toInt(), precio.toDouble(),
+                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
+                        habitaciones.toInt(), baños.toInt(), garaje
+                )
+            }
+            habitacionPos -> {
+                val baños = bañosTextField.text.toString()
+                if(baños == ""){
+                    bañosTextField.error = "Los baños son obligatorios"
+                    bañosTextField.requestFocus()
+                    return
+                }
+                val habitaciones = bañosTextField.text.toString()
+                if(habitaciones == ""){
+                    habitacionesTextField.error = "Las habitaciones son obligatorias"
+                    habitacionesTextField.requestFocus()
+                    return
+                }
+                val garaje = garajeCheckbox.isChecked
+                val numComp = numCompTextField.text.toString()
+                if(numComp == ""){
+                    numCompTextField.error = "El número de compañeros es obligatorio"
+                    numCompTextField.requestFocus()
+                    return
+                }
+                inmueble = InmuebleFactory.new(0, true, tipo, superficie.toInt(), precio.toDouble(),
+                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
+                        habitaciones.toInt(), baños.toInt(), garaje, numComp.toInt()
+                )
+            }
+            localPos -> {
+                val baños = bañosTextField.text.toString()
+                if(baños == ""){
+                    bañosTextField.error = "Los baños son obligatorios"
+                    bañosTextField.requestFocus()
+                    return
+                }
+                inmueble = InmuebleFactory.new(0, true, tipo, superficie.toInt(), precio.toDouble(),
+                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
+                        baños.toInt(),
+                )
+            }
+            garajePos -> {
+                inmueble = InmuebleFactory.new(0, true, tipo, superficie.toInt(), precio.toDouble(),
+                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
+                )
+            }
+        }
+        sendInmueble(inmueble)
+    }
+
     override fun onNothingSelected(parent: AdapterView<*>?) {
         return
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedModel = parent?.getItemAtPosition(position) as String
+        currentType = position
         tipoInmuebleText.text = selectedModel
         resetModelFilters()
         showModelFilters(position)
+    }
+
+    private fun processUris(uris : ArrayList<Uri>) : ArrayList<String> {
+        return uris.map { it.toFile().name } as ArrayList<String>
+    }
+
+    private fun sendInmueble(inmueble : DatosInmueble){
+        val query = AndroidNetworking.post("http://10.0.2.2:9000/api/inmueble/")
+        query.addApplicationJsonBody(inmueble.toJson())
+        query.setPriority(Priority.HIGH).build().getAsJSONObject(
+            object: JSONObjectRequestListener {
+                override fun onResponse(response : JSONObject) {
+                    Snackbar.make(window.decorView.rootView, "Creado con éxito", Snackbar.LENGTH_LONG).show()
+                }
+                override fun onError(error : ANError) {
+                    Snackbar.make(window.decorView.rootView, "Error al crear inmueble", Snackbar.LENGTH_LONG).show()
+                }
+            }
+        )
     }
 }
