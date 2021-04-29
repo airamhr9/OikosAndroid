@@ -28,7 +28,6 @@ abstract class DatosInmueble(val id: Int,
         result.addProperty("ciudad", ciudad)
         result.addProperty("latitud", latitud)
         result.addProperty("longitud", longitud)
-        introducirModeloEnJsonObject(result)
         return result
     }
 
@@ -47,8 +46,5 @@ abstract class DatosInmueble(val id: Int,
 
         return result
     }
-
-    protected abstract fun introducirModeloEnJsonObject(jsonObject: JsonObject)
-
 }
 

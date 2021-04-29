@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Oikos"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.launcher.Launcher"></activity>
+        <activity android:name=".ui.inmuebles.SelectCoordinatesActivity"></activity>
+        <activity android:name=".ui.launcher.Launcher" />
         <activity android:name=".ui.inmuebles.PublicarAnunciosActivity" />
         <activity android:name=".ui.search.SearchResultsActivity" />
         <activity android:name=".ui.user.preferences" />

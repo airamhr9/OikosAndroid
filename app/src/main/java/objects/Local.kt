@@ -19,10 +19,6 @@ class Local(id: Int,
 ) : Serializable, DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
         direccion, ciudad, latitud, longitud, imagenes) {
 
-    override fun introducirModeloEnJsonObject(jsonObject: JsonObject) {
-        jsonObject.addProperty("modelo", "local")
-    }
-
     override fun toJson(): JsonObject {
         val result = super.toJson()
         result.addProperty("baños", baños)

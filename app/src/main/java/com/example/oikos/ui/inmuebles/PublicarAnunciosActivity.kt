@@ -2,9 +2,11 @@ package com.example.oikos.ui.inmuebles
 
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.util.AttributeSet
+import android.provider.OpenableColumns
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -13,25 +15,27 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
-import androidx.core.net.toFile
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.R
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import objects.DatosInmueble
+import objects.GeoCoordsSerializable
 import objects.InmuebleFactory
-import objects.Piso
 import objects.Usuario
-import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.nio.file.StandardCopyOption
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.properties.Delegates
 
 
 class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -39,6 +43,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
     val habitacionPos = 1
     val garajePos = 2
     val localPos = 3
+    val GET_COORDS_ACTIVITY = 8
 
     private val ResultLoadImage = 1
     lateinit var fotoLayout: FlexboxLayout
@@ -94,6 +99,11 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         }
         tipoSpinner.onItemSelectedListener = this
 
+        locationButton.setOnClickListener {
+            val i = Intent(this, SelectCoordinatesActivity::class.java)
+            startActivityForResult(i, GET_COORDS_ACTIVITY);
+        }
+
         findViewById<AppCompatButton>(R.id.publicar_button).setOnClickListener {
             getFormData()
         }
@@ -133,18 +143,32 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == ResultLoadImage && resultCode == RESULT_OK && data != null){
-            val selectedImageUri : Uri? = data.data
-            if(selectedImageUri != null){
-                val inflater: LayoutInflater = LayoutInflater.from(applicationContext)
-                val newCard = inflater.inflate(R.layout.publicar_image_card, fotoLayout, false)
-                newCard.findViewById<ImageView>(R.id.image_inmueble).setImageURI(selectedImageUri)
-                fotoLayout.addView(newCard)
-                imageUris.add(selectedImageUri)
-                newCard.findViewById<ImageButton>(R.id.remove_image).setOnClickListener {
-                    fotoLayout.removeView(newCard)
-                    imageUris.remove(selectedImageUri)
+        println("ON RESULT")
+        println("request code  $requestCode")
+        if (resultCode == RESULT_OK && data != null) {
+            if(requestCode == ResultLoadImage){
+                val selectedImageUri : Uri? = data.data
+                if(selectedImageUri != null){
+                    val inflater: LayoutInflater = LayoutInflater.from(applicationContext)
+                    val newCard = inflater.inflate(R.layout.publicar_image_card, fotoLayout, false)
+                    newCard.findViewById<ImageView>(R.id.image_inmueble).setImageURI(
+                            selectedImageUri
+                    )
+                    fotoLayout.addView(newCard)
+                    imageUris.add(selectedImageUri)
+                    newCard.findViewById<ImageButton>(R.id.remove_image).setOnClickListener {
+                        fotoLayout.removeView(newCard)
+                        imageUris.remove(selectedImageUri)
+                    }
                 }
+            }
+            else {
+                println("COORDS RESULT")
+                val coords = data.getSerializableExtra("coords") as GeoCoordsSerializable
+                latitud = coords.latitud
+                longitud = coords.longitud
+                locationImage.visibility = View.VISIBLE
+                locationText.text = "Añadida"
             }
         }
     }
@@ -184,7 +208,11 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
 
     private fun getFormData() {
         if(imageUris.size <= 0) {
-            Snackbar.make(window.decorView.rootView, "Se necesita al menos una foto", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                    window.decorView.rootView,
+                    "Se necesita al menos una foto",
+                    Snackbar.LENGTH_LONG
+            ).show()
             fotoLayout.requestFocus()
             return
         }
@@ -212,7 +240,11 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
             return
         }
         if(latitud == null){
-            Snackbar.make(window.decorView.rootView, "La localización es obligatoria", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                    window.decorView.rootView,
+                    "La localización es obligatoria",
+                    Snackbar.LENGTH_LONG
+            ).show()
             locationButton.requestFocus()
             return
         }
@@ -234,19 +266,20 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         when (currentType) {
             pisoPos -> {
                 val baños = bañosTextField.text.toString()
-                if(baños == ""){
+                if (baños == "") {
                     bañosTextField.error = "Los baños son obligatorios"
                     bañosTextField.requestFocus()
                     return
                 }
                 val habitaciones = bañosTextField.text.toString()
-                if(habitaciones == ""){
+                if (habitaciones == "") {
                     habitacionesTextField.error = "Las habitaciones son obligatorias"
                     habitacionesTextField.requestFocus()
                     return
                 }
                 val garaje = garajeCheckbox.isChecked
-                inmueble = InmuebleFactory.new(0, true, tipo, superficie.toInt(), precio.toDouble(),
+                inmueble = InmuebleFactory.new(
+                        -1, true, tipo, superficie.toInt(), precio.toDouble(),
                         Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
                         habitaciones.toInt(), baños.toInt(), garaje
@@ -254,25 +287,26 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
             }
             habitacionPos -> {
                 val baños = bañosTextField.text.toString()
-                if(baños == ""){
+                if (baños == "") {
                     bañosTextField.error = "Los baños son obligatorios"
                     bañosTextField.requestFocus()
                     return
                 }
                 val habitaciones = bañosTextField.text.toString()
-                if(habitaciones == ""){
+                if (habitaciones == "") {
                     habitacionesTextField.error = "Las habitaciones son obligatorias"
                     habitacionesTextField.requestFocus()
                     return
                 }
                 val garaje = garajeCheckbox.isChecked
                 val numComp = numCompTextField.text.toString()
-                if(numComp == ""){
+                if (numComp == "") {
                     numCompTextField.error = "El número de compañeros es obligatorio"
                     numCompTextField.requestFocus()
                     return
                 }
-                inmueble = InmuebleFactory.new(0, true, tipo, superficie.toInt(), precio.toDouble(),
+                inmueble = InmuebleFactory.new(
+                        -1, true, tipo, superficie.toInt(), precio.toDouble(),
                         Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
                         habitaciones.toInt(), baños.toInt(), garaje, numComp.toInt()
@@ -280,25 +314,27 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
             }
             localPos -> {
                 val baños = bañosTextField.text.toString()
-                if(baños == ""){
+                if (baños == "") {
                     bañosTextField.error = "Los baños son obligatorios"
                     bañosTextField.requestFocus()
                     return
                 }
-                inmueble = InmuebleFactory.new(0, true, tipo, superficie.toInt(), precio.toDouble(),
+                inmueble = InmuebleFactory.new(
+                        -1, true, tipo, superficie.toInt(), precio.toDouble(),
                         Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
                         baños.toInt(),
                 )
             }
             garajePos -> {
-                inmueble = InmuebleFactory.new(0, true, tipo, superficie.toInt(), precio.toDouble(),
+                inmueble = InmuebleFactory.new(
+                        -1, true, tipo, superficie.toInt(), precio.toDouble(),
                         Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
                 )
             }
         }
-        sendInmueble(inmueble)
+        sendInmueble(inmueble, modelo)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -313,22 +349,97 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         showModelFilters(position)
     }
 
-    private fun processUris(uris : ArrayList<Uri>) : ArrayList<String> {
-        return uris.map { it.toFile().name } as ArrayList<String>
+    private fun processUris(uris: ArrayList<Uri>) : ArrayList<String> {
+        val result = ArrayList<String>()
+        for(uri in uris) {
+            val query = AndroidNetworking.post("http://10.0.2.2:9000/api/image/")
+            val file = getFile(applicationContext, uri)
+            val name = UUID.randomUUID().toString() + "." + file.extension
+            result.add(name)
+            val newFile = File(filesDir, name)
+            file.copyTo(newFile)
+            query.addFileBody(newFile)
+            query.addQueryParameter("name", name)
+            query.setTag("Images")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsString(object : StringRequestListener {
+                        override fun onResponse(response: String?) {
+                            println("Imagen OK")
+                            newFile.delete()
+                        }
+
+                        override fun onError(anError: ANError?) {
+                            println("Error imagen")
+                            newFile.delete()
+                        }
+                    })
+        }
+        return result
     }
 
-    private fun sendInmueble(inmueble : DatosInmueble){
+    private fun sendInmueble(inmueble: DatosInmueble, modelo : String){
         val query = AndroidNetworking.post("http://10.0.2.2:9000/api/inmueble/")
         query.addApplicationJsonBody(inmueble.toJson())
-        query.setPriority(Priority.HIGH).build().getAsJSONObject(
-            object: JSONObjectRequestListener {
-                override fun onResponse(response : JSONObject) {
-                    Snackbar.make(window.decorView.rootView, "Creado con éxito", Snackbar.LENGTH_LONG).show()
+        query.addQueryParameter("modelo", modelo)
+        query.setPriority(Priority.HIGH).build().getAsString(
+                object : StringRequestListener {
+                    override fun onResponse(response: String) {
+                        Snackbar.make(
+                                window.decorView.rootView,
+                                "Creado con éxito",
+                                Snackbar.LENGTH_LONG
+                        ).show()
+                        finish()
+                    }
+
+                    override fun onError(error: ANError) {
+                        Snackbar.make(
+                                window.decorView.rootView,
+                                "Error al crear inmueble",
+                                Snackbar.LENGTH_LONG
+                        ).show()
+                    }
                 }
-                override fun onError(error : ANError) {
-                    Snackbar.make(window.decorView.rootView, "Error al crear inmueble", Snackbar.LENGTH_LONG).show()
-                }
-            }
         )
     }
+
+    fun getFile(context: Context, uri: Uri): File {
+        val destinationFilename: File = File(context.filesDir.path + File.separatorChar + queryName(context, uri))
+        try {
+            context.contentResolver.openInputStream(uri).use { ins ->
+                if (ins != null) {
+                    createFileFromStream(ins, destinationFilename)
+                }
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+        return destinationFilename
+    }
+
+    private fun createFileFromStream(ins: InputStream, destination: File?) {
+        try {
+            FileOutputStream(destination).use { os ->
+                val buffer = ByteArray(4096)
+                var length: Int
+                while (ins.read(buffer).also { length = it } > 0) {
+                    os.write(buffer, 0, length)
+                }
+                os.flush()
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    private fun queryName(context: Context, uri: Uri): String {
+        val returnCursor: Cursor = context.contentResolver.query(uri, null, null, null, null)!!
+        val nameIndex: Int = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        returnCursor.moveToFirst()
+        val name: String = returnCursor.getString(nameIndex)
+        returnCursor.close()
+        return name
+    }
+
 }

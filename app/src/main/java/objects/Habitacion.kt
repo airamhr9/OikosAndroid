@@ -23,11 +23,6 @@ class Habitacion(id: Int,
         direccion, ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje) {
 
 
-    override fun introducirModeloEnJsonObject(jsonObject: JsonObject) {
-        jsonObject.addProperty("modelo", "habitacion")
-    }
-
-
     companion object {
         fun fromJson(jsonObject: JsonObject): Habitacion {
             val id = jsonObject.get("id").asInt
