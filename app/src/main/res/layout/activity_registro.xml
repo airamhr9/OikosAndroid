@@ -10,28 +10,19 @@
         android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="280dp"
-        android:layout_marginBottom="460dp"
+        android:layout_marginBottom="516dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/house" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@android:color/transparent"
-        android:src="@drawable/ic_baseline_arrow_back_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="394dp"
+        android:layout_height="598dp"
         android:layout_marginTop="200dp"
         app:cardCornerRadius="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -65,7 +56,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/username2"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -79,8 +70,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/tBadPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="Las contraseñas no coinciden"
+                android:textColor="@android:color/holo_red_light"
+                android:visibility="gone" />
+
             <EditText
-                android:id="@+id/password2"
+                android:id="@+id/password1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -96,7 +96,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/username" />
 
             <EditText
-                android:id="@+id/password3"
+                android:id="@+id/password2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -128,14 +128,14 @@
                 android:paddingRight="20dp">
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/avatar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <Button
                     android:id="@+id/bSel_imagen"
-                    android:layout_width="185dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"

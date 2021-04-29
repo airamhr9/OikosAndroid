@@ -1,6 +1,7 @@
 package com.example.oikos.ui.user.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -14,7 +15,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.oikos.R
+import com.example.oikos.ui.inmuebles.PublicarAnunciosActivity
+import com.example.oikos.ui.user.registro
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class LoginActivity : AppCompatActivity() {
@@ -30,6 +35,13 @@ class LoginActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
+
+        val bRegistrar = findViewById<Button>(R.id.bRegistrarse)
+        bRegistrar.setOnClickListener {
+            val intent = Intent(applicationContext, registro::class.java)
+            startActivity(intent)
+        }
+
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
                 .get(LoginViewModel::class.java)
