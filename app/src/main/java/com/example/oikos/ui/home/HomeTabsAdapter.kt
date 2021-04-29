@@ -10,4 +10,5 @@ class HomeTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun createFragment(position: Int): Fragment {
         return if (position == 0) RecommendedFragment() else SavedSearchFragment()
     }
+
 }

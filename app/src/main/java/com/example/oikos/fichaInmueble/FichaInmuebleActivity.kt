@@ -34,7 +34,7 @@ class FichaInmuebleActivity : AppCompatActivity() {
     }
 
 
-    fun changeToMapFragment(view : View){
+   fun changeToMapFragment(view : View){
         val mapFragment: Fragment = FichaMapFragment()
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         val bundle = Bundle()
