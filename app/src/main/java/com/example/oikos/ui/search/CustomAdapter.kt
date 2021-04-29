@@ -49,7 +49,7 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleForList>) :
         viewHolder.tipoTextView.text = dataSet[position].inmueble.tipo
         if(dataSet[position].inmueble.tipo == "Alquiler")
             viewHolder.tipoCardView.setCardBackgroundColor(Color.parseColor("#42a5f5"))
-        viewHolder.numImagenes.text = "${dataSet[position].inmueble.images.size} imágenes"
+        viewHolder.numImagenes.text = "${dataSet[position].inmueble.imagenes.size} imágenes"
 
         viewHolder.inmuebleCardView.setOnClickListener {
             val intent = Intent(viewHolder.itemView.context, FichaInmuebleActivity :: class.java)
@@ -57,7 +57,7 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleForList>) :
             intent.putExtra("modelo", dataSet[position].modelo)
             viewHolder.itemView.context.startActivity(intent)
         }
-        var url = URL(dataSet[position].inmueble.images.first())
+        var url = URL(dataSet[position].inmueble.imagenes.first())
         url = URL("http://10.0.2.2:9000${url.path}")
 
         Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)

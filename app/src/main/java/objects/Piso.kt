@@ -22,7 +22,20 @@ open class Piso(id: Int,
 ) : Serializable, DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
         direccion, ciudad, latitud, longitud, imagenes) {
 
-    companion object {
+    override fun introducirModeloEnJsonObject(jsonObject: JsonObject) {
+        jsonObject.addProperty("modelo", "piso")
+    }
+
+    override fun toJson(): JsonObject {
+        val result = super.toJson()
+        result.addProperty("habitaciones", habitaciones)
+        result.addProperty("baños", baños)
+        result.addProperty("garaje", garaje)
+        return result
+    }
+
+
+        companion object {
         fun fromJson(jsonObject: JsonObject): Piso {
             val id = jsonObject.get("id").asInt
             val disponible = jsonObject.get("disponible").asBoolean

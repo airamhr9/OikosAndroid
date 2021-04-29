@@ -22,6 +22,12 @@ class Habitacion(id: Int,
 ) : Serializable, Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
         direccion, ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje) {
 
+
+    override fun introducirModeloEnJsonObject(jsonObject: JsonObject) {
+        jsonObject.addProperty("modelo", "habitacion")
+    }
+
+
     companion object {
         fun fromJson(jsonObject: JsonObject): Habitacion {
             val id = jsonObject.get("id").asInt

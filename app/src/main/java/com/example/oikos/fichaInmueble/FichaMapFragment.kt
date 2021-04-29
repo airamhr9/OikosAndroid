@@ -103,7 +103,7 @@ class FichaMapFragment : Fragment() {
             tipoCard.setCardBackgroundColor(android.graphics.Color.parseColor("#4caf50"))
         }
         tipoText.text = data.tipo
-        numImageText.text = "${data.images.size} imágenes"
+        numImageText.text = "${data.imagenes.size} imágenes"
     }
 
 }

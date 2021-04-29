@@ -43,7 +43,7 @@ class FichaInmuebleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ViewPagerAdapter(requireContext(), datosFicha.images)
+        val adapter = ViewPagerAdapter(requireContext(), datosFicha.imagenes)
         val imageViewPager : ViewPager = view.findViewById(R.id.image_viewpager)
         val tabLayout : TabLayout = view.findViewById(R.id.tab_layout)
         imageViewPager.adapter = adapter

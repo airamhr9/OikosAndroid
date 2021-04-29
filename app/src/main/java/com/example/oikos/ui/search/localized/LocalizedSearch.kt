@@ -1,6 +1,5 @@
 package com.example.oikos.ui.search.localized
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -24,7 +23,6 @@ import com.google.gson.JsonParser
 import com.here.sdk.core.*
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapview.*
-import objects.DatosInmueble
 import objects.InmuebleFactory
 import objects.InmuebleForList
 import org.json.JSONArray
@@ -199,12 +197,12 @@ class LocalizedSearch : AppCompatActivity() {
 
 
         //TODO(solo para emulador)
-        var url = URL(inmueble.images.first())
+        var url = URL(inmueble.imagenes.first())
         url = URL("http://10.0.2.2:9000${url.path}")
 
         Glide.with(this).asBitmap().load(url.toString()).into(imageView!!)
 
-        numImag?.text = "${inmueble.images.size} imágenes"
+        numImag?.text = "${inmueble.imagenes.size} imágenes"
         price?.text = "${inmueble.precio}€"
         type?.text = inmueble.tipo
         if(type?.text == "Alquiler"){
