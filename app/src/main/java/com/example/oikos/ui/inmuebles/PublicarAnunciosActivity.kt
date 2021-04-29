@@ -271,7 +271,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
                     bañosTextField.requestFocus()
                     return
                 }
-                val habitaciones = bañosTextField.text.toString()
+                val habitaciones = habitacionesTextField.text.toString()
                 if (habitaciones == "") {
                     habitacionesTextField.error = "Las habitaciones son obligatorias"
                     habitacionesTextField.requestFocus()
@@ -292,7 +292,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
                     bañosTextField.requestFocus()
                     return
                 }
-                val habitaciones = bañosTextField.text.toString()
+                val habitaciones = habitacionesTextField.text.toString()
                 if (habitaciones == "") {
                     habitacionesTextField.error = "Las habitaciones son obligatorias"
                     habitacionesTextField.requestFocus()
