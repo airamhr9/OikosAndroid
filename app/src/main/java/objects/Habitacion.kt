@@ -22,6 +22,12 @@ class Habitacion(id: Int,
 ) : Serializable, Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
         direccion, ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje) {
 
+    override fun toJson(): JsonObject {
+        val result = super.toJson()
+        result.addProperty("numCompañeros", numCompañeros)
+        return result
+    }
+
 
     companion object {
         fun fromJson(jsonObject: JsonObject): Habitacion {
