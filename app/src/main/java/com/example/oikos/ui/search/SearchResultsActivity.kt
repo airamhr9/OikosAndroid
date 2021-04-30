@@ -47,7 +47,7 @@ class SearchResultsActivity : AppCompatActivity() {
         val filters : HashMap<String, String> = intent.extras!!.get("filters") as HashMap<String, String>
         getFilteredResults(filters)
 
-        val resultsRecycler = findViewById<View>(R.id.results_recycler) as RecyclerView
+        val resultsRecycler = findViewById<RecyclerView>(R.id.results_recycler)
         customAdapter = CustomAdapter(searchResults)
         resultsRecycler.adapter = customAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(this)
@@ -92,7 +92,7 @@ class SearchResultsActivity : AppCompatActivity() {
         var i = 0
         println("we have response")
         while(i < response.length()){
-            val inmueble = InmuebleFactory.new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
+            val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
             searchResults.add(InmuebleForList(inmueble, modelo))
             println("MODELO AGAIN IS " + modelo)
             i++

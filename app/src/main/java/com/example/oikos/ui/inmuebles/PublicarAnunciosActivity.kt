@@ -262,6 +262,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         }
 
         lateinit var inmueble : DatosInmueble
+        val inmuebleFactory = InmuebleFactory()
 
         when (currentType) {
             pisoPos -> {
@@ -278,7 +279,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
                     return
                 }
                 val garaje = garajeCheckbox.isChecked
-                inmueble = InmuebleFactory.new(
+                inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
                         Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
@@ -305,7 +306,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
                     numCompTextField.requestFocus()
                     return
                 }
-                inmueble = InmuebleFactory.new(
+                inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
                         Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
@@ -319,7 +320,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
                     bañosTextField.requestFocus()
                     return
                 }
-                inmueble = InmuebleFactory.new(
+                inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
                         Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
@@ -327,7 +328,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
                 )
             }
             garajePos -> {
-                inmueble = InmuebleFactory.new(
+                inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
                         Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),

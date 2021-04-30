@@ -282,7 +282,7 @@ class LocalizedSearch : AppCompatActivity() {
                                     val modelo = inmuebleJson.get("modelo").asString!!
                                     listaInmuebles.add(
                                         InmuebleForList(
-                                            InmuebleFactory.new(
+                                            InmuebleFactory().new(
                                                 inmuebleJson,
                                                 modelo
                                             ), modelo)
@@ -334,7 +334,7 @@ class LocalizedSearch : AppCompatActivity() {
                                     val modelo = inmuebleJson.get("modelo").asString!!
                                     listaInmuebles.add(
                                         InmuebleForList(
-                                            InmuebleFactory.new(
+                                            InmuebleFactory().new(
                                                     inmuebleJson,
                                                     modelo
                                             ), modelo)
@@ -384,7 +384,7 @@ class LocalizedSearch : AppCompatActivity() {
                         val modelo = inmuebleJson.get("modelo").asString!!
                         listaInmuebles.add(
                             InmuebleForList(
-                                InmuebleFactory.new(
+                                InmuebleFactory().new(
                                         inmuebleJson,
                                         modelo
                                 ), modelo)
