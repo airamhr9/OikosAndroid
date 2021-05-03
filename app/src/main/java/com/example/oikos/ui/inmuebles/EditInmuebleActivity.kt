@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.util.Log
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
@@ -18,27 +18,20 @@ import androidx.cardview.widget.CardView
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.R
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import objects.DatosInmueble
-import objects.GeoCoordsSerializable
-import objects.InmuebleFactory
-import objects.Usuario
-import org.json.JSONObject
+import objects.*
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.InputStream
-import java.nio.file.StandardCopyOption
 import java.util.*
 import kotlin.collections.ArrayList
 
+class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     val pisoPos = 0
     val habitacionPos = 1
     val garajePos = 2
@@ -63,6 +56,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
     lateinit var locationImage : ImageView
     lateinit var locationText : TextView
     lateinit var locationButton : Button
+    lateinit var tipoSpinner : AppCompatSpinner
     var latitud : Double? = null
     var longitud : Double? = null
     var currentType = pisoPos
@@ -72,11 +66,15 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
     lateinit var bañosLayout : LinearLayout
     lateinit var garajeLayout : LinearLayout
 
+    lateinit var inmuebleToEdit : InmuebleForList
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.publicar_anuncios)
 
         supportActionBar?.hide()
+
+        inmuebleToEdit = intent.getSerializableExtra("inmueble") as InmuebleForList
 
         fotoLayout = findViewById(R.id.foto_layout)
         val fotoCard = findViewById<CardView>(R.id.foto_card)
@@ -86,9 +84,9 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         imageUris = ArrayList()
 
         initializeFields()
+        initializeData()
 
-        tipoBusqueda.check(R.id.alquiler_radio_button)
-        val tipoSpinner : AppCompatSpinner = findViewById(R.id.publicar_tipo)
+        tipoSpinner = findViewById(R.id.publicar_tipo)
         ArrayAdapter.createFromResource(
                 this,
                 R.array.spinner_values,
@@ -132,6 +130,26 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
 
         tipoBusqueda = findViewById(R.id.tipo_busqueda_radio_group)
         tipoInmuebleText = findViewById(R.id.publicar_tipo_text)
+    }
+
+    private fun initializeData() {
+        val inmueble = inmuebleToEdit.inmueble
+        if (inmueble.tipo == "Alquiler")
+            tipoBusqueda.check(R.id.alquiler_radio_button)
+        else tipoBusqueda.check(R.id.compra_radio_button)
+        when(inmuebleToEdit.modelo) {
+            "piso" -> tipoSpinner.setSelection(pisoPos)
+            "local" -> tipoSpinner.setSelection(localPos)
+            "garaje" -> tipoSpinner.setSelection(garajePos)
+            "habitación" -> tipoSpinner.setSelection(habitacionPos)
+        }
+        tipoInmuebleText.text = inmuebleToEdit.modelo[0].toString().capitalize() + inmuebleToEdit.modelo.substring(1)
+        precioTextField.setText(inmueble.precio.toString())
+        ciudadTextField.setText(inmueble.ciudad)
+        direccionTextField.setText(inmueble.direccion)
+        superficieTextField.setText(inmueble.superficie.toString())
+        precioTextField.setText(inmueble.precio.toString())
+
     }
 
     private fun imageChooser(){
@@ -441,10 +459,6 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
         val name: String = returnCursor.getString(nameIndex)
         returnCursor.close()
         return name
-    }
-
-    fun onBackPressed (view : View) {
-        super.onBackPressed()
     }
 
 }

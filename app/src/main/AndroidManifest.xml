@@ -20,21 +20,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Oikos"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.user.ui.login.LoginActivity"></activity>
-        <activity android:name=".ui.user.registro"></activity>
-        <activity android:name=".ui.inmuebles.SelectCoordinatesActivity"></activity>
-        <activity android:name=".ui.launcher.Launcher" >
+        <activity android:name=".ui.inmuebles.EditInmuebleActivity"></activity>
+        <activity android:name=".ui.user.ui.login.LoginActivity" />
+        <activity android:name=".ui.user.registro" />
+        <activity android:name=".ui.inmuebles.SelectCoordinatesActivity" />
+        <activity android:name=".ui.launcher.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".ui.inmuebles.PublicarAnunciosActivity" />
         <activity android:name=".ui.search.SearchResultsActivity" />
         <activity android:name=".ui.user.preferences" />
-
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
@@ -57,9 +56,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>

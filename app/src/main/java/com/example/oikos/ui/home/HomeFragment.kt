@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
 
         val tabLayout : TabLayout = view.findViewById(R.id.tab_layout)
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = if (position == 0) "Recomendado" else "Última búsqueda"
+            tab.text = if (position == 0) "Última Búsqueda" else "Recomendado"
         }.attach()
 
 

@@ -61,4 +61,8 @@ class FichaInmuebleActivity : AppCompatActivity() {
         }
     }
 
+    fun onBackPressed (view : View) {
+        super.onBackPressed()
+    }
+
 }

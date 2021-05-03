@@ -191,14 +191,35 @@ class GestionInmuebleFragment : Fragment() {
         if(visible) {
             visibleInmuebles.remove(inmuebleForList)
             inmuebleForList.inmueble.disponible = false
-
+            visibleAdapter.notifyDataSetChanged()
         } else {
             invisibleInmuebles.remove(inmuebleForList)
+            invisibleAdapter.notifyDataSetChanged()
         }
-        visibleAdapter.notifyDataSetChanged()
-        invisibleAdapter.notifyDataSetChanged()
-        //updateInDatabase(inmuebleForList)
-        //FALTA metodo delete in database
+        deleteInDatabase(inmuebleForList)
+    }
+
+    fun deleteInDatabase(inmuebleForList: InmuebleForList) {
+        val query = AndroidNetworking.delete("http://10.0.2.2:9000/api/inmueble/")
+        query.addQueryParameter("id", inmuebleForList.inmueble.id.toString())
+        query.setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(object : StringRequestListener {
+                    override fun onResponse(response: String) {
+                        Snackbar.make(
+                                requireView(),
+                                "Inmueble eliminado con éxito",
+                                Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    override fun onError(error: ANError) {
+                        Snackbar.make(
+                                requireView(),
+                                "Error actualizando inmueble",
+                                Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                })
     }
 
 }

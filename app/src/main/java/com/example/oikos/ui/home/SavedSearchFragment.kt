@@ -27,6 +27,8 @@ import com.example.oikos.ui.user.UserViewModel
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
+import objects.InmuebleFactory
+import objects.InmuebleForList
 import org.json.JSONArray
 
 
@@ -34,7 +36,7 @@ class SavedSearchFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var sharedPref : SharedPreferences
-    lateinit var searchResults: ArrayList<DatosInmueble>
+    lateinit var searchResults: ArrayList<InmuebleForList>
     lateinit var customAdapter: CustomAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -66,8 +68,8 @@ class SavedSearchFragment : Fragment() {
         resultLayout.visibility = View.GONE
 
         val resultsRecycler = view.findViewById<View>(R.id.results_saved_recycler) as RecyclerView
-        //customAdapter = CustomAdapter(searchResults)
-        //resultsRecycler.adapter = customAdapter
+        customAdapter = CustomAdapter(searchResults)
+        resultsRecycler.adapter = customAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(context)
 
         val savedSearch = (sharedPref?.getString("saved_search", ""))
@@ -105,7 +107,9 @@ class SavedSearchFragment : Fragment() {
                         while (i < response.length()) {
                             println("here")
                             println("search result $i ${response[i]}")
-                            //searchResults.add(DatosInmueble.fromJson(JsonParser.parseString(response[i].toString()).asJsonObject))
+                            val modelo =  response.getJSONObject(i)["modelo"].toString()
+                            val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
+                            searchResults.add(InmuebleForList(inmueble, modelo))
                             i++
                         }
                         customAdapter.notifyDataSetChanged()
@@ -133,6 +137,7 @@ class SavedSearchFragment : Fragment() {
             when (key) {
                 "ciudad" -> filterString += "Ciudad: ${preferences[key].asString}\n"
                 "tipo" -> filterString += "Tipo: ${preferences[key].asString}\n"
+                "modelo" -> filterString += "Modelo: ${preferences[key].asString}\n"
                 "precioMin" -> filterString += "Precio mínimo: ${preferences[key].asString}€\n"
                 "precioMax" -> filterString += "Precio máximo: ${preferences[key].asString}€\n"
                 "habitaciones" -> filterString += "Habitaciones: ${preferences[key].asString}\n"

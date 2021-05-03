@@ -50,14 +50,15 @@ class UserFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_user, container, false)
         val textView: TextView = root.findViewById(R.id.text_notifications)
 
-        loadingCircle = root.findViewById(R.id.loading_search2)
-        resultLayout = root.findViewById(R.id.preference_layout)
-        loadingCircle.visibility = View.VISIBLE
-        resultLayout.visibility = View.GONE
+        //loadingCircle = root.findViewById(R.id.loading_search2)
+        //resultLayout = root.findViewById(R.id.preference_layout)
+        //loadingCircle.visibility = View.VISIBLE
+        //resultLayout.visibility = View.GONE
 
-        editButton = root.findViewById(R.id.bEditar)
-        editButton.visibility = View.GONE
+        //editButton = root.findViewById(R.id.bEditar)
+        //editButton.visibility = View.GONE
 
+/*
         if ((activity as MainActivity).isNetworkConnected()) {
             AndroidNetworking.get("http://10.0.2.2:9000/api/preferencias/")
                     .addQueryParameter("id", "1")
@@ -95,12 +96,14 @@ class UserFragment : Fragment() {
                     Toast.LENGTH_LONG
             ).show()
         }
+*/
         return root
     }
 
     override fun onResume() {
         super.onResume()
 
+/*
         if ((activity as MainActivity).isNetworkConnected()) {
             AndroidNetworking.get("http://10.0.2.2:9000/api/preferencias/")
                     .addQueryParameter("id", "1")
@@ -138,8 +141,10 @@ class UserFragment : Fragment() {
                     Toast.LENGTH_LONG
             ).show()
         }
+*/
     }
 
+/*
     fun printFilters(preferences: Preferencia){
         val tCiudad = requireView().findViewById<TextView>(R.id.tCiudad)
         val tTipo = requireView().findViewById<TextView>(R.id.tTipo)
@@ -164,5 +169,6 @@ class UserFragment : Fragment() {
          tGaraje.text = "${if(preferences.garaje) "Sí" else "No"}"
 
     }
+*/
 
 }

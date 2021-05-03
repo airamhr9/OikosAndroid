@@ -61,6 +61,12 @@ class SearchResultsActivity : AppCompatActivity() {
             for (key in filterKeys) {
                 query.addQueryParameter(key, filters[key])
             }
+            val jsonToSave = JsonObject()
+            for (key in filterKeys) {
+                query.addQueryParameter(key, filters[key])
+                jsonToSave.addProperty(key, filters[key])
+            }
+            saveSearch(jsonToSave)
             resultLayout.visibility = View.GONE
             loadingCircle.visibility = View.VISIBLE
             query.setPriority(Priority.HIGH)
@@ -119,5 +125,9 @@ class SearchResultsActivity : AppCompatActivity() {
             apply()
             println("COMMITED")
         }
+    }
+
+    fun onBackPressed (view : View) {
+        super.onBackPressed()
     }
 }
