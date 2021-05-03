@@ -1,5 +1,6 @@
 package com.example.oikos.ui.inmuebles
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -19,14 +20,17 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.StringRequestListener
+import com.bumptech.glide.Glide
 import com.example.oikos.R
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import objects.*
+import org.w3c.dom.Text
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -65,7 +69,6 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     lateinit var habsLayout : LinearLayout
     lateinit var bañosLayout : LinearLayout
     lateinit var garajeLayout : LinearLayout
-
     lateinit var inmuebleToEdit : InmuebleForList
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,9 +86,6 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
         imageUris = ArrayList()
 
-        initializeFields()
-        initializeData()
-
         tipoSpinner = findViewById(R.id.publicar_tipo)
         ArrayAdapter.createFromResource(
                 this,
@@ -97,12 +97,18 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
         tipoSpinner.onItemSelectedListener = this
 
+        initializeFields()
+        initializeData()
+
         locationButton.setOnClickListener {
             val i = Intent(this, SelectCoordinatesActivity::class.java)
             startActivityForResult(i, GET_COORDS_ACTIVITY);
         }
 
-        findViewById<AppCompatButton>(R.id.publicar_button).setOnClickListener {
+        findViewById<TextView>(R.id.publicar_toolbar_text).text = "Editar Inmueble"
+        val publicarButton = findViewById<AppCompatButton>(R.id.publicar_button)
+        publicarButton.text = "Editar"
+        publicarButton.setOnClickListener {
             getFormData()
         }
     }
@@ -130,26 +136,97 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
         tipoBusqueda = findViewById(R.id.tipo_busqueda_radio_group)
         tipoInmuebleText = findViewById(R.id.publicar_tipo_text)
+
     }
 
     private fun initializeData() {
         val inmueble = inmuebleToEdit.inmueble
-        if (inmueble.tipo == "Alquiler")
-            tipoBusqueda.check(R.id.alquiler_radio_button)
-        else tipoBusqueda.check(R.id.compra_radio_button)
-        when(inmuebleToEdit.modelo) {
-            "piso" -> tipoSpinner.setSelection(pisoPos)
-            "local" -> tipoSpinner.setSelection(localPos)
-            "garaje" -> tipoSpinner.setSelection(garajePos)
-            "habitación" -> tipoSpinner.setSelection(habitacionPos)
-        }
+
         tipoInmuebleText.text = inmuebleToEdit.modelo[0].toString().capitalize() + inmuebleToEdit.modelo.substring(1)
+        if (inmueble.tipo == "Alquiler") {
+            tipoBusqueda.check(R.id.alquiler_radio_button)
+        } else {
+            tipoBusqueda.check(R.id.compra_radio_button)
+        }
+
         precioTextField.setText(inmueble.precio.toString())
         ciudadTextField.setText(inmueble.ciudad)
         direccionTextField.setText(inmueble.direccion)
         superficieTextField.setText(inmueble.superficie.toString())
-        precioTextField.setText(inmueble.precio.toString())
+        descripcionTextField.setText(inmueble.descripcion)
+        for (imagen in inmueble.imagenes) {
+            addImageFromUrl(imagen)
+        }
 
+        when(inmuebleToEdit.modelo) {
+            "piso" -> {
+                tipoSpinner.setSelection(pisoPos)
+                currentType = pisoPos
+            }
+            "local" -> {
+                tipoSpinner.setSelection(localPos)
+                currentType = localPos
+            }
+            "garaje" -> {
+                tipoSpinner.setSelection(garajePos)
+                currentType = garajePos
+            }
+            "habitacion" -> {
+                tipoSpinner.setSelection(habitacionPos)
+                currentType = habitacionPos
+            }
+        }
+
+        when (currentType) {
+            pisoPos -> {
+                inmueble as Piso
+                numCompLayout.visibility = View.GONE
+                bañosTextField.setText(inmueble.baños.toString())
+                habitacionesTextField.setText(inmueble.habitaciones.toString())
+                garajeCheckbox.isChecked = inmueble.garaje
+            }
+            habitacionPos -> {
+                inmueble as Habitacion
+                bañosTextField.setText(inmueble.baños.toString())
+                habitacionesTextField.setText(inmueble.habitaciones.toString())
+                garajeCheckbox.isChecked = inmueble.garaje
+                numCompTextField.setText(inmueble.numCompañeros.toString())
+            }
+            localPos -> {
+                inmueble as Local
+                habsLayout.visibility = View.GONE
+                numCompLayout.visibility = View.GONE
+                garajeLayout.visibility = View.GONE
+                bañosTextField.setText(inmueble.baños.toString())
+            }
+            garajePos -> {
+                habsLayout.visibility = View.GONE
+                bañosLayout.visibility = View.GONE
+                garajeLayout.visibility = View.GONE
+                numCompLayout.visibility = View.GONE
+                inmueble as Garaje
+            }
+        }
+
+        latitud = inmueble.latitud
+        longitud = inmueble.longitud
+        locationImage.visibility = View.VISIBLE
+        locationText.text = "Añadida"
+
+    }
+
+    private fun addImageFromUrl(originalUrl : String) {
+        val inflater: LayoutInflater = LayoutInflater.from(applicationContext)
+        val newCard = inflater.inflate(R.layout.publicar_image_card, fotoLayout, false)
+        val imageView = newCard.findViewById<ImageView>(R.id.image_inmueble)
+        var newUrl = URL(originalUrl)
+        newUrl = URL("http://10.0.2.2:9000${newUrl.path}")
+        Glide.with(newCard).asBitmap().load(newUrl.toString()).into(imageView)
+        fotoLayout.addView(newCard)
+        newCard.findViewById<ImageButton>(R.id.remove_image).setOnClickListener {
+            fotoLayout.removeView(newCard)
+            inmuebleToEdit.inmueble.imagenes.remove(originalUrl)
+        }
     }
 
     private fun imageChooser(){
@@ -225,7 +302,7 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
     private fun getFormData() {
-        if(imageUris.size <= 0) {
+        if(imageUris.size + inmuebleToEdit.inmueble.imagenes.size <= 0) {
             Snackbar.make(
                     window.decorView.rootView,
                     "Se necesita al menos una foto",
@@ -282,6 +359,9 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         lateinit var inmueble : DatosInmueble
         val inmuebleFactory = InmuebleFactory()
 
+        val images = processUris(imageUris)
+        images.addAll(inmuebleToEdit.inmueble.imagenes)
+
         when (currentType) {
             pisoPos -> {
                 val baños = bañosTextField.text.toString()
@@ -298,9 +378,9 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 }
                 val garaje = garajeCheckbox.isChecked
                 inmueble = inmuebleFactory.new(
-                        -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
-                        descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
+                        inmuebleToEdit.inmueble.id,  inmuebleToEdit.inmueble.disponible, tipo, superficie.toInt(), precio.toDouble(),
+                        inmuebleToEdit.inmueble.propietario,
+                        descripcion, direccion, ciudad, latitud!!, longitud!!, images,
                         habitaciones.toInt(), baños.toInt(), garaje
                 )
             }
@@ -325,9 +405,9 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                     return
                 }
                 inmueble = inmuebleFactory.new(
-                        -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
-                        descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
+                        inmuebleToEdit.inmueble.id,  inmuebleToEdit.inmueble.disponible, tipo, superficie.toInt(), precio.toDouble(),
+                        inmuebleToEdit.inmueble.propietario,
+                        descripcion, direccion, ciudad, latitud!!, longitud!!, images,
                         habitaciones.toInt(), baños.toInt(), garaje, numComp.toInt()
                 )
             }
@@ -339,17 +419,17 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                     return
                 }
                 inmueble = inmuebleFactory.new(
-                        -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
-                        descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
+                        inmuebleToEdit.inmueble.id, inmuebleToEdit.inmueble.disponible, tipo, superficie.toInt(), precio.toDouble(),
+                        inmuebleToEdit.inmueble.propietario,
+                        descripcion, direccion, ciudad, latitud!!, longitud!!, images,
                         baños.toInt(),
                 )
             }
             garajePos -> {
                 inmueble = inmuebleFactory.new(
-                        -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
-                        descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
+                        inmuebleToEdit.inmueble.id,  inmuebleToEdit.inmueble.disponible, tipo, superficie.toInt(), precio.toDouble(),
+                        inmuebleToEdit.inmueble.propietario,
+                        descripcion, direccion, ciudad, latitud!!, longitud!!, images,
                 )
             }
         }
@@ -362,9 +442,11 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedModel = parent?.getItemAtPosition(position) as String
-        currentType = position
-        tipoInmuebleText.text = selectedModel
-        resetModelFilters()
+        if(currentType != position) {
+            currentType = position
+            tipoInmuebleText.text = selectedModel
+            resetModelFilters()
+        }
         showModelFilters(position)
     }
 
@@ -398,7 +480,7 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
     private fun sendInmueble(inmueble: DatosInmueble, modelo : String){
-        val query = AndroidNetworking.post("http://10.0.2.2:9000/api/inmueble/")
+        val query = AndroidNetworking.put("http://10.0.2.2:9000/api/inmueble/")
         query.addApplicationJsonBody(inmueble.toJson())
         query.addQueryParameter("modelo", modelo)
         query.setPriority(Priority.HIGH).build().getAsString(
@@ -406,9 +488,10 @@ class EditInmuebleActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                     override fun onResponse(response: String) {
                         Snackbar.make(
                                 window.decorView.rootView,
-                                "Creado con éxito",
+                                "Editado con éxito",
                                 Snackbar.LENGTH_LONG
                         ).show()
+                        setResult(Activity.RESULT_OK)
                         finish()
                     }
 

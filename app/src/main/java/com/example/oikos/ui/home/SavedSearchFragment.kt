@@ -24,6 +24,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.example.oikos.R
 import com.example.oikos.ui.search.CustomAdapter
 import com.example.oikos.ui.user.UserViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
@@ -120,10 +121,10 @@ class SavedSearchFragment : Fragment() {
 
                     override fun onError(error: ANError) {
                         println(error.message)
-                        Toast.makeText(
-                                activity?.applicationContext,
+                        Snackbar.make(
+                                requireView(),
                                 "Error cargando inmuebles",
-                                Toast.LENGTH_LONG
+                                Snackbar.LENGTH_LONG
                         ).show()
                         loadingCircle.visibility = View.GONE
                     }

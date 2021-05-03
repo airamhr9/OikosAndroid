@@ -1,5 +1,6 @@
 package com.example.oikos.ui.inmuebles
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -391,6 +392,7 @@ class PublicarAnunciosActivity : AppCompatActivity(), AdapterView.OnItemSelected
                                 "Creado con éxito",
                                 Snackbar.LENGTH_LONG
                         ).show()
+                        setResult(Activity.RESULT_OK)
                         finish()
                     }
 

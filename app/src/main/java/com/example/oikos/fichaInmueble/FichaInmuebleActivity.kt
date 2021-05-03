@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.oikos.R
 import com.example.oikos.ui.search.FichaMapFragment
+import com.google.android.material.snackbar.Snackbar
 import objects.DatosInmueble
 
 
@@ -57,7 +58,7 @@ class FichaInmuebleActivity : AppCompatActivity() {
         try {
             startActivity(Intent.createChooser(i, "Enviar correo..."))
         } catch (ex: ActivityNotFoundException) {
-            Toast.makeText(applicationContext, "No hay clientes de correo instalados", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "No hay clientes de correo instalados", Snackbar.LENGTH_SHORT).show()
         }
     }
 

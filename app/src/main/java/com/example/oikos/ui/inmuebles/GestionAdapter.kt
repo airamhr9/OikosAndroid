@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +36,7 @@ class GestionAdapter(private val dataSet: ArrayList<InmuebleForList>, val visibl
         val imagen : ImageView = view.findViewById(R.id.inmueble_card_image)
         val visibilityButton : ImageButton = view.findViewById(R.id.inmueble_card_visible)
         val deleteButton : ImageButton = view.findViewById(R.id.inmueble_card_delete)
+        val editButton : ImageButton = view.findViewById(R.id.inmueble_card_edit)
     }
 
     // Create new views (invoked by the layout manager)
@@ -74,34 +76,32 @@ class GestionAdapter(private val dataSet: ArrayList<InmuebleForList>, val visibl
         viewHolder.deleteButton.setOnClickListener {
             fragment.context?.let { it1 ->
                 AlertDialog.Builder(it1)
-                        .setIcon(android.R.drawable.ic_menu_search)
-                        .setTitle("Eliminar Inmueble")
-                        .setMessage("¿Desea eliminar este inmueble?")
-                        .setPositiveButton("Si"
-                        ) { _, _ -> deleteInmueble(position) }
-                        .setNegativeButton("No"){ _,_ ->
+                    .setIcon(android.R.drawable.ic_menu_search)
+                    .setTitle("Eliminar Inmueble")
+                    .setMessage("¿Desea eliminar este inmueble?")
+                    .setPositiveButton("Si"
+                    ) { _, _ -> deleteInmueble(position) }
+                    .setNegativeButton("No"){ _,_ ->
 
-                        }
-                        .show()
+                    }.show()
             }
-
-
         }
         viewHolder.visibilityButton.setOnClickListener {
             fragment.context?.let { it1 ->
                 AlertDialog.Builder(it1)
-                        .setIcon(android.R.drawable.ic_menu_search)
-                        .setTitle("Cambiar visibilidad")
-                        .setMessage("¿Desea cambiar la visibilidad del inmueble?")
-                        .setPositiveButton("Si"
-                        ) { _, _ -> updateVisibility(position) }
-                        .setNegativeButton("No"){ _,_ ->
+                    .setIcon(android.R.drawable.ic_menu_search)
+                    .setTitle("Cambiar visibilidad")
+                    .setMessage("¿Desea cambiar la visibilidad del inmueble?")
+                    .setPositiveButton("Si"
+                    ) { _, _ -> updateVisibility(position) }
+                    .setNegativeButton("No"){ _,_ ->
 
-                        }
-                        .show()
+                    }.show()
             }
+        }
 
-
+        viewHolder.editButton.setOnClickListener {
+            fragment.startEditActivity(dataSet[position])
         }
     }
     private  fun deleteInmueble(pos : Int){

@@ -18,6 +18,7 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.example.oikos.MainActivity
 import com.example.oikos.R
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -77,10 +78,10 @@ class SearchResultsActivity : AppCompatActivity() {
                         processResponse(response, filters["modelo"]!!)
                     }
                     override fun onError(error: ANError) {
-                        Toast.makeText(
-                            applicationContext,
+                        Snackbar.make(
+                                window.decorView.rootView,
                             "Error cargando inmuebles",
-                            Toast.LENGTH_LONG
+                            Snackbar.LENGTH_LONG
                         ).show()
                     }
                 })

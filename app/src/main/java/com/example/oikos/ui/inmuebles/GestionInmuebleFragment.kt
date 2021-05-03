@@ -1,5 +1,6 @@
 package com.example.oikos.ui.inmuebles
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -36,6 +37,8 @@ import org.w3c.dom.Text
 
 class GestionInmuebleFragment : Fragment() {
 
+    val PUBLISH_ACTIVITY = 15
+    val EDIT_ACTIVITY = 35
     lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var resultLayout : NestedScrollView
     lateinit var visibleLayout : RecyclerView
@@ -55,7 +58,7 @@ class GestionInmuebleFragment : Fragment() {
         val publishFab = root.findViewById<FloatingActionButton>(R.id.publish_fab)
         publishFab.setOnClickListener {
             val intent = Intent(requireContext(), PublicarAnunciosActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, PUBLISH_ACTIVITY)
         }
         loadingCircle = root.findViewById(R.id.loading_search)
         resultLayout = root.findViewById(R.id.results)
@@ -220,6 +223,32 @@ class GestionInmuebleFragment : Fragment() {
                         ).show()
                     }
                 })
+    }
+
+    fun startEditActivity(inmuebleForList: InmuebleForList) {
+        val intent = Intent(context, EditInmuebleActivity::class.java)
+        intent.putExtra("inmueble", inmuebleForList)
+        startActivityForResult(intent, EDIT_ACTIVITY)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        println("RESULT CODE: $resultCode REQUEST CODE $requestCode")
+        if(resultCode == Activity.RESULT_OK) {
+            if(requestCode == PUBLISH_ACTIVITY) {
+                Snackbar.make(
+                        requireView(),
+                        "Inmueble publicado con éxito",
+                        Snackbar.LENGTH_LONG
+                ).show()
+            } else {
+                Snackbar.make(
+                        requireView(),
+                        "Inmueble editado con éxito",
+                        Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 
 }

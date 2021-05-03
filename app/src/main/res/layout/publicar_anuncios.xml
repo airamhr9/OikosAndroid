@@ -51,10 +51,13 @@
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/foto_layout"
+        android:layout_marginStart="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:flexWrap="wrap"
         app:flexDirection="row"
+        app:dividerDrawable="@drawable/image_divider"
+        app:showDivider="middle"
         app:alignItems="stretch"
         app:alignContent="stretch"
         />

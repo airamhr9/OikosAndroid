@@ -26,6 +26,7 @@ import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.example.oikos.serverConnection.PlatformPositioningProvider
 import com.example.oikos.ui.search.CustomAdapter
 import com.example.oikos.ui.user.UserViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.here.sdk.core.GeoCoordinates
@@ -85,18 +86,18 @@ class RecommendedFragment : Fragment() {
                             }
                         }
                         override fun onError(error: ANError) {
-                            Toast.makeText(
-                                    activity?.applicationContext,
+                            Snackbar.make(
+                                    view,
                                     "Compruebe la conexión a internet",
-                                    Toast.LENGTH_LONG
+                                    Snackbar.LENGTH_LONG
                             ).show()
                         }
                     })
         } else {
-            Toast.makeText(
-                    activity?.applicationContext,
+            Snackbar.make(
+                    view,
                     "Sin conexión a internet",
-                    Toast.LENGTH_LONG
+                    Snackbar.LENGTH_LONG
             ).show()
         }
     }
@@ -132,10 +133,10 @@ class RecommendedFragment : Fragment() {
                                 override fun onError(error: ANError) {
                                     // handle error
                                     println("ERROR: AAAAAAAAA " + error.message)
-                                    Toast.makeText(
-                                            activity?.applicationContext,
+                                    Snackbar.make(
+                                            requireView(),
                                             "Error cargando inmuebles",
-                                            Toast.LENGTH_LONG
+                                            Snackbar.LENGTH_LONG
                                     ).show()
                                 }
                             })
@@ -162,20 +163,20 @@ class RecommendedFragment : Fragment() {
                                     resultLayout.visibility = View.VISIBLE
                                 }
                                 override fun onError(error: ANError) {
-                                    Toast.makeText(
-                                            activity?.applicationContext,
+                                    Snackbar.make(
+                                            requireView(),
                                             "Error cargando inmuebles",
-                                            Toast.LENGTH_LONG
+                                            Snackbar.LENGTH_LONG
                                     ).show()
                                 }
                             })
                 }
             }
         } else {
-            Toast.makeText(
-                    activity?.applicationContext,
+            Snackbar.make(
+                    requireView(),
                     "Sin conexión a internet",
-                    Toast.LENGTH_LONG
+                    Snackbar.LENGTH_LONG
             ).show()
         }
     }
@@ -229,10 +230,10 @@ class RecommendedFragment : Fragment() {
                     }
                     override fun onError(error: ANError) {
                         println(error.message)
-                        Toast.makeText(
-                                activity?.applicationContext,
+                        Snackbar.make(
+                                requireView(),
                                 "Error cargando inmuebles",
-                                Toast.LENGTH_LONG
+                                Snackbar.LENGTH_LONG
                         ).show()
                         loadingCircle.visibility = View.GONE
                     }
