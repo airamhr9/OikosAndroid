@@ -102,6 +102,7 @@ class GestionInmuebleFragment : Fragment() {
                                     "Error cargando inmuebles",
                                     Snackbar.LENGTH_LONG
                             ).show()
+                            loadingCircle.visibility = View.GONE
                         }
                     })
         } else {
@@ -127,6 +128,7 @@ class GestionInmuebleFragment : Fragment() {
         }
         if(completeList.size == 0){
             emptyLayout.visibility = View.VISIBLE
+            loadingCircle.visibility = View.GONE
             return
         } else {
             resultLayout.visibility = View.VISIBLE
@@ -183,6 +185,20 @@ class GestionInmuebleFragment : Fragment() {
                         ).show()
                     }
                 })
+    }
+
+    fun deleteInmueble(inmuebleForList : InmuebleForList ,  visible : Boolean){
+        if(visible) {
+            visibleInmuebles.remove(inmuebleForList)
+            inmuebleForList.inmueble.disponible = false
+
+        } else {
+            invisibleInmuebles.remove(inmuebleForList)
+        }
+        visibleAdapter.notifyDataSetChanged()
+        invisibleAdapter.notifyDataSetChanged()
+        //updateInDatabase(inmuebleForList)
+        //FALTA metodo delete in database
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.oikos.ui.inmuebles
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -17,6 +19,7 @@ import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import objects.InmuebleForList
 import java.net.URL
+import java.security.AccessController.getContext
 
 
 class GestionAdapter(private val dataSet: ArrayList<InmuebleForList>, val visible: Boolean, val fragment: GestionInmuebleFragment) :
@@ -31,6 +34,7 @@ class GestionAdapter(private val dataSet: ArrayList<InmuebleForList>, val visibl
         val numImagenes : TextView = view.findViewById(R.id.inmueble_card_num_images)
         val imagen : ImageView = view.findViewById(R.id.inmueble_card_image)
         val visibilityButton : ImageButton = view.findViewById(R.id.inmueble_card_visible)
+        val deleteButton : ImageButton = view.findViewById(R.id.inmueble_card_delete)
     }
 
     // Create new views (invoked by the layout manager)
@@ -67,9 +71,42 @@ class GestionAdapter(private val dataSet: ArrayList<InmuebleForList>, val visibl
 
         Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
 
-        viewHolder.visibilityButton.setOnClickListener {
-            updateVisibility(position)
+        viewHolder.deleteButton.setOnClickListener {
+            fragment.context?.let { it1 ->
+                AlertDialog.Builder(it1)
+                        .setIcon(android.R.drawable.ic_menu_search)
+                        .setTitle("Eliminar Inmueble")
+                        .setMessage("¿Desea eliminar este inmueble?")
+                        .setPositiveButton("Si"
+                        ) { _, _ -> deleteInmueble(position) }
+                        .setNegativeButton("No"){ _,_ ->
+
+                        }
+                        .show()
+            }
+
+
         }
+        viewHolder.visibilityButton.setOnClickListener {
+            fragment.context?.let { it1 ->
+                AlertDialog.Builder(it1)
+                        .setIcon(android.R.drawable.ic_menu_search)
+                        .setTitle("Cambiar visibilidad")
+                        .setMessage("¿Desea cambiar la visibilidad del inmueble?")
+                        .setPositiveButton("Si"
+                        ) { _, _ -> updateVisibility(position) }
+                        .setNegativeButton("No"){ _,_ ->
+
+                        }
+                        .show()
+            }
+
+
+        }
+    }
+    private  fun deleteInmueble(pos : Int){
+        fragment.deleteInmueble(dataSet[pos], visible)
+
     }
 
     private fun updateVisibility(pos : Int){
