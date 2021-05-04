@@ -4,7 +4,7 @@ import com.example.oikos.R
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import java.io.Serializable
-abstract class DatosInmueble(val id: Int,
+abstract class DatosInmueble(var id: Int,
                              var disponible: Boolean,
                              var tipo: String,
                              var superficie: Int,

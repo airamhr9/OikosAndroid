@@ -248,6 +248,10 @@ class GestionInmuebleFragment : Fragment() {
                         Snackbar.LENGTH_LONG
                 ).show()
             }
+
+            visibleInmuebles.clear()
+            invisibleInmuebles.clear()
+            getInmuebles()
         }
     }
 
