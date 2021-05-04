@@ -144,7 +144,8 @@ class LocalizedSearch : AppCompatActivity() {
                         .setTitle("Nueva búsqueda")
                         .setMessage("¿Desea buscar en esta zona?")
                         .setPositiveButton("Sí"
-                        ) { _, _ -> getResultsWithCoords(touchCoordinates) }
+                        ) { _, _ -> getResultsWithCoords(touchCoordinates)
+                        }
                         .setNegativeButton("No"){ _,_ ->
                             mapView.mapScene.removeMapMarker(searchMarker!!)
                         }
@@ -257,6 +258,7 @@ class LocalizedSearch : AppCompatActivity() {
     }
 
     private fun getResults(){
+            mapView.mapScene.removeMapMarker(searchMarker!!)
             val platformPositioningProvider = PlatformPositioningProvider(this);
             val located = platformPositioningProvider.startLocating(object :
                 PlatformPositioningProvider.PlatformLocationListener {
@@ -364,6 +366,7 @@ class LocalizedSearch : AppCompatActivity() {
     }
 
     private fun getResultsWithCoords(geoCoordinates: GeoCoordinates){
+        mapView.mapScene.removeMapMarker(searchMarker!!)
         mapMarkers.forEach{mapView.mapScene.removeMapMarker(it)}
         mapPolygons.forEach{mapView.mapScene.removeMapPolygon(it)}
         AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
