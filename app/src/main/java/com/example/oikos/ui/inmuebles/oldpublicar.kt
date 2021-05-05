@@ -7,7 +7,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -19,7 +18,6 @@ import androidx.cardview.widget.CardView
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.R
 import com.google.android.flexbox.FlexboxLayout
@@ -29,12 +27,9 @@ import objects.DatosInmueble
 import objects.GeoCoordsSerializable
 import objects.InmuebleFactory
 import objects.Usuario
-import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.InputStream
-import java.nio.file.StandardCopyOption
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -282,7 +277,7 @@ class oldpublicar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val garaje = garajeCheckbox.isChecked
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
                         habitaciones.toInt(), baños.toInt(), garaje
                 )
@@ -309,7 +304,7 @@ class oldpublicar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 }
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
                         habitaciones.toInt(), baños.toInt(), garaje, numComp.toInt()
                 )
@@ -323,7 +318,7 @@ class oldpublicar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 }
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
                         baños.toInt(),
                 )
@@ -331,7 +326,7 @@ class oldpublicar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             garajePos -> {
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processUris(imageUris),
                 )
             }

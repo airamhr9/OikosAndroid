@@ -293,6 +293,7 @@ class LocalizedSearch : AppCompatActivity() {
                                 }
                                 inmueblesDisplayed = true
                                 loadMapData()
+                                if(listaInmuebles.size > 0)
                                 mapView.camera.lookAt(
                                     GeoCoordinates(
                                         listaInmuebles.first().inmueble.latitud,

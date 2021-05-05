@@ -54,7 +54,7 @@ class preferences : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         aceptarB = findViewById(R.id.bAcpetar)
         aceptarB.setOnClickListener{
-            editarPreferencias()
+                editarPreferencias()
             if(myPreferences.superficie_min > myPreferences.superficie_max ){
                 AlertDialog.Builder(this@preferences)
                         .setTitle("Error en superficie")
