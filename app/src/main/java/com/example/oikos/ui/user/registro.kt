@@ -281,17 +281,17 @@ lateinit var imageUris : Uri
                     override fun onResponse(response: String) {
                         AlertDialog.Builder(this@registro)
                                 .setTitle("Se ha registrado correctamente")
-                                .setMessage("")
+                                //.setMessage("")
                                 .setPositiveButton("Ok"
                                 ) { _, _ ->}
                                 .show()
                        // finish()
                     }
-
                     override fun onError(anError: ANError?) {
+
                         AlertDialog.Builder(this@registro)
-                                .setTitle("Error al registrarse")
-                                .setMessage("Compruebe que ha introducido bien los datos")
+                                .setTitle("Usuario ya registrado")
+                                //.setMessage("Compruebe que ha introducido bien los datos")
                                 .setPositiveButton("Ok"
                                 ) { _, _ ->}
                                 .show()

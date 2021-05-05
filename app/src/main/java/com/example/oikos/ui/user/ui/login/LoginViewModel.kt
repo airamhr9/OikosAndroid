@@ -42,7 +42,8 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                             val jsonUser = JsonParser.parseString(response.toString()).asJsonObject
 
                              usuario = Usuario.fromJson(jsonUser)
-
+                            println(usuario.mail)
+                            println(usuario.contraseña)
 
                         }
 
@@ -51,8 +52,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                         }
                     })
 
-         if(username == usuario.mail && password == usuario.contraseña) println("Usuario correcto")
-        else (println("usuario incorrecto"))
+
         }
 
 
