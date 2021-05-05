@@ -118,7 +118,7 @@ class SearchesFragment : Fragment() {
                 .getAsJSONArray(object : JSONArrayRequestListener {
                     override fun onResponse(response: JSONArray) {
                         var i = 0
-                        println("we have response lenght: ${response.length()}")
+                        println("we have response length: ${response.length()}")
                         searchResults.clear()
                         while(i < response.length()){
                             println("here")
