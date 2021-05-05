@@ -33,6 +33,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             usuario = Usuario(-1,"","","","")
             AndroidNetworking.get("http://10.0.2.2:9000/api/user/")
                     .addQueryParameter("mail", username)
+                    .addQueryParameter("contraseña", password)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONObject(object : JSONObjectRequestListener {
