@@ -253,7 +253,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                 val garaje = garajeCheckbox.isChecked
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
                         habitaciones.toInt(), baños.toInt(), garaje
                 )
@@ -280,7 +280,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                 }
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
                         habitaciones.toInt(), baños.toInt(), garaje, numComp.toInt()
                 )
@@ -294,7 +294,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                 }
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
                         baños.toInt(),
                 )
@@ -302,7 +302,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
             garajePos -> {
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario("Antonio Gabinete", "antoniogabinete@mail.com"),
+                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
                         descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
                 )
             }
