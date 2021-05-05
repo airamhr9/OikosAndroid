@@ -3,11 +3,14 @@ package com.example.oikos.ui.search
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,16 +19,21 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
-import com.example.oikos.MainActivity
+import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.R
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.JsonArray
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import objects.DatosInmueble
 import objects.InmuebleFactory
 import objects.InmuebleForList
 import org.json.JSONArray
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+
 
 class SearchResultsActivity : AppCompatActivity() {
     lateinit var searchResults: ArrayList<InmuebleForList>
@@ -33,6 +41,8 @@ class SearchResultsActivity : AppCompatActivity() {
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var emptyLayout : LinearLayout
+    lateinit var filters : HashMap<String, String>
+    lateinit var saveNameEditText: TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,16 +55,80 @@ class SearchResultsActivity : AppCompatActivity() {
         emptyLayout = findViewById(R.id.empty_layout)
         emptyLayout.visibility = View.GONE
 
-        val filters : HashMap<String, String> = intent.extras!!.get("filters") as HashMap<String, String>
+        filters = intent.extras!!.get("filters") as HashMap<String, String>
         getFilteredResults(filters)
 
         val resultsRecycler = findViewById<RecyclerView>(R.id.results_recycler)
         customAdapter = CustomAdapter(searchResults)
         resultsRecycler.adapter = customAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(this)
+
+        val saveBusquedaButton = findViewById<AppCompatImageButton>(R.id.save_busqueda_button)
+        saveBusquedaButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val dialogView = layoutInflater.inflate(R.layout.save_search_dialog, null)
+            builder.setView(dialogView)
+            saveNameEditText = dialogView.findViewById(R.id.search_name)
+            builder.setTitle("Guardar búsqueda")
+                    .setPositiveButton("Guardar"
+                    ) { dialog, id ->
+                        sendBusquedaToDB(saveNameEditText.text.toString())
+                    }
+                    .setNegativeButton("Cancelar"
+                    ) { dialog, id ->
+                        dialog.cancel()
+                    }
+            builder.show()
+        }
     }
 
-    private fun getFilteredResults(filters : HashMap<String, String>){
+    private fun sendBusquedaToDB(name: String) {
+        if (isNetworkConnected()) {
+            val query = AndroidNetworking.post("http://10.0.2.2:9000/api/busqueda/")
+            query.addQueryParameter("id", "1")
+            val jsonToSave = JsonObject()
+            val filterKeys = filters.keys
+            for (key in filterKeys) {
+                jsonToSave.addProperty(key, filters[key])
+            }
+            val completeJson = JsonObject()
+            completeJson.addProperty("nombre", name)
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            val formatted = current.format(formatter)
+            completeJson.addProperty("fecha", formatted)
+            completeJson.add("busqueda", jsonToSave)
+            query.addApplicationJsonBody(completeJson)
+            query.setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsString(object : StringRequestListener {
+                        override fun onResponse(response: String) {
+                            Snackbar.make(
+                                    window.decorView.rootView,
+                                    "Búsqueda guardada correctamente",
+                                    Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+
+                        override fun onError(error: ANError) {
+                            Snackbar.make(
+                                    window.decorView.rootView,
+                                    "Error guardando búsqueda",
+                                    Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+        } else {
+            Toast.makeText(
+                    applicationContext,
+                    "Sin conexión a internet",
+                    Toast.LENGTH_LONG
+            ).show()
+            loadingCircle.visibility = View.GONE
+        }
+    }
+
+    private fun getFilteredResults(filters: HashMap<String, String>){
         if (isNetworkConnected()) {
             val query = AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
             query.addQueryParameter("filtrada", "true")
@@ -77,25 +151,26 @@ class SearchResultsActivity : AppCompatActivity() {
                         println("MODELO ES " + filters["modelo"])
                         processResponse(response, filters["modelo"]!!)
                     }
+
                     override fun onError(error: ANError) {
                         Snackbar.make(
                                 window.decorView.rootView,
-                            "Error cargando inmuebles",
-                            Snackbar.LENGTH_LONG
+                                "Error cargando inmuebles",
+                                Snackbar.LENGTH_LONG
                         ).show()
                     }
                 })
         } else {
             Toast.makeText(
-                applicationContext,
-                "Sin conexión a internet",
-                Toast.LENGTH_LONG
+                    applicationContext,
+                    "Sin conexión a internet",
+                    Toast.LENGTH_LONG
             ).show()
             loadingCircle.visibility = View.GONE
         }
     }
 
-    private fun processResponse(response : JSONArray, modelo : String){
+    private fun processResponse(response: JSONArray, modelo: String){
         var i = 0
         println("we have response")
         while(i < response.length()){
@@ -128,7 +203,7 @@ class SearchResultsActivity : AppCompatActivity() {
         }
     }
 
-    fun onBackPressed (view : View) {
+    fun onBackPressed(view: View) {
         super.onBackPressed()
     }
 }

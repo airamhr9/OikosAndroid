@@ -43,7 +43,6 @@ class PublicarAnunciosActivity :  GestionInmuebleForm() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         currentType = 1
         tipoBusqueda.check(R.id.alquiler_radio_button)
         super.setUpSpinner()
