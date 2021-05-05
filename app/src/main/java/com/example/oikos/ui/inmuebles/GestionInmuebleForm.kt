@@ -1,12 +1,10 @@
 package com.example.oikos.ui.inmuebles
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +14,6 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
-import androidx.core.widget.addTextChangedListener
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
@@ -37,7 +34,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
     val habitacionPos = 1
     val garajePos = 2
     val localPos = 3
-    val GET_COORDS_ACTIVITY = 8
+    val GetCoordsActivity = 8
 
     private val ResultLoadImage = 1
     lateinit var fotoLayout: FlexboxLayout
@@ -78,7 +75,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
 
         locationButton.setOnClickListener {
             val i = Intent(this, SelectCoordinatesActivity::class.java)
-            startActivityForResult(i, GET_COORDS_ACTIVITY);
+            startActivityForResult(i, GetCoordsActivity);
         }
 
         findViewById<AppCompatButton>(R.id.publicar_button).setOnClickListener {

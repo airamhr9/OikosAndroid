@@ -140,6 +140,7 @@ class EditInmuebleActivity : GestionInmuebleForm() {
     override fun numImages(): Int {
         return imageUris.size + inmuebleToEdit.inmueble.imagenes.size
     }
+
     override fun processImages(): ArrayList<String> {
         val images = super.processImages()
         images.addAll(inmuebleToEdit.inmueble.imagenes)

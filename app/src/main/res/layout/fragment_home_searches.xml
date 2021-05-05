@@ -7,7 +7,7 @@
     >
 
     <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/loading_search_recommended"
+        android:id="@+id/loading_searches"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_centerHorizontal="true"
@@ -16,14 +16,14 @@
         android:indeterminate="true"/>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/results_recommended"
+        android:id="@+id/results_searches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        tools:context=".ui.home.RecommendedFragment">
+        tools:context=".ui.home.SearchesFragment">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/results_recommended_recycler"
+                android:id="@+id/results_searches_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"

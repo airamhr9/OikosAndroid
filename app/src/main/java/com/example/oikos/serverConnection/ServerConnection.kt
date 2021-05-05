@@ -1,15 +1,5 @@
 package com.example.oikos.serverConnection
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.view.View
-import com.example.oikos.ui.home.RecommendedFragment
-import com.google.gson.JsonParser
-import objects.DatosInmueble
-import okhttp3.*
-import java.io.IOException
-
 
 class ServerConnection {
 /*
