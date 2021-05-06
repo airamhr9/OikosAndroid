@@ -36,16 +36,18 @@ import org.json.JSONObject
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var loading : ProgressBar
     lateinit var usuario: Usuario
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_login)
 
+        supportActionBar?.hide()
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
-        val loading = findViewById<ProgressBar>(R.id.loading)
+        loading = findViewById<ProgressBar>(R.id.loading)
 
         val bRegistrar = findViewById<Button>(R.id.bRegistrarse)
         bRegistrar.setOnClickListener {
@@ -154,6 +156,7 @@ class LoginActivity : AppCompatActivity() {
                                 .setPositiveButton("Ok"
                                 ) { _, _ ->}
                                 .show()
+                        loading.visibility = View.GONE
                     }
                 })
 

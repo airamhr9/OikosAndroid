@@ -1,5 +1,6 @@
 package com.example.oikos.ui.home
 
+import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,10 +29,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.here.sdk.core.GeoCoordinates
-import objects.Busqueda
-import objects.DatosInmueble
-import objects.InmuebleFactory
-import objects.InmuebleForList
+import objects.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -46,6 +44,7 @@ class SearchesFragment : Fragment() {
     lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var emptyLayout : LinearLayout
     lateinit var noSearchButon : AppCompatButton
+    lateinit var user : Usuario
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -54,6 +53,7 @@ class SearchesFragment : Fragment() {
     ): View? {
         userViewModel =
                 ViewModelProvider(this).get(UserViewModel::class.java)
+        loadUser()
         return inflater.inflate(R.layout.fragment_home_searches, container, false)
     }
 
@@ -83,7 +83,7 @@ class SearchesFragment : Fragment() {
     private fun getResults(){
         if ((activity as MainActivity).isNetworkConnected()) {
             AndroidNetworking.get("http://10.0.2.2:9000/api/busqueda/")
-                    .addQueryParameter("id", "1")
+                    .addQueryParameter("id", user.id.toString())
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(object : JSONArrayRequestListener {
@@ -116,6 +116,12 @@ class SearchesFragment : Fragment() {
                     Snackbar.LENGTH_LONG
             ).show()
         }
+    }
+    private fun loadUser(){
+        val sharedPref = activity?.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val savedUser = (sharedPref?.getString("saved_user", ""))
+        val savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
+        user = Usuario.fromJson(savedJsonUser)
     }
 }
 

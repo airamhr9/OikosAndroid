@@ -30,6 +30,7 @@ import com.google.gson.JsonParser
 import objects.DatosInmueble
 import objects.InmuebleFactory
 import objects.InmuebleForList
+import objects.Usuario
 import org.json.JSONArray
 
 
@@ -44,6 +45,8 @@ class SavedSearchFragment : Fragment() {
     lateinit var noSearchButon : AppCompatButton
     lateinit var emptyLayout : LinearLayout
 
+    lateinit var user : Usuario
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -51,6 +54,7 @@ class SavedSearchFragment : Fragment() {
     ): View? {
         userViewModel =
                 ViewModelProvider(this).get(UserViewModel::class.java)
+        loadUser()
         return inflater.inflate(R.layout.fragment_home_saved_search, container, false)
     }
 
@@ -73,9 +77,13 @@ class SavedSearchFragment : Fragment() {
         resultsRecycler.adapter = customAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(context)
 
-        val savedSearch = (sharedPref?.getString("saved_search", ""))
+        var savedSearch = (sharedPref.getString("saved_search", ""))
         println("SAVED SEARCH: $savedSearch")
-        if(savedSearch == "" || savedSearch == null){
+        if(savedSearch != "") {
+            val savedJsonSearch : JsonObject = JsonParser.parseString(savedSearch).asJsonObject
+            if (savedJsonSearch["userId"].asString == user.id.toString())
+                getSavedResults(savedJsonSearch["search"].asJsonObject)
+        } else {
             loadingCircle.visibility = View.INVISIBLE
             emptyLayout.visibility = View.VISIBLE
             noSearchButon.setOnClickListener {
@@ -84,8 +92,6 @@ class SavedSearchFragment : Fragment() {
             }
             return
         }
-        var savedJsonSearch : JsonObject = JsonParser.parseString(savedSearch).asJsonObject
-        getSavedResults(savedJsonSearch)
     }
 
     fun getSavedResults(preferences: JsonObject){
@@ -151,4 +157,10 @@ class SavedSearchFragment : Fragment() {
         filterTextView.text = filterString
     }
 
+    private fun loadUser(){
+        val sharedPref = activity?.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val savedUser = (sharedPref?.getString("saved_user", ""))
+        val savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
+        user = Usuario.fromJson(savedJsonUser)
+    }
 }

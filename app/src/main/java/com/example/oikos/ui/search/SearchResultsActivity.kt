@@ -27,6 +27,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
 import objects.InmuebleForList
+import objects.Usuario
 import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -196,8 +197,11 @@ class SearchResultsActivity : AppCompatActivity() {
 
     private fun saveSearch(jsonObject: JsonObject){
         val sharedPrefs = this.getSharedPreferences("prefs", Context.MODE_PRIVATE) ?: return
+        val jsonToSave = JsonObject()
+        jsonToSave.addProperty("userId", getUserId())
+        jsonToSave.add("search", jsonObject)
         with(sharedPrefs.edit()){
-            putString("saved_search", jsonObject.toString())
+            putString("saved_search", jsonToSave.toString())
             apply()
             println("COMMITED")
         }
@@ -205,5 +209,12 @@ class SearchResultsActivity : AppCompatActivity() {
 
     fun onBackPressed(view: View) {
         super.onBackPressed()
+    }
+
+    private fun getUserId() : Int{
+        val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
+        val savedUser = (sharedPref?.getString("saved_user", ""))
+        val savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
+        return savedJsonUser["id"].asInt
     }
 }

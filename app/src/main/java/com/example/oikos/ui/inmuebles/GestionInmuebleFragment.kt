@@ -22,6 +22,8 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.oikos.R
 import com.example.oikos.ui.search.CustomAdapter
 import com.example.oikos.ui.search.SearchResultsActivity
@@ -29,9 +31,11 @@ import com.example.oikos.ui.search.localized.LocalizedSearch
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
 import objects.InmuebleForList
+import objects.Usuario
 import org.json.JSONArray
 import org.w3c.dom.Text
 
@@ -46,6 +50,7 @@ class GestionInmuebleFragment : Fragment() {
     lateinit var visibleAdapter : GestionAdapter
     lateinit var invisibleAdapter : GestionAdapter
     lateinit var emptyLayout : LinearLayout
+    lateinit var user : Usuario
 
     lateinit var visibleInmuebles : ArrayList<InmuebleForList>
     lateinit var invisibleInmuebles : ArrayList<InmuebleForList>
@@ -55,6 +60,7 @@ class GestionInmuebleFragment : Fragment() {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.fragment_gestion_inmueble, container, false)
 
+        loadUser()
         val publishFab = root.findViewById<FloatingActionButton>(R.id.publish_fab)
         publishFab.setOnClickListener {
             val intent = Intent(requireContext(), PublicarAnunciosActivity::class.java)
@@ -90,7 +96,7 @@ class GestionInmuebleFragment : Fragment() {
         if (isNetworkConnected()) {
             val query = AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
             //TODO SUSTITUIR POR ID UNA VEZ HAYA LOGIN
-            query.addQueryParameter("propietario", "1")
+            query.addQueryParameter("propietario", user.id.toString())
             resultLayout.visibility = View.GONE
             loadingCircle.visibility = View.VISIBLE
             query.setPriority(Priority.HIGH)
@@ -253,6 +259,14 @@ class GestionInmuebleFragment : Fragment() {
             invisibleInmuebles.clear()
             getInmuebles()
         }
+    }
+
+
+    private fun loadUser(){
+        val sharedPref = activity?.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val savedUser = (sharedPref?.getString("saved_user", ""))
+        val savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
+        user = Usuario.fromJson(savedJsonUser)
     }
 
 }

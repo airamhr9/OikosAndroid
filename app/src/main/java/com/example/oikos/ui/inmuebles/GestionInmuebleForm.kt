@@ -22,6 +22,8 @@ import com.example.oikos.R
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import objects.*
 import java.io.File
 import java.io.FileOutputStream
@@ -57,6 +59,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
     var latitud : Double? = null
     var longitud : Double? = null
     var currentType = pisoPos
+    lateinit var user : Usuario
 
     lateinit var numCompLayout : LinearLayout
     lateinit var habsLayout : LinearLayout
@@ -67,7 +70,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.publicar_anuncios)
-
+        loadUser()
         supportActionBar?.hide()
 
         setUpImageChooser()
@@ -253,8 +256,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                 val garaje = garajeCheckbox.isChecked
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
-                        descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
+                        user, descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
                         habitaciones.toInt(), baños.toInt(), garaje
                 )
             }
@@ -280,8 +282,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                 }
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
-                        descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
+                        user, descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
                         habitaciones.toInt(), baños.toInt(), garaje, numComp.toInt()
                 )
             }
@@ -294,16 +295,14 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                 }
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
-                        descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
+                        user, descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
                         baños.toInt(),
                 )
             }
             garajePos -> {
                 inmueble = inmuebleFactory.new(
                         -1, true, tipo, superficie.toInt(), precio.toDouble(),
-                        Usuario(-1,"Antonio Gabinete", "antoniogabinete@mail.com", "",""),
-                        descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
+                        user, descripcion, direccion, ciudad, latitud!!, longitud!!, processImages(),
                 )
             }
         }
@@ -346,7 +345,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
     }
 
     fun getFile(context: Context, uri: Uri): File {
-        val destinationFilename: File = File(context.filesDir.path + File.separatorChar + queryName(context, uri))
+        val destinationFilename = File(context.filesDir.path + File.separatorChar + queryName(context, uri))
         try {
             context.contentResolver.openInputStream(uri).use { ins ->
                 if (ins != null) {
@@ -432,5 +431,12 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                 bañosLayout.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun loadUser(){
+        val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
+        val savedUser = (sharedPref?.getString("saved_user", ""))
+        val savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
+        user = Usuario.fromJson(savedJsonUser)
     }
 }

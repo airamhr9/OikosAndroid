@@ -57,9 +57,9 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleForList>) :
             intent.putExtra("modelo", dataSet[position].modelo)
             viewHolder.itemView.context.startActivity(intent)
         }
+
         var url = URL(dataSet[position].inmueble.imagenes.first())
         url = URL("http://10.0.2.2:9000${url.path}")
-
         Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
     }
 

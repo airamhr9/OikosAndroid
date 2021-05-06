@@ -31,8 +31,7 @@ class InmuebleFactory {
         }
     }
 
-    fun new(
-            id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
+    fun new(id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
             propietario: Usuario, descripcion: String, direccion: String, ciudad: String,
             latitud: Double, longitud: Double, imagenes: ArrayList<String>, habitaciones: Int,
             baños: Int, garaje: Boolean,
@@ -41,8 +40,7 @@ class InmuebleFactory {
                 ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje)
     }
 
-    fun new(
-            id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
+    fun new(id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
             propietario: Usuario, descripcion: String, direccion: String, ciudad: String,
             latitud: Double, longitud: Double, imagenes: ArrayList<String>, baños: Int,
     ) : Local {
@@ -51,38 +49,17 @@ class InmuebleFactory {
 
     }
 
-    fun new(id: Int,
-             disponible: Boolean,
-             tipo: String,
-             superficie: Int,
-             precio: Double,
-             propietario: Usuario,
-             descripcion: String,
-             direccion: String,
-             ciudad: String,
-             latitud: Double,
-             longitud: Double,
-             imagenes: ArrayList<String>,) : Garaje {
+    fun new(id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
+            propietario: Usuario, descripcion: String, direccion: String, ciudad: String,
+            latitud: Double, longitud: Double, imagenes: ArrayList<String>,) : Garaje {
         return Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion,
                 direccion, ciudad, latitud, longitud, imagenes)
     }
 
-    fun new(id: Int,
-            disponible: Boolean,
-            tipo: String,
-            superficie: Int,
-            precio: Double,
-            propietario: Usuario,
-            descripcion: String,
-            direccion: String,
-            ciudad: String,
-            latitud: Double,
-            longitud: Double,
-            imagenes: ArrayList<String>,
-            habitaciones: Int,
-            baños: Int,
-            garaje: Boolean,
-            numCompañeros: Int,
+    fun new(id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
+            propietario: Usuario, descripcion: String, direccion: String, ciudad: String,
+            latitud: Double, longitud: Double, imagenes: ArrayList<String>, habitaciones: Int,
+            baños: Int, garaje: Boolean, numCompañeros: Int,
     ) : Habitacion {
         return Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion,
                 direccion, ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje, numCompañeros)

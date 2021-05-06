@@ -58,8 +58,8 @@ var changedPhoto : Boolean = false
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registro)
         setUpImageChooser()
+        supportActionBar?.hide()
 
-        val bSelectImagen = findViewById<Button>(R.id.bSel_imagen)
 
          eName = findViewById<TextView>(R.id.name)
         eEmail = findViewById<TextView>(R.id.email)
@@ -295,8 +295,8 @@ var changedPhoto : Boolean = false
                     }
                     override fun onError(anError: ANError?) {
                         AlertDialog.Builder(this@registro)
-                                .setTitle("Usuario ya registrado")
-                                //.setMessage("Compruebe que ha introducido bien los datos")
+                                .setTitle("Ha ocurrido un error")
+                                .setMessage("Compruebe su conexión o si se encuentra ya registrado")
                                 .setPositiveButton("Ok"
                                 ) { _, _ ->}
                                 .show()

@@ -25,6 +25,8 @@ import com.example.oikos.R
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import objects.*
 import org.w3c.dom.Text
 import java.io.File
@@ -174,4 +176,5 @@ class EditInmuebleActivity : GestionInmuebleForm() {
                 }
         )
     }
+
 }
