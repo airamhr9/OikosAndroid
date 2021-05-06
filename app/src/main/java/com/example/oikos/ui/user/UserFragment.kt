@@ -1,13 +1,12 @@
 package com.example.oikos.ui.user
 
+import android.content.Context
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.cardview.widget.CardView
@@ -20,14 +19,18 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.oikos.MainActivity
 import com.example.oikos.R
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
 import objects.Preferencia
+import objects.Usuario
 import org.json.JSONArray
 import org.json.JSONObject
+import java.net.URL
 import android.content.Intent as Intent
 
 class UserFragment : Fragment() {
@@ -40,6 +43,9 @@ class UserFragment : Fragment() {
    // lateinit var  tCiudad : TextView
     lateinit var preference : Preferencia
 
+    lateinit var userTag :TextView
+    lateinit var emailTag :TextView
+    lateinit var avatar : ImageView
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +54,10 @@ class UserFragment : Fragment() {
         userViewModel =
                 ViewModelProvider(this).get(UserViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_user, container, false)
-        val textView: TextView = root.findViewById(R.id.text_notifications)
-
+        userTag = root.findViewById<EditText>(R.id.userTag)
+        emailTag =  root.findViewById<EditText>(R.id.emailTag)
+        avatar = root.findViewById(R.id.profileview)
+        loadUser()
         //loadingCircle = root.findViewById(R.id.loading_search2)
         //resultLayout = root.findViewById(R.id.preference_layout)
         //loadingCircle.visibility = View.VISIBLE
@@ -99,7 +107,19 @@ class UserFragment : Fragment() {
 */
         return root
     }
+    private fun loadUser(){
+        val sharedPref = activity?.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val savedUser = (sharedPref?.getString("saved_user", ""))
+        var savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
+        var usuario = Usuario.fromJson(savedJsonUser)
+        userTag.text = usuario.nombre
+        emailTag.text = usuario.mail
 
+
+       // var url = URL("http://10.0.2.2:9000/imagenes/")
+        Glide.with(this).load("http://10.0.2.2:9000/api/image/"+usuario.imagen).apply(RequestOptions.circleCropTransform()).into(avatar);
+       // Glide.with(this).asBitmap().load("http://10.0.2.2:9000/api/image/"+usuario.imagen).into(avatar)
+    }
     override fun onResume() {
         super.onResume()
 

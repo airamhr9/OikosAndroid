@@ -22,6 +22,7 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.example.oikos.MainActivity
 import com.example.oikos.R
 import com.example.oikos.ui.inmuebles.PublicarAnunciosActivity
 import com.example.oikos.ui.user.registro
@@ -137,9 +138,11 @@ class LoginActivity : AppCompatActivity() {
                         println(usuario.contraseña)
                         AlertDialog.Builder(this@LoginActivity)
                                 .setTitle("Se ha conectado correctamente")
-                                //.setMessage("")
+                                .setMessage("Ya puede empezar a usar Trobify")
                                 .setPositiveButton("Ok"
-                                ) { _, _ ->}
+                                ) { _, _ ->val intent = Intent(applicationContext, MainActivity::class.java)
+
+                                    startActivity(intent)}
                                 .show()
                     }
 

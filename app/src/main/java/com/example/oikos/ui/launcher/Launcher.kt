@@ -20,20 +20,7 @@ class Launcher : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launcher)
 
-        val sharedPref = this@Launcher.getSharedPreferences("user", Context.MODE_PRIVATE)
-
-        val savedUser = (sharedPref?.getString("saved_user", ""))
-        println("SAVED USER: $savedUser")
-        if(savedUser == "" || savedUser == null){
-            val intent = Intent(applicationContext, LoginActivity::class.java)
-            startActivity(intent)
-        }else {
-            var savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
-            var usuario = Usuario.fromJson(savedJsonUser)
-            println(usuario.mail)
-            val intent = Intent(applicationContext, MainActivity::class.java)
-            startActivity(intent)
-        }
+        loadUser()
 
 
         val bSiguiente = findViewById<Button>(R.id.bSiguiente)
@@ -47,5 +34,28 @@ class Launcher : AppCompatActivity() {
             val intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun loadUser(){
+        val sharedPref = this@Launcher.getSharedPreferences("user", Context.MODE_PRIVATE)
+
+        val savedUser = (sharedPref?.getString("saved_user", ""))
+        println("SAVED USER: $savedUser")
+        if(savedUser == "" || savedUser == null){
+            val intent = Intent(applicationContext, LoginActivity::class.java)
+          //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+           // finish()
+        }else {
+            var savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
+            var usuario = Usuario.fromJson(savedJsonUser)
+            println(usuario.imagen)
+
+            val intent = Intent(applicationContext, MainActivity::class.java)
+          //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+          //  finish()
+        }
+
     }
 }
