@@ -146,6 +146,7 @@ class LoginActivity : AppCompatActivity() {
 
                                     startActivity(intent)}
                                 .show()
+                        loading.visibility = View.GONE
                     }
 
                     override fun onError(error: ANError) {
