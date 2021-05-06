@@ -86,7 +86,7 @@ class SearchResultsActivity : AppCompatActivity() {
     private fun sendBusquedaToDB(name: String) {
         if (isNetworkConnected()) {
             val query = AndroidNetworking.post("http://10.0.2.2:9000/api/busqueda/")
-            query.addQueryParameter("id", "1")
+            query.addQueryParameter("id", getUserId().toString())
             val jsonToSave = JsonObject()
             val filterKeys = filters.keys
             for (key in filterKeys) {
