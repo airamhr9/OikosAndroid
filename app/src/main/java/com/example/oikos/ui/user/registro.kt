@@ -27,6 +27,7 @@ import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.MainActivity
 import com.example.oikos.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.JsonObject
 import objects.GeoCoordsSerializable
 import objects.Usuario
 import okhttp3.Response
@@ -291,6 +292,7 @@ var changedPhoto : Boolean = false
                                 ) { _, _ ->  val intent = Intent(applicationContext, MainActivity::class.java)
                                     startActivity(intent)}
                                 .show()
+                        saveUser(jsonUser)
                        // finish()
                     }
                     override fun onError(anError: ANError?) {
@@ -318,6 +320,15 @@ var changedPhoto : Boolean = false
         var myUser = Usuario(-1, nombre,correo, contraseña, myImage)
         println(correo)
         return myUser
+    }
+
+    private fun saveUser(jsonObject: JsonObject){
+        val sharedPrefs = this@registro.getSharedPreferences("user", Context.MODE_PRIVATE) ?: return
+        with(sharedPrefs.edit()){
+            putString("saved_user", jsonObject.toString())
+            apply()
+            println("COMMITED")
+        }
     }
 
 
