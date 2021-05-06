@@ -78,12 +78,15 @@ class SavedSearchFragment : Fragment() {
         resultsRecycler.layoutManager = LinearLayoutManager(context)
 
         var savedSearch = (sharedPref.getString("saved_search", ""))
+        var showEmptyLayout = false
         println("SAVED SEARCH: $savedSearch")
         if(savedSearch != "") {
             val savedJsonSearch : JsonObject = JsonParser.parseString(savedSearch).asJsonObject
             if (savedJsonSearch["userId"].asString == user.id.toString())
                 getSavedResults(savedJsonSearch["search"].asJsonObject)
-        } else {
+            else showEmptyLayout = true
+        }  else showEmptyLayout = true
+        if (showEmptyLayout) {
             loadingCircle.visibility = View.INVISIBLE
             emptyLayout.visibility = View.VISIBLE
             noSearchButon.setOnClickListener {

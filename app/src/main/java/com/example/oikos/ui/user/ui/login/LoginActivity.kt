@@ -152,7 +152,7 @@ class LoginActivity : AppCompatActivity() {
                         println("Error en la peticion al server get User")
                         AlertDialog.Builder(this@LoginActivity)
                                 .setTitle("Usuario o contraseña incorrecta")
-                                .setMessage("Inténtelo de nueve o regístrese")
+                                .setMessage("Inténtelo de nuevo o regístrese")
                                 .setPositiveButton("Ok"
                                 ) { _, _ ->}
                                 .show()
