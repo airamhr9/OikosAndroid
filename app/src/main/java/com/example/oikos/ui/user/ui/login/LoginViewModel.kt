@@ -1,5 +1,6 @@
 package com.example.oikos.ui.user.ui.login
 
+import android.app.Application
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,11 +16,11 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.example.oikos.R
 import com.example.oikos.ui.user.data.LoginRepository
 import com.example.oikos.ui.user.data.Result
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.Usuario
 import org.json.JSONObject
 import java.security.AccessController.getContext
-
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -28,8 +29,8 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
-    lateinit var usuario: Usuario
-    fun login(username: String, password: String) {
+//    lateinit var usuario: Usuario
+/*    fun login(username: String, password: String) {
             usuario = Usuario(-1,"","","","")
             AndroidNetworking.get("http://10.0.2.2:9000/api/user/")
                     .addQueryParameter("mail", username)
@@ -40,8 +41,8 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                         override fun onResponse(response: JSONObject) {
                             println("Peticion realizada")
                             val jsonUser = JsonParser.parseString(response.toString()).asJsonObject
-
-                             usuario = Usuario.fromJson(jsonUser)
+                            saveUser(jsonUser)
+                            usuario = Usuario.fromJson(jsonUser)
                             println(usuario.mail)
                             println(usuario.contraseña)
 
@@ -53,8 +54,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                     })
 
 
-        }
-
+        }*/
 
 
 

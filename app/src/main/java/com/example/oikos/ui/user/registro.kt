@@ -24,6 +24,7 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.OkHttpResponseListener
 import com.androidnetworking.interfaces.StringRequestListener
+import com.example.oikos.MainActivity
 import com.example.oikos.R
 import com.google.android.material.textfield.TextInputEditText
 import objects.GeoCoordsSerializable
@@ -51,6 +52,7 @@ lateinit var eName : TextView
 lateinit var eEmail:TextView
 lateinit var ePass : TextView
 lateinit var imageUris : Uri
+var changedPhoto : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -154,6 +156,7 @@ lateinit var imageUris : Uri
         i.type = "image/*"
         i.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(i, "Seleccione una imagen"), ResultLoadImage)
+        changedPhoto = true
     }
 
   /*  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -169,8 +172,10 @@ lateinit var imageUris : Uri
 
     private fun setUpImageChooser() {
         fotoLayout = findViewById<ImageView>(R.id.avatar)
-        val fotoCard = findViewById<Button>(R.id.bSel_imagen)
-        fotoCard.setOnClickListener {
+        val bfoto = findViewById<Button>(R.id.bSel_imagen)
+        fotoLayout.setBackgroundResource(R.drawable.default_user)
+
+        bfoto.setOnClickListener {
             chooseImage()
         }
     }
@@ -283,12 +288,12 @@ lateinit var imageUris : Uri
                                 .setTitle("Se ha registrado correctamente")
                                 //.setMessage("")
                                 .setPositiveButton("Ok"
-                                ) { _, _ ->}
+                                ) { _, _ ->  val intent = Intent(applicationContext, MainActivity::class.java)
+                                    startActivity(intent)}
                                 .show()
                        // finish()
                     }
                     override fun onError(anError: ANError?) {
-
                         AlertDialog.Builder(this@registro)
                                 .setTitle("Usuario ya registrado")
                                 //.setMessage("Compruebe que ha introducido bien los datos")
@@ -302,10 +307,14 @@ lateinit var imageUris : Uri
 
 
     fun obtenerUsuario() : Usuario{
+        var myImage : String
         nombre = eName.text.toString()
         contraseña = ePass.text.toString()
         correo = eEmail.text.toString()
-        var myImage = processImages()
+
+        if(changedPhoto) myImage = processImages()
+        else myImage = "default_user.png"
+
         var myUser = Usuario(-1, nombre,correo, contraseña, myImage)
         println(correo)
         return myUser

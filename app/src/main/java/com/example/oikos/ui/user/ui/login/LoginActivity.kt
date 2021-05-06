@@ -1,6 +1,7 @@
 package com.example.oikos.ui.user.ui.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,17 +16,26 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.example.oikos.R
 import com.example.oikos.ui.inmuebles.PublicarAnunciosActivity
 import com.example.oikos.ui.user.registro
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import objects.Usuario
+import org.json.JSONObject
 
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
-
+    lateinit var usuario: Usuario
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -94,7 +104,7 @@ class LoginActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
+                        login(
                                 username.text.toString(),
                                 password.text.toString()
                         )
@@ -104,9 +114,47 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                login(username.text.toString(), password.text.toString())
             }
         }
+    }
+
+
+    fun login(username: String, password: String) {
+        usuario = Usuario(-1,"","","","")
+        AndroidNetworking.get("http://10.0.2.2:9000/api/user/")
+                .addQueryParameter("mail", username)
+                .addQueryParameter("contraseña", password)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(object : JSONObjectRequestListener {
+                    override fun onResponse(response: JSONObject) {
+                        println("Peticion realizada")
+                        val jsonUser = JsonParser.parseString(response.toString()).asJsonObject
+                        saveUser(jsonUser)
+                        usuario = Usuario.fromJson(jsonUser)
+                        println(usuario.mail)
+                        println(usuario.contraseña)
+                        AlertDialog.Builder(this@LoginActivity)
+                                .setTitle("Se ha conectado correctamente")
+                                //.setMessage("")
+                                .setPositiveButton("Ok"
+                                ) { _, _ ->}
+                                .show()
+                    }
+
+                    override fun onError(error: ANError) {
+                        println("Error en la peticion al server get User")
+                        AlertDialog.Builder(this@LoginActivity)
+                                .setTitle("Usuario o contraseña incorrecta")
+                                .setMessage("Inténtelo de nueve o regístrese")
+                                .setPositiveButton("Ok"
+                                ) { _, _ ->}
+                                .show()
+                    }
+                })
+
+
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
@@ -118,6 +166,15 @@ class LoginActivity : AppCompatActivity() {
                 "$welcome $displayName",
                 Toast.LENGTH_LONG
         ).show()
+    }
+
+    private fun saveUser(jsonObject: JsonObject){
+        val sharedPrefs = this@LoginActivity.getSharedPreferences("user", Context.MODE_PRIVATE) ?: return
+        with(sharedPrefs.edit()){
+            putString("saved_user", jsonObject.toString())
+            apply()
+            println("COMMITED")
+        }
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
