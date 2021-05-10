@@ -26,6 +26,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
 import objects.InmuebleWithModelo
+import objects.Usuario
 import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -41,11 +42,14 @@ class SearchResultsActivity : LoadUserActivity() {
     lateinit var emptyLayout : LinearLayout
     lateinit var filters : HashMap<String, String>
     lateinit var saveNameEditText: TextInputEditText
+    lateinit var user : Usuario
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_results)
         supportActionBar?.hide()
+
+        user = loadUser()
 
         searchResults = ArrayList()
         loadingCircle = findViewById(R.id.loading_search)
@@ -134,6 +138,7 @@ class SearchResultsActivity : LoadUserActivity() {
             for (key in filterKeys) {
                 query.addQueryParameter(key, filters[key])
             }
+            query.addQueryParameter("usuario", user.id.toString())
             val jsonToSave = JsonObject()
             for (key in filterKeys) {
                 query.addQueryParameter(key, filters[key])

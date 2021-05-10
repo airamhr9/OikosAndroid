@@ -106,6 +106,7 @@ class SavedSearchFragment : Fragment() {
             filterString += ("$key: ${preferences.get(key).asString}\n")
             query.addQueryParameter(key, preferences.get(key).asString)
         }
+        query.addQueryParameter("usuario", user.id.toString())
         resultLayout.visibility = View.GONE
         loadingCircle.visibility = View.VISIBLE
         query.setPriority(Priority.HIGH)

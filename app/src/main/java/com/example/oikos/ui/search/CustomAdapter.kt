@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.androidnetworking.AndroidNetworking
@@ -18,6 +19,7 @@ import com.example.oikos.LoadUserActivity
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import objects.Favorito
 import objects.InmuebleWithModelo
 import xyz.hanks.library.bang.SmallBangView
@@ -71,46 +73,90 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val acti
         Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
 
         viewHolder.favIcon.setOnClickListener {
-            viewHolder.favIcon.isSelected = !viewHolder.favIcon.isSelected
-            if (viewHolder.favIcon.isSelected) {
-                viewHolder.favIcon.likeAnimation()
-                val query = AndroidNetworking.post("http://10.0.2.2:9000/api/favorito/")
-                query.addApplicationJsonBody(Favorito (this.activity.loadUser(), dataSet[position], "", 0).toJson())
-                query.setPriority(Priority.LOW)
-                    .build()
-                    .getAsString(object : StringRequestListener {
-                        override fun onResponse(response: String) {
-                        }
-                        override fun onError(error: ANError) {
-                            Snackbar.make(
-                                activity.window.decorView.rootView,
-                                "Error añadiendo favorito",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            viewHolder.favIcon.isSelected = false
-                        }
-                    })
+            val builder = AlertDialog.Builder(activity)
+            val dialogView = activity.layoutInflater.inflate(R.layout.fav_notas_dialog, null)
+            builder.setView(dialogView)
+            val notasFavorito = dialogView.findViewById<TextInputEditText>(R.id.notas_fav)
+            if (!viewHolder.favIcon.isSelected) {
+                builder.setTitle("Añadir favorito")
+                    .setPositiveButton(
+                        "Añadir"
+                    ) { dialog, id ->
+                        val query = AndroidNetworking.post("http://10.0.2.2:9000/api/favorito/")
+                        query.addApplicationJsonBody(
+                            Favorito(
+                                this.activity.loadUser(),
+                                dataSet[position],
+                                notasFavorito.text.toString(),
+                                0
+                            ).toJson()
+                        )
+                        query.setPriority(Priority.LOW)
+                            .build()
+                            .getAsString(object : StringRequestListener {
+                                override fun onResponse(response: String) {
+                                    viewHolder.favIcon.isSelected = true
+                                    viewHolder.favIcon.likeAnimation()
+                                }
+
+                                override fun onError(error: ANError) {
+                                    Snackbar.make(
+                                        activity.window.decorView.rootView,
+                                        "Error añadiendo favorito",
+                                        Snackbar.LENGTH_LONG
+                                    ).show()
+                                    viewHolder.favIcon.isSelected = false
+                                }
+                            })
+                    }
+                    .setNegativeButton(
+                        "Cancelar"
+                    ) { dialog, id ->
+                        dialog.cancel()
+                        viewHolder.favIcon.isSelected = false
+                    }
             } else {
-                val query = AndroidNetworking.delete("http://10.0.2.2:9000/api/favorito/")
-                query.addApplicationJsonBody(Favorito (this.activity.loadUser(), dataSet[position], "", 0).toJson())
-                query.setPriority(Priority.LOW)
-                    .build()
-                    .getAsString(object : StringRequestListener {
-                        override fun onResponse(response: String) {
-                        }
-                        override fun onError(error: ANError) {
-                            Snackbar.make(
-                                activity.window.decorView.rootView,
-                                "Error eliminando favorito",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            viewHolder.favIcon.isSelected = true
-                        }
-                    })
+                notasFavorito.visibility = View.GONE
+                builder.setTitle("Eliminar favorito")
+                    .setPositiveButton(
+                        "Eliminar"
+                    ) { dialog, id ->
+                        val query = AndroidNetworking.delete("http://10.0.2.2:9000/api/favorito/")
+                        query.addApplicationJsonBody(
+                            Favorito(
+                                this.activity.loadUser(),
+                                dataSet[position],
+                                "",
+                                0
+                            ).toJson()
+                        )
+                        query.setPriority(Priority.LOW)
+                            .build()
+                            .getAsString(object : StringRequestListener {
+                                override fun onResponse(response: String) {
+                                    viewHolder.favIcon.isSelected = false
+                                }
+
+                                override fun onError(error: ANError) {
+                                    Snackbar.make(
+                                        activity.window.decorView.rootView,
+                                        "Error eliminando favorito",
+                                        Snackbar.LENGTH_LONG
+                                    ).show()
+                                    viewHolder.favIcon.isSelected = true
+                                }
+                            })
+                    }.setNegativeButton(
+                        "Cancelar"
+                    ) { dialog, id ->
+                        dialog.cancel()
+                        viewHolder.favIcon.isSelected = true
+                    }
             }
+            builder.show()
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+        // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
 }
