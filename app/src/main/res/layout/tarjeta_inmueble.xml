@@ -97,13 +97,30 @@
                 android:id="@+id/inmueble_card_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Avenida Blasco Ibáñez 14, Valencia, 46022"
+                android:maxWidth="300dp"
+                android:layout_marginTop="5dp"
+                android:text="Avenida Blasco Ibáñez 14, Valencia"
                 android:textSize="14dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
         </LinearLayout>
 
+        <xyz.hanks.library.bang.SmallBangView
+            android:layout_gravity="bottom|end"
+            android:id="@+id/fav_image_animation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:id="@+id/fav_image"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:layout_height="wrap_content"
+                android:src="@drawable/heart_selector"
+                />
+
+        </xyz.hanks.library.bang.SmallBangView>
         <!--
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/inmueble_card_details"

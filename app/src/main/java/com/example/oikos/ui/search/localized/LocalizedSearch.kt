@@ -24,7 +24,7 @@ import com.here.sdk.core.*
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapview.*
 import objects.InmuebleFactory
-import objects.InmuebleForList
+import objects.InmuebleWithModelo
 import org.json.JSONArray
 import java.net.URL
 import java.util.*
@@ -34,7 +34,7 @@ import kotlin.collections.ArrayList
 class LocalizedSearch : AppCompatActivity() {
     private lateinit var mapView : MapView
     private lateinit var mapCard : CardView
-    private lateinit var listaInmuebles : ArrayList<InmuebleForList>
+    private lateinit var listaInmuebles : ArrayList<InmuebleWithModelo>
     private var inmueblesDisplayed : Boolean = false
     private lateinit var mapMarkers : ArrayList<MapMarker>
     private lateinit var mapPolygons : ArrayList<MapPolygon>
@@ -188,7 +188,7 @@ class LocalizedSearch : AppCompatActivity() {
         mapView.onDestroy()
     }
 
-    fun setCardData(inmuebleData: InmuebleForList){
+    fun setCardData(inmuebleData: InmuebleWithModelo){
         val inmueble = inmuebleData.inmueble
         val numImag = findViewById<TextView>(R.id.map_card_localized_num_imag)
         val price = findViewById<TextView>(R.id.map_card_localized_price)
@@ -258,7 +258,7 @@ class LocalizedSearch : AppCompatActivity() {
     }
 
     private fun getResults(){
-            mapView.mapScene.removeMapMarker(searchMarker!!)
+            if (searchMarker!= null) mapView.mapScene.removeMapMarker(searchMarker!!)
             val platformPositioningProvider = PlatformPositioningProvider(this);
             val located = platformPositioningProvider.startLocating(object :
                 PlatformPositioningProvider.PlatformLocationListener {
@@ -283,7 +283,7 @@ class LocalizedSearch : AppCompatActivity() {
                                     ).asJsonObject
                                     val modelo = inmuebleJson.get("modelo").asString!!
                                     listaInmuebles.add(
-                                        InmuebleForList(
+                                        InmuebleWithModelo(
                                             InmuebleFactory().new(
                                                 inmuebleJson,
                                                 modelo
@@ -336,7 +336,7 @@ class LocalizedSearch : AppCompatActivity() {
                                     ).asJsonObject
                                     val modelo = inmuebleJson.get("modelo").asString!!
                                     listaInmuebles.add(
-                                        InmuebleForList(
+                                        InmuebleWithModelo(
                                             InmuebleFactory().new(
                                                     inmuebleJson,
                                                     modelo
@@ -387,7 +387,7 @@ class LocalizedSearch : AppCompatActivity() {
                         ).asJsonObject
                         val modelo = inmuebleJson.get("modelo").asString!!
                         listaInmuebles.add(
-                            InmuebleForList(
+                            InmuebleWithModelo(
                                 InmuebleFactory().new(
                                         inmuebleJson,
                                         modelo

@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -26,7 +25,6 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import objects.*
-import org.w3c.dom.Text
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -70,7 +68,7 @@ class oldeditar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     /*Específicos de Edit*/
     lateinit var tipoSpinner : AppCompatSpinner
-    lateinit var inmuebleToEdit : InmuebleForList
+    lateinit var inmuebleToEdit : InmuebleWithModelo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +76,7 @@ class oldeditar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         supportActionBar?.hide()
 
-        inmuebleToEdit = intent.getSerializableExtra("inmueble") as InmuebleForList
+        inmuebleToEdit = intent.getSerializableExtra("inmueble") as InmuebleWithModelo
 
         fotoLayout = findViewById(R.id.foto_layout)
         val fotoCard = findViewById<CardView>(R.id.foto_card)

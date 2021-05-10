@@ -181,7 +181,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
 
     abstract fun numImages() : Int
 
-    open fun getFormData() : InmuebleForList?{
+    open fun getFormData() : InmuebleWithModelo?{
         if(numImages() <= 0) {
             Snackbar.make(
                     window.decorView.rootView,
@@ -306,7 +306,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                 )
             }
         }
-        return InmuebleForList(inmueble, modelo)
+        return InmuebleWithModelo(inmueble, modelo)
     }
 
     abstract fun sendToDB(inmueble: DatosInmueble, modelo : String)

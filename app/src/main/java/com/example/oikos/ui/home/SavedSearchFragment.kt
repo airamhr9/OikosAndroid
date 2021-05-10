@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.core.widget.NestedScrollView
@@ -21,15 +20,16 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
+import com.example.oikos.LoadUserActivity
+import com.example.oikos.MainActivity
 import com.example.oikos.R
 import com.example.oikos.ui.search.CustomAdapter
 import com.example.oikos.ui.user.UserViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import objects.DatosInmueble
 import objects.InmuebleFactory
-import objects.InmuebleForList
+import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
 
@@ -38,7 +38,7 @@ class SavedSearchFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var sharedPref : SharedPreferences
-    lateinit var searchResults: ArrayList<InmuebleForList>
+    lateinit var searchResults: ArrayList<InmuebleWithModelo>
     lateinit var customAdapter: CustomAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -54,7 +54,7 @@ class SavedSearchFragment : Fragment() {
     ): View? {
         userViewModel =
                 ViewModelProvider(this).get(UserViewModel::class.java)
-        loadUser()
+        user = (activity as MainActivity).loadUser()
         return inflater.inflate(R.layout.fragment_home_saved_search, container, false)
     }
 
@@ -73,7 +73,7 @@ class SavedSearchFragment : Fragment() {
         resultLayout.visibility = View.GONE
 
         val resultsRecycler = view.findViewById<View>(R.id.results_saved_recycler) as RecyclerView
-        customAdapter = CustomAdapter(searchResults)
+        customAdapter = CustomAdapter(searchResults, requireActivity() as LoadUserActivity)
         resultsRecycler.adapter = customAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(context)
 
@@ -119,7 +119,7 @@ class SavedSearchFragment : Fragment() {
                             println("search result $i ${response[i]}")
                             val modelo =  response.getJSONObject(i)["modelo"].toString()
                             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
-                            searchResults.add(InmuebleForList(inmueble, modelo))
+                            searchResults.add(InmuebleWithModelo(inmueble, modelo))
                             i++
                         }
                         customAdapter.notifyDataSetChanged()
@@ -160,10 +160,4 @@ class SavedSearchFragment : Fragment() {
         filterTextView.text = filterString
     }
 
-    private fun loadUser(){
-        val sharedPref = activity?.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val savedUser = (sharedPref?.getString("saved_user", ""))
-        val savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
-        user = Usuario.fromJson(savedJsonUser)
-    }
 }

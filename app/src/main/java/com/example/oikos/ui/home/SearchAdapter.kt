@@ -2,26 +2,18 @@ package com.example.oikos.ui.home
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.oikos.R
-import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.example.oikos.ui.search.SearchResultsActivity
 import com.google.gson.JsonObject
 import objects.Busqueda
-import objects.InmuebleForList
-import java.net.URL
 
 class SearchAdapter(private val dataSet: ArrayList<Busqueda>, val context : Context) :
         RecyclerView.Adapter<SearchAdapter.ViewHolder>() {

@@ -22,15 +22,18 @@ import androidx.core.widget.addTextChangedListener
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.androidnetworking.interfaces.OkHttpResponseListener
 import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.MainActivity
 import com.example.oikos.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import objects.GeoCoordsSerializable
 import objects.Usuario
 import okhttp3.Response
+import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -292,7 +295,7 @@ var changedPhoto : Boolean = false
                                 ) { _, _ ->  val intent = Intent(applicationContext, MainActivity::class.java)
                                     startActivity(intent)}
                                 .show()
-                        saveUser(jsonUser)
+                        saveUser(user)
                        // finish()
                     }
                     override fun onError(anError: ANError?) {
@@ -305,8 +308,6 @@ var changedPhoto : Boolean = false
                     }
                 })
     }
-
-
 
     fun obtenerUsuario() : Usuario{
         var myImage : String
@@ -322,13 +323,34 @@ var changedPhoto : Boolean = false
         return myUser
     }
 
-    private fun saveUser(jsonObject: JsonObject){
-        val sharedPrefs = this@registro.getSharedPreferences("user", Context.MODE_PRIVATE) ?: return
-        with(sharedPrefs.edit()){
-            putString("saved_user", jsonObject.toString())
-            apply()
-            println("COMMITED")
-        }
+    private fun saveUser(initialUser : Usuario){
+        AndroidNetworking.get("http://10.0.2.2:9000/api/user/")
+                .addQueryParameter("mail", initialUser.mail)
+                .addQueryParameter("contraseña", initialUser.contraseña)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(object : JSONObjectRequestListener {
+                    override fun onResponse(response: JSONObject) {
+                        val sharedPrefs = this@registro.getSharedPreferences("user", Context.MODE_PRIVATE) ?: return
+                        with(sharedPrefs.edit()){
+                            putString("saved_user", JsonParser.parseString(response.toString()).asJsonObject.toString())
+                            apply()
+                            println("COMMITED")
+                        }
+                    }
+
+                    override fun onError(error: ANError) {
+                        println("Error en la peticion al server get User")
+                        AlertDialog.Builder(this@registro)
+                                .setTitle("Error inesperado")
+                                .setMessage("Inténtelo de nuevo más tarde")
+                                .setPositiveButton("Ok"
+                                ) { _, _ ->}
+                                .show()
+                        finish()
+                    }
+                })
+
     }
 
 

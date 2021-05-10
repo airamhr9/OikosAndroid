@@ -9,15 +9,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.StringRequestListener
 import com.bumptech.glide.Glide
+import com.example.oikos.LoadUserActivity
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
-import objects.DatosInmueble
-import objects.InmuebleForList
+import com.google.android.material.snackbar.Snackbar
+import objects.Favorito
+import objects.InmuebleWithModelo
+import xyz.hanks.library.bang.SmallBangView
 import java.net.URL
 
 
-class CustomAdapter(private val dataSet: ArrayList<InmuebleForList>) :
+class CustomAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val activity: LoadUserActivity) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -28,6 +35,7 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleForList>) :
         val tipoCardView : CardView = view.findViewById(R.id.inmueble_card_tipo_card)
         val numImagenes : TextView = view.findViewById(R.id.inmueble_card_num_images)
         val imagen : ImageView = view.findViewById(R.id.inmueble_card_image)
+        val favIcon : SmallBangView = view.findViewById(R.id.fav_image_animation)
     }
 
     // Create new views (invoked by the layout manager)
@@ -61,9 +69,48 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleForList>) :
         var url = URL(dataSet[position].inmueble.imagenes.first())
         url = URL("http://10.0.2.2:9000${url.path}")
         Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
+
+        viewHolder.favIcon.setOnClickListener {
+            viewHolder.favIcon.isSelected = !viewHolder.favIcon.isSelected
+            if (viewHolder.favIcon.isSelected) {
+                viewHolder.favIcon.likeAnimation()
+                val query = AndroidNetworking.post("http://10.0.2.2:9000/api/favorito/")
+                query.addApplicationJsonBody(Favorito (this.activity.loadUser(), dataSet[position], "", 0).toJson())
+                query.setPriority(Priority.LOW)
+                    .build()
+                    .getAsString(object : StringRequestListener {
+                        override fun onResponse(response: String) {
+                        }
+                        override fun onError(error: ANError) {
+                            Snackbar.make(
+                                activity.window.decorView.rootView,
+                                "Error añadiendo favorito",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            viewHolder.favIcon.isSelected = false
+                        }
+                    })
+            } else {
+                val query = AndroidNetworking.delete("http://10.0.2.2:9000/api/favorito/")
+                query.addApplicationJsonBody(Favorito (this.activity.loadUser(), dataSet[position], "", 0).toJson())
+                query.setPriority(Priority.LOW)
+                    .build()
+                    .getAsString(object : StringRequestListener {
+                        override fun onResponse(response: String) {
+                        }
+                        override fun onError(error: ANError) {
+                            Snackbar.make(
+                                activity.window.decorView.rootView,
+                                "Error eliminando favorito",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            viewHolder.favIcon.isSelected = true
+                        }
+                    })
+            }
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
-
 }

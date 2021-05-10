@@ -4,12 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.core.widget.NestedScrollView
@@ -20,24 +18,23 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
+import com.example.oikos.LoadUserActivity
 import com.example.oikos.R
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
-import objects.InmuebleForList
-import objects.Usuario
+import objects.InmuebleWithModelo
 import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-class SearchResultsActivity : AppCompatActivity() {
-    lateinit var searchResults: ArrayList<InmuebleForList>
+class SearchResultsActivity : LoadUserActivity() {
+    lateinit var searchResults: ArrayList<InmuebleWithModelo>
     lateinit var customAdapter: CustomAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -60,7 +57,7 @@ class SearchResultsActivity : AppCompatActivity() {
         getFilteredResults(filters)
 
         val resultsRecycler = findViewById<RecyclerView>(R.id.results_recycler)
-        customAdapter = CustomAdapter(searchResults)
+        customAdapter = CustomAdapter(searchResults, this)
         resultsRecycler.adapter = customAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(this)
 
@@ -176,7 +173,7 @@ class SearchResultsActivity : AppCompatActivity() {
         println("we have response")
         while(i < response.length()){
             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
-            searchResults.add(InmuebleForList(inmueble, modelo))
+            searchResults.add(InmuebleWithModelo(inmueble, modelo))
             println("MODELO AGAIN IS " + modelo)
             i++
         }

@@ -1,48 +1,29 @@
 package com.example.oikos.ui.inmuebles
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.OpenableColumns
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatSpinner
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.cardview.widget.CardView
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.StringRequestListener
 import com.bumptech.glide.Glide
 import com.example.oikos.R
-import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import objects.*
-import org.w3c.dom.Text
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 import java.net.URL
-import java.util.*
 import kotlin.collections.ArrayList
 
 class EditInmuebleActivity : GestionInmuebleForm() {
 
-    lateinit var inmuebleToEdit : InmuebleForList
+    lateinit var inmuebleToEdit : InmuebleWithModelo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inmuebleToEdit = intent.getSerializableExtra("inmueble") as InmuebleForList
+        inmuebleToEdit = intent.getSerializableExtra("inmueble") as InmuebleWithModelo
         super.setUpSpinner()
         initializeData()
         findViewById<TextView>(R.id.publicar_toolbar_text).text = "Editar Inmueble"

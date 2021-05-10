@@ -1,3 +1,7 @@
+
+
+
+
 package com.example.oikos.ui.inmuebles
 
 import android.app.Activity
@@ -11,8 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.widget.*
-import androidx.cardview.widget.CardView
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,22 +24,15 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.oikos.R
-import com.example.oikos.ui.search.CustomAdapter
-import com.example.oikos.ui.search.SearchResultsActivity
-import com.example.oikos.ui.search.localized.LocalizedSearch
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
-import objects.InmuebleForList
+import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
-import org.w3c.dom.Text
 
 class GestionInmuebleFragment : Fragment() {
 
@@ -52,8 +47,8 @@ class GestionInmuebleFragment : Fragment() {
     lateinit var emptyLayout : LinearLayout
     lateinit var user : Usuario
 
-    lateinit var visibleInmuebles : ArrayList<InmuebleForList>
-    lateinit var invisibleInmuebles : ArrayList<InmuebleForList>
+    lateinit var visibleInmuebles : ArrayList<InmuebleWithModelo>
+    lateinit var invisibleInmuebles : ArrayList<InmuebleWithModelo>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -97,6 +92,7 @@ class GestionInmuebleFragment : Fragment() {
             val query = AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
             //TODO SUSTITUIR POR ID UNA VEZ HAYA LOGIN
             query.addQueryParameter("propietario", user.id.toString())
+            emptyLayout.visibility = View.GONE
             resultLayout.visibility = View.GONE
             loadingCircle.visibility = View.VISIBLE
             query.setPriority(Priority.HIGH)
@@ -125,14 +121,14 @@ class GestionInmuebleFragment : Fragment() {
     }
 
     private fun processResponse(response : JSONArray) {
-        val completeList = ArrayList<InmuebleForList>()
+        val completeList = ArrayList<InmuebleWithModelo>()
         var i = 0
         println("RESPONSE OF ${response.length()} ELEMENTS")
         while(i < response.length()){
             val modelo =  response.getJSONObject(i)["modelo"].toString()
             println("MODELO $modelo")
             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
-            completeList.add(InmuebleForList(inmueble, modelo))
+            completeList.add(InmuebleWithModelo(inmueble, modelo))
             i++
         }
         if(completeList.size == 0){
@@ -144,8 +140,8 @@ class GestionInmuebleFragment : Fragment() {
         }
         loadingCircle.visibility = View.GONE
 
-        visibleInmuebles.addAll(completeList.filter { it.inmueble.disponible } as ArrayList<InmuebleForList>)
-        invisibleInmuebles.addAll(completeList.filter { !it.inmueble.disponible } as ArrayList<InmuebleForList>)
+        visibleInmuebles.addAll(completeList.filter { it.inmueble.disponible } as ArrayList<InmuebleWithModelo>)
+        invisibleInmuebles.addAll(completeList.filter { !it.inmueble.disponible } as ArrayList<InmuebleWithModelo>)
         visibleAdapter.notifyDataSetChanged()
         invisibleAdapter.notifyDataSetChanged()
     }
@@ -158,24 +154,24 @@ class GestionInmuebleFragment : Fragment() {
                 networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
-    fun updateInmueble(inmuebleForList : InmuebleForList ,  visible : Boolean){
+    fun updateInmueble(inmuebleWithModelo : InmuebleWithModelo, visible : Boolean){
         if(visible) {
-            visibleInmuebles.remove(inmuebleForList)
-            inmuebleForList.inmueble.disponible = false
-            invisibleInmuebles.add(inmuebleForList)
+            visibleInmuebles.remove(inmuebleWithModelo)
+            inmuebleWithModelo.inmueble.disponible = false
+            invisibleInmuebles.add(inmuebleWithModelo)
         } else {
-            invisibleInmuebles.remove(inmuebleForList)
-            inmuebleForList.inmueble.disponible = true
-            visibleInmuebles.add(inmuebleForList)
+            invisibleInmuebles.remove(inmuebleWithModelo)
+            inmuebleWithModelo.inmueble.disponible = true
+            visibleInmuebles.add(inmuebleWithModelo)
         }
         visibleAdapter.notifyDataSetChanged()
         invisibleAdapter.notifyDataSetChanged()
-        updateInDatabase(inmuebleForList)
+        updateInDatabase(inmuebleWithModelo)
     }
-    private fun updateInDatabase(inmuebleForList : InmuebleForList) {
+    private fun updateInDatabase(inmuebleWithModelo : InmuebleWithModelo) {
         val query = AndroidNetworking.put("http://10.0.2.2:9000/api/inmueble/")
-        query.addApplicationJsonBody(inmuebleForList.inmueble.toJson())
-        query.addQueryParameter("modelo", inmuebleForList.modelo)
+        query.addApplicationJsonBody(inmuebleWithModelo.inmueble.toJson())
+        query.addQueryParameter("modelo", inmuebleWithModelo.modelo)
         query.setPriority(Priority.MEDIUM)
                 .build()
                 .getAsString(object : StringRequestListener {
@@ -196,21 +192,25 @@ class GestionInmuebleFragment : Fragment() {
                 })
     }
 
-    fun deleteInmueble(inmuebleForList : InmuebleForList ,  visible : Boolean){
+    fun deleteInmueble(inmuebleWithModelo : InmuebleWithModelo, visible : Boolean){
         if(visible) {
-            visibleInmuebles.remove(inmuebleForList)
-            inmuebleForList.inmueble.disponible = false
+            visibleInmuebles.remove(inmuebleWithModelo)
+            inmuebleWithModelo.inmueble.disponible = false
             visibleAdapter.notifyDataSetChanged()
         } else {
-            invisibleInmuebles.remove(inmuebleForList)
+            invisibleInmuebles.remove(inmuebleWithModelo)
             invisibleAdapter.notifyDataSetChanged()
         }
-        deleteInDatabase(inmuebleForList)
+        if(invisibleInmuebles.size == 0 && visibleInmuebles.size == 0) {
+            resultLayout.visibility = View.GONE
+            emptyLayout.visibility = View.VISIBLE
+        }
+        deleteInDatabase(inmuebleWithModelo)
     }
 
-    fun deleteInDatabase(inmuebleForList: InmuebleForList) {
+    fun deleteInDatabase(inmuebleWithModelo: InmuebleWithModelo) {
         val query = AndroidNetworking.delete("http://10.0.2.2:9000/api/inmueble/")
-        query.addQueryParameter("id", inmuebleForList.inmueble.id.toString())
+        query.addQueryParameter("id", inmuebleWithModelo.inmueble.id.toString())
         query.setPriority(Priority.MEDIUM)
                 .build()
                 .getAsString(object : StringRequestListener {
@@ -231,9 +231,9 @@ class GestionInmuebleFragment : Fragment() {
                 })
     }
 
-    fun startEditActivity(inmuebleForList: InmuebleForList) {
+    fun startEditActivity(inmuebleWithModelo: InmuebleWithModelo) {
         val intent = Intent(context, EditInmuebleActivity::class.java)
-        intent.putExtra("inmueble", inmuebleForList)
+        intent.putExtra("inmueble", inmuebleWithModelo)
         startActivityForResult(intent, EDIT_ACTIVITY)
     }
 
@@ -260,7 +260,6 @@ class GestionInmuebleFragment : Fragment() {
             getInmuebles()
         }
     }
-
 
     private fun loadUser(){
         val sharedPref = activity?.getSharedPreferences("user", Context.MODE_PRIVATE)
