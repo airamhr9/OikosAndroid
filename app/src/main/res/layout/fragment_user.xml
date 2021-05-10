@@ -75,10 +75,9 @@
 
     </LinearLayout>
 
-        <!--
         <GridLayout
             android:layout_width="match_parent"
-            android:columnCount="2"
+            android:columnCount="1"
             android:layout_marginTop="15dp"
             android:orientation="horizontal"
             android:layout_height="wrap_content">
@@ -89,55 +88,51 @@
                 android:minHeight="100dp"
                 android:layout_margin="5dp"
                 >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top|start"
+                    android:layout_margin="10dp"
                     android:src="@drawable/ic_baseline_favorite_24"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="bottom|start"
                     android:textStyle="bold"
                     android:text="Favoritos"/>
-                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
 
             <androidx.cardview.widget.CardView
-                android:minHeight="100dp"
                 android:layout_columnSpan="1"
                 android:layout_columnWeight="1"
+                android:minHeight="100dp"
                 android:layout_margin="5dp"
                 >
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="top|start"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_baseline_save_24"
+                    android:tint="?android:colorPrimary"/>
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_baseline_favorite_24"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                        android:layout_marginStart="10dp"
-                        android:textStyle="bold"
-                        android:text="Favoritos"/>
-                </LinearLayout>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="bottom|start"
+                    android:textStyle="bold"
+                    android:text="Búsquedas Guardadas"/>
 
             </androidx.cardview.widget.CardView>
 
-
         </GridLayout>
-        -->
     </LinearLayout>
 
     <androidx.core.widget.ContentLoadingProgressBar
