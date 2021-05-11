@@ -29,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
+import objects.InmuebleModeloFav
 import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
@@ -38,7 +39,7 @@ class SavedSearchFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var sharedPref : SharedPreferences
-    lateinit var searchResults: ArrayList<InmuebleWithModelo>
+    lateinit var searchResults: ArrayList<InmuebleModeloFav>
     lateinit var customAdapter: CustomAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -116,11 +117,10 @@ class SavedSearchFragment : Fragment() {
                         var i = 0
                         searchResults.clear()
                         while (i < response.length()) {
-                            println("here")
-                            println("search result $i ${response[i]}")
                             val modelo =  response.getJSONObject(i)["modelo"].toString()
+                            val favorito =  response.getJSONObject(i)["favorito"].toString().toBoolean()
                             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
-                            searchResults.add(InmuebleWithModelo(inmueble, modelo))
+                            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito))
                             i++
                         }
                         customAdapter.notifyDataSetChanged()

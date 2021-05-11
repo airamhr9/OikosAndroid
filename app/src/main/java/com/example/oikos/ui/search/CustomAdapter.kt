@@ -5,10 +5,12 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.RecyclerView
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
@@ -20,13 +22,14 @@ import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import objects.Favorito
-import objects.InmuebleWithModelo
+import objects.InmuebleModeloFav
 import xyz.hanks.library.bang.SmallBangView
 import java.net.URL
 
 
-class CustomAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val activity: LoadUserActivity) :
+class CustomAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val activity: LoadUserActivity) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -62,7 +65,7 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val acti
         viewHolder.numImagenes.text = "${dataSet[position].inmueble.imagenes.size} imágenes"
 
         viewHolder.inmuebleCardView.setOnClickListener {
-            val intent = Intent(viewHolder.itemView.context, FichaInmuebleActivity :: class.java)
+            val intent = Intent(viewHolder.itemView.context, FichaInmuebleActivity::class.java)
             intent.putExtra("inmueble", dataSet[position].inmueble)
             intent.putExtra("modelo", dataSet[position].modelo)
             viewHolder.itemView.context.startActivity(intent)
@@ -72,24 +75,26 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val acti
         url = URL("http://10.0.2.2:9000${url.path}")
         Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
 
+        viewHolder.favIcon.isSelected = dataSet[position].esFavorito
+
         viewHolder.favIcon.setOnClickListener {
             val builder = AlertDialog.Builder(activity)
-            val dialogView = activity.layoutInflater.inflate(R.layout.fav_notas_dialog, null)
-            builder.setView(dialogView)
-            val notasFavorito = dialogView.findViewById<TextInputEditText>(R.id.notas_fav)
             if (!viewHolder.favIcon.isSelected) {
+                val dialogView = activity.layoutInflater.inflate(R.layout.fav_notas_dialog, null)
+                builder.setView(dialogView)
+                val notasFavorito = dialogView.findViewById<TextInputEditText>(R.id.notas_fav)
                 builder.setTitle("Añadir favorito")
                     .setPositiveButton(
-                        "Añadir"
+                            "Añadir"
                     ) { dialog, id ->
                         val query = AndroidNetworking.post("http://10.0.2.2:9000/api/favorito/")
                         query.addApplicationJsonBody(
-                            Favorito(
-                                this.activity.loadUser(),
-                                dataSet[position],
-                                notasFavorito.text.toString(),
-                                0
-                            ).toJson()
+                                Favorito(
+                                        this.activity.loadUser(),
+                                        dataSet[position].toInmuebleWithModelo(),
+                                        notasFavorito.text.toString(),
+                                        0
+                                ).toJson()
                         )
                         query.setPriority(Priority.LOW)
                             .build()
@@ -101,34 +106,34 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val acti
 
                                 override fun onError(error: ANError) {
                                     Snackbar.make(
-                                        activity.window.decorView.rootView,
-                                        "Error añadiendo favorito",
-                                        Snackbar.LENGTH_LONG
+                                            activity.window.decorView.rootView,
+                                            "Error añadiendo favorito",
+                                            Snackbar.LENGTH_LONG
                                     ).show()
                                     viewHolder.favIcon.isSelected = false
                                 }
                             })
                     }
                     .setNegativeButton(
-                        "Cancelar"
+                            "Cancelar"
                     ) { dialog, id ->
                         dialog.cancel()
                         viewHolder.favIcon.isSelected = false
                     }
             } else {
-                notasFavorito.visibility = View.GONE
+                builder.setMessage("¿Eliminar este inmueble de sus favoritos?")
                 builder.setTitle("Eliminar favorito")
                     .setPositiveButton(
-                        "Eliminar"
+                            "Eliminar"
                     ) { dialog, id ->
                         val query = AndroidNetworking.delete("http://10.0.2.2:9000/api/favorito/")
                         query.addApplicationJsonBody(
-                            Favorito(
-                                this.activity.loadUser(),
-                                dataSet[position],
-                                "",
-                                0
-                            ).toJson()
+                                Favorito(
+                                        this.activity.loadUser(),
+                                        dataSet[position].toInmuebleWithModelo(),
+                                        "",
+                                        0
+                                ).toJson()
                         )
                         query.setPriority(Priority.LOW)
                             .build()
@@ -139,16 +144,16 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val acti
 
                                 override fun onError(error: ANError) {
                                     Snackbar.make(
-                                        activity.window.decorView.rootView,
-                                        "Error eliminando favorito",
-                                        Snackbar.LENGTH_LONG
+                                            activity.window.decorView.rootView,
+                                            "Error eliminando favorito",
+                                            Snackbar.LENGTH_LONG
                                     ).show()
                                     viewHolder.favIcon.isSelected = true
                                 }
                             })
                     }.setNegativeButton(
-                        "Cancelar"
-                    ) { dialog, id ->
+                                "Cancelar"
+                        ) { dialog, id ->
                         dialog.cancel()
                         viewHolder.favIcon.isSelected = true
                     }

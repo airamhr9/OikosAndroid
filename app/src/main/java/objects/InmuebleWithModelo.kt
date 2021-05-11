@@ -9,4 +9,5 @@ class InmuebleWithModelo (val inmueble : DatosInmueble, val modelo : String) : S
         json.addProperty("modelo", modelo)
         return json
     }
+
 }

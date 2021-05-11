@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
+import objects.InmuebleModeloFav
 import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
@@ -35,7 +36,7 @@ import kotlin.collections.HashMap
 
 
 class SearchResultsActivity : LoadUserActivity() {
-    lateinit var searchResults: ArrayList<InmuebleWithModelo>
+    lateinit var searchResults: ArrayList<InmuebleModeloFav>
     lateinit var customAdapter: CustomAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -178,7 +179,8 @@ class SearchResultsActivity : LoadUserActivity() {
         println("we have response")
         while(i < response.length()){
             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
-            searchResults.add(InmuebleWithModelo(inmueble, modelo))
+            val favorito : Boolean =  response.getJSONObject(i)["favorito"].toString().toBoolean()
+            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito))
             println("MODELO AGAIN IS " + modelo)
             i++
         }
