@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.oikos.R
+import com.example.oikos.agendaVisitas.AgendaPropietarioActivity
 import com.example.oikos.ui.search.FichaMapFragment
 import com.google.android.material.snackbar.Snackbar
 import objects.DatosInmueble
@@ -60,6 +61,15 @@ class FichaInmuebleActivity : AppCompatActivity() {
         } catch (ex: ActivityNotFoundException) {
             Snackbar.make(view, "No hay clientes de correo instalados", Snackbar.LENGTH_SHORT).show()
         }
+    }
+
+    fun startAgendaActivity (view : View) {
+        val inmueble = intent.getSerializableExtra("inmueble") as DatosInmueble
+        val modelo = intent.getStringExtra("modelo") as String
+        val agendaIntent = Intent(this, AgendaPropietarioActivity :: class.java)
+        agendaIntent.putExtra("inmueble", inmueble)
+        agendaIntent.putExtra("modelo", modelo)
+        startActivity(agendaIntent)
     }
 
     fun onBackPressed (view : View) {

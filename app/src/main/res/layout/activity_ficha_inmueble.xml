@@ -233,6 +233,7 @@
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -257,20 +258,31 @@
                         android:id="@+id/ficha_propietario_mail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:text="antoniogabinete@mail.com" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="5dp"
-                        android:background="@android:color/transparent"
-                        android:onClick="sendMail"
-                        android:text="Enviar correo"
-                        android:textColor="#2196f3" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:background="@android:color/transparent"
+                            android:onClick="startAgendaActivity"
+                            android:layout_gravity="end"
+                            android:text="Solicitar visita"
+                            android:textColor="#2196f3" />
 
                 </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@android:color/transparent"
+                    android:onClick="sendMail"
+                    android:tint="?android:colorPrimary"
+                    android:layout_gravity="end|top"
+                    android:src="@drawable/ic_baseline_email_24"/>
 
             </androidx.cardview.widget.CardView>
 
