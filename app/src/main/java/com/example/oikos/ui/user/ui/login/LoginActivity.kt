@@ -138,14 +138,9 @@ class LoginActivity : AppCompatActivity() {
                         usuario = Usuario.fromJson(jsonUser)
                         println(usuario.mail)
                         println(usuario.contraseña)
-                        AlertDialog.Builder(this@LoginActivity)
-                                .setTitle("Se ha conectado correctamente")
-                                .setMessage("Ya puede empezar a usar Trobify")
-                                .setPositiveButton("Ok"
-                                ) { _, _ ->val intent = Intent(applicationContext, MainActivity::class.java)
+                        val intent = Intent(applicationContext, MainActivity::class.java)
 
-                                    startActivity(intent)}
-                                .show()
+                        startActivity(intent)
                         loading.visibility = View.GONE
                     }
 

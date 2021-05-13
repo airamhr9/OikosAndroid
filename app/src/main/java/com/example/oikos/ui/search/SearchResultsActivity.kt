@@ -26,7 +26,6 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
 import objects.InmuebleModeloFav
-import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
 import java.time.LocalDateTime
@@ -180,7 +179,7 @@ class SearchResultsActivity : LoadUserActivity() {
         while(i < response.length()){
             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
             val favorito : Boolean =  response.getJSONObject(i)["favorito"].toString().toBoolean()
-            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito))
+            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito, ""))
             println("MODELO AGAIN IS " + modelo)
             i++
         }

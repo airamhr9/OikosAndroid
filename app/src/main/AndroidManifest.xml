@@ -20,7 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Oikos"
         android:usesCleartextTraffic="true">
-        <activity android:name=".agendaVisitas.AgendaPropietarioActivity"></activity>
+        <activity
+            android:name=".ui.favoritos.verFavoritos"
+            android:label="@string/title_activity_ver_favoritos"
+            android:theme="@style/Theme.Oikos.NoActionBar"></activity>
+        <activity android:name=".agendaVisitas.AgendaPropietarioActivity" />
         <activity android:name=".ui.inmuebles.EditInmuebleActivity" />
         <activity android:name=".ui.user.ui.login.LoginActivity" />
         <activity android:name=".ui.user.registro" />

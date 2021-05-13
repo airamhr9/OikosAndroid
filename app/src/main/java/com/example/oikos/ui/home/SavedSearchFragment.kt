@@ -30,7 +30,6 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
 import objects.InmuebleModeloFav
-import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
 
@@ -120,7 +119,7 @@ class SavedSearchFragment : Fragment() {
                             val modelo =  response.getJSONObject(i)["modelo"].toString()
                             val favorito =  response.getJSONObject(i)["favorito"].toString().toBoolean()
                             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
-                            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito))
+                            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito, ""))
                             i++
                         }
                         customAdapter.notifyDataSetChanged()

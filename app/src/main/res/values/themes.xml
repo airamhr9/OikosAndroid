@@ -42,6 +42,7 @@
         <item name="titleTextColor">@color/black</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_baseline_arrow_back_24</item>
     </style>
+
     <style name="Theme.Oikos.ActionBar.Text" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/black</item>
     </style>
@@ -49,5 +50,9 @@
     <style name="Theme.Oikos.RecommendedTabs" parent="Theme.Oikos">
         <item name="android:backgroundTint">@color/white</item>
     </style>
+
+    <style name="Theme.Oikos.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Oikos.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
