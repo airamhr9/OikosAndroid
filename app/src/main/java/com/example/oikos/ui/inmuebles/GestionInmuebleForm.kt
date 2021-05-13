@@ -86,19 +86,6 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
         }
     }
 
-    fun setUpSpinner() {
-        tipoSpinner = findViewById(R.id.publicar_tipo)
-        ArrayAdapter.createFromResource(
-                this,
-                R.array.spinner_values,
-                android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            tipoSpinner.adapter = adapter
-        }
-        tipoSpinner.onItemSelectedListener = this
-    }
-
     private fun initializeFields(){
         precioTextField = findViewById(R.id.publicar_precio)
         ciudadTextField = findViewById(R.id.publicar_ciudad)

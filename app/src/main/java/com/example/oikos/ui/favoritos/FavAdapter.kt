@@ -29,7 +29,7 @@ import xyz.hanks.library.bang.SmallBangView
 import java.net.URL
 
 
-class FavAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val activity: LoadUserActivity) :
+class FavAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val activity: VerFavoritosActivity) :
     RecyclerView.Adapter<FavAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -143,6 +143,7 @@ class FavAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val activity
                             .getAsString(object : StringRequestListener {
                                 override fun onResponse(response: String) {
                                     viewHolder.favIcon.isSelected = false
+                                    activity.eliminarFavorito(position)
                                 }
 
                                 override fun onError(error: ANError) {

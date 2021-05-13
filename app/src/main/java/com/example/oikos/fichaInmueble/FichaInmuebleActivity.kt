@@ -63,15 +63,6 @@ class FichaInmuebleActivity : AppCompatActivity() {
         }
     }
 
-    fun startAgendaActivity (view : View) {
-        val inmueble = intent.getSerializableExtra("inmueble") as DatosInmueble
-        val modelo = intent.getStringExtra("modelo") as String
-        val agendaIntent = Intent(this, AgendaPropietarioActivity :: class.java)
-        agendaIntent.putExtra("inmueble", inmueble)
-        agendaIntent.putExtra("modelo", modelo)
-        startActivity(agendaIntent)
-    }
-
     fun onBackPressed (view : View) {
         super.onBackPressed()
     }

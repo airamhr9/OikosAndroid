@@ -266,23 +266,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="20dp"
                             android:background="@android:color/transparent"
-                            android:onClick="startAgendaActivity"
+                            android:onClick="sendMailº"
                             android:layout_gravity="end"
-                            android:text="Solicitar visita"
+                            android:text="Enviar correo"
                             android:textColor="#2196f3" />
 
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@android:color/transparent"
-                    android:onClick="sendMail"
-                    android:tint="?android:colorPrimary"
-                    android:layout_gravity="end|top"
-                    android:src="@drawable/ic_baseline_email_24"/>
 
             </androidx.cardview.widget.CardView>
 

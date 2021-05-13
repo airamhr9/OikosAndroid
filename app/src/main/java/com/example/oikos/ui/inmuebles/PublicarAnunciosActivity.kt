@@ -45,7 +45,19 @@ class PublicarAnunciosActivity :  GestionInmuebleForm() {
         super.onCreate(savedInstanceState)
         currentType = 1
         tipoBusqueda.check(R.id.alquiler_radio_button)
-        super.setUpSpinner()
+        setUpSpinner()
+    }
+    private fun setUpSpinner() {
+        tipoSpinner = findViewById(R.id.publicar_tipo)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.spinner_values,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            tipoSpinner.adapter = adapter
+        }
+        tipoSpinner.onItemSelectedListener = this
     }
 
     override fun numImages(): Int {

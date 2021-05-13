@@ -1,48 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:animateLayoutChanges="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    >
+  <include layout="@layout/publicar_toolbar" android:id="@+id/search_results_toolbar"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="15dp"
+        android:layout_below="@+id/search_results_toolbar"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="60dp"
-        tools:layout_editor_absoluteY="76dp"
-        tools:layout_marginVertical="20dp">
+        >
 
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:text="Favoritos"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textStyle="bold" />
-
-        <ScrollView
-            android:id="@+id/scrollView3"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listaFavoritos"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/listaFavoritos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical" />
-            </LinearLayout>
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical" />
 
     </LinearLayout>
 
@@ -74,14 +52,11 @@
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loading_search3"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="match_parent"
+        android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_centerInParent="true"
-        android:indeterminate="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:indeterminate="true"/>
+ />
 
 
 </RelativeLayout>

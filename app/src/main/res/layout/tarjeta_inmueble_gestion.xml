@@ -107,14 +107,6 @@
                 android:gravity="end"
                 >
                 <ImageButton
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_baseline_calendar_today_24"
-                    android:background="@android:color/transparent"
-                    android:tint="@color/black"
-                    android:alpha=".87"
-                />
-                <ImageButton
                     android:id="@+id/inmueble_card_visible"
                     android:layout_width="36dp"
                     android:layout_height="36dp"

@@ -6,7 +6,9 @@ import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,30 +25,29 @@ import objects.InmuebleFactory
 import objects.InmuebleModeloFav
 import org.json.JSONArray
 
-class verFavoritos : LoadUserActivity() {
+class VerFavoritosActivity : LoadUserActivity() {
 
     lateinit var searchResults: ArrayList<InmuebleModeloFav>
-    lateinit var FavAdapter: FavAdapter
+    lateinit var favAdapter: FavAdapter
     lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var  emptyLayout : LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_favoritos)
-         emptyLayout = findViewById(R.id.empty_layout)
 
+        supportActionBar?.hide()
+        findViewById<TextView>(R.id.publicar_toolbar_text).text = "Favoritos"
 
+        emptyLayout = findViewById(R.id.empty_layout)
         loadingCircle = findViewById(R.id.loading_search3)
-
         getFilteredResults()
 
         searchResults = ArrayList()
         val favRecycler = findViewById<RecyclerView>(R.id.listaFavoritos)
-        FavAdapter = FavAdapter(searchResults, this)
-        favRecycler.adapter = FavAdapter
+        favAdapter = FavAdapter(searchResults, this)
+        favRecycler.adapter = favAdapter
         favRecycler.layoutManager = LinearLayoutManager(this)
-
-
     }
 
 
@@ -61,7 +62,6 @@ class verFavoritos : LoadUserActivity() {
                     .getAsJSONArray(object : JSONArrayRequestListener {
                         override fun onResponse(response: JSONArray) {
                            // println("MODELO ES " + filters["modelo"])
-
                             processResponse(response)
                         }
 
@@ -87,7 +87,6 @@ class verFavoritos : LoadUserActivity() {
         var i = 0
         println("we have response")
         while(i < response.length()){
-
             println(response.getJSONObject(i))
 
             val modelo =  response.getJSONObject(i).getJSONObject("inmueble")["modelo"].toString()
@@ -96,12 +95,10 @@ class verFavoritos : LoadUserActivity() {
             val nota =  response.getJSONObject(i)["notas"].toString()
             searchResults.add(InmuebleModeloFav(inmueble, modelo, true, nota))
 
-
-
             println("MODELO AGAIN IS " + modelo)
             i++
         }
-        FavAdapter.notifyDataSetChanged()
+        favAdapter.notifyDataSetChanged()
         loadingCircle.visibility = View.GONE
        if(searchResults.size == 0){
             emptyLayout.visibility = View.VISIBLE
@@ -121,5 +118,14 @@ class verFavoritos : LoadUserActivity() {
         val savedUser = (sharedPref?.getString("saved_user", ""))
         val savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
         return savedJsonUser["id"].asInt
+    }
+
+    fun onBackPressed(view: View) {
+        super.onBackPressed()
+    }
+
+    fun eliminarFavorito(pos : Int) {
+        searchResults.removeAt(pos)
+        favAdapter.notifyDataSetChanged()
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import com.androidnetworking.AndroidNetworking
@@ -15,7 +16,7 @@ import com.example.oikos.R
 import com.google.android.material.snackbar.Snackbar
 import objects.*
 import java.net.URL
-import kotlin.collections.ArrayList
+
 
 class EditInmuebleActivity : GestionInmuebleForm() {
 
@@ -24,7 +25,14 @@ class EditInmuebleActivity : GestionInmuebleForm() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inmuebleToEdit = intent.getSerializableExtra("inmueble") as InmuebleWithModelo
-        super.setUpSpinner()
+        tipoSpinner = findViewById(R.id.publicar_tipo)
+        tipoSpinner.visibility = View.GONE
+
+        val tipoTextLayoutParams = tipoInmuebleText.layoutParams
+        tipoTextLayoutParams as ViewGroup.MarginLayoutParams
+        tipoTextLayoutParams.marginEnd = 10
+        tipoInmuebleText.layoutParams = tipoTextLayoutParams
+
         initializeData()
         findViewById<TextView>(R.id.publicar_toolbar_text).text = "Editar Inmueble"
         findViewById<AppCompatButton>(R.id.publicar_button).text = "Editar"
@@ -106,7 +114,7 @@ class EditInmuebleActivity : GestionInmuebleForm() {
 
     }
 
-    private fun addImageFromUrl(originalUrl : String) {
+    private fun addImageFromUrl(originalUrl: String) {
         val inflater: LayoutInflater = LayoutInflater.from(applicationContext)
         val newCard = inflater.inflate(R.layout.publicar_image_card, fotoLayout, false)
         val imageView = newCard.findViewById<ImageView>(R.id.image_inmueble)
@@ -136,25 +144,25 @@ class EditInmuebleActivity : GestionInmuebleForm() {
         query.addApplicationJsonBody(inmueble.toJson())
         query.addQueryParameter("modelo", modelo)
         query.setPriority(Priority.HIGH).build().getAsString(
-                object : StringRequestListener {
-                    override fun onResponse(response: String) {
-                        Snackbar.make(
-                                window.decorView.rootView,
-                                "Editado con éxito",
-                                Snackbar.LENGTH_LONG
-                        ).show()
-                        setResult(Activity.RESULT_OK)
-                        finish()
-                    }
-
-                    override fun onError(error: ANError) {
-                        Snackbar.make(
-                                window.decorView.rootView,
-                                "Error al crear inmueble",
-                                Snackbar.LENGTH_LONG
-                        ).show()
-                    }
+            object : StringRequestListener {
+                override fun onResponse(response: String) {
+                    Snackbar.make(
+                        window.decorView.rootView,
+                        "Editado con éxito",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    setResult(Activity.RESULT_OK)
+                    finish()
                 }
+
+                override fun onError(error: ANError) {
+                    Snackbar.make(
+                        window.decorView.rootView,
+                        "Error al crear inmueble",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
         )
     }
 

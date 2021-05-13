@@ -1,7 +1,3 @@
-
-
-
-
 package com.example.oikos.ui.inmuebles
 
 import android.app.Activity

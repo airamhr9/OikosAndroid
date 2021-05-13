@@ -1,37 +1,25 @@
 package com.example.oikos.ui.user
 
 import android.content.Context
-import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatSpinner
 import androidx.cardview.widget.CardView
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.androidnetworking.AndroidNetworking
-import com.androidnetworking.common.Priority
-import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONArrayRequestListener
-import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.oikos.MainActivity
 import com.example.oikos.R
-import com.example.oikos.ui.favoritos.verFavoritos
+import com.example.oikos.ui.favoritos.VerFavoritosActivity
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
 import objects.Preferencia
 import objects.Usuario
-import org.json.JSONArray
-import org.json.JSONObject
-import java.net.URL
 import android.content.Intent as Intent
 
 class UserFragment : Fragment() {
@@ -63,7 +51,7 @@ class UserFragment : Fragment() {
 
 
         favCard.setOnClickListener{
-            val menuPref = Intent(context, verFavoritos :: class.java)
+            val menuPref = Intent(context, VerFavoritosActivity :: class.java)
 
             startActivity(menuPref)
         }
