@@ -22,11 +22,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import objects.Utils
 
 
 class HomeFragment : Fragment() {
 
-    private lateinit var demoCollectionAdapter: HomeTabsAdapter
+    private lateinit var homeTabsAdapter : HomeTabsAdapter
     private lateinit var viewPager: ViewPager2
 
     override fun onCreateView(
@@ -38,14 +39,18 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        demoCollectionAdapter = HomeTabsAdapter(this)
+        homeTabsAdapter = HomeTabsAdapter(this)
         viewPager = view.findViewById(R.id.pager)
-        viewPager.adapter = demoCollectionAdapter
+        viewPager.adapter = homeTabsAdapter
 
         val tabLayout : TabLayout = view.findViewById(R.id.tab_layout)
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = if (position == 0) "Última Búsqueda" else "Búsquedas Guardadas"
+            tab.text = when (position) {
+                0 -> "Última Búsqueda"
+                1 -> "Búsquedas Guardadas"
+                else -> "Favoritos"
+            }
         }.attach()
 
 

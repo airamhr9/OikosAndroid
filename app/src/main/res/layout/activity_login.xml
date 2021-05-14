@@ -13,7 +13,7 @@
         android:scaleType="centerCrop"
         android:layout_height="275dp"
         android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/house" />
+        app:srcCompat="@drawable/home" />
 
         <LinearLayout
             android:layout_width="match_parent"

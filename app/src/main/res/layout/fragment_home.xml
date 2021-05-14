@@ -7,11 +7,24 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:paddingHorizontal="10dp"
+        android:minWidth="80dp"
+        app:tabGravity="fill"
+        android:layout_gravity="start"
+        app:tabIndicatorGravity="center"
         android:theme="@style/Theme.Oikos.RecommendedTabs"
         app:tabMode="scrollable"
-        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="30dp"
+        app:tabIndicatorColor="#0077c2"
+        app:tabPadding="5dp"
+        app:tabPaddingStart="10dp"
+        app:tabPaddingEnd="10dp"
+        app:tabTextAppearance="@style/Theme.Oikos.ChipTab"
+        app:tabTextColor="?android:textColorHint"
+        app:tabSelectedTextColor="@color/white"
+        app:tabRippleColor="@android:color/transparent"
         app:tabIndicator="@drawable/custom_tab_indicator"/>
 
     <androidx.viewpager2.widget.ViewPager2

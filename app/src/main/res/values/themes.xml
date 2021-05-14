@@ -55,4 +55,9 @@
 
     <style name="Theme.Oikos.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Theme.Oikos.ChipTab" parent ="TextAppearance.AppCompat.Subhead">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
 </resources>

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -94,6 +95,19 @@ class SavedSearchFragment : Fragment() {
                 navController.navigate(R.id.navigation_search)
             }
             return
+        }
+        val expandFiltersArrow = view.findViewById<AppCompatImageView>(R.id.filtros_avanzados_arrow)
+        val expandFiltersButton = view.findViewById<LinearLayout>(R.id.filtros_avanzados_linear)
+        val filterTextView = view.findViewById<TextView>(R.id.filter_text_view)
+        filterTextView.visibility = View.GONE
+        expandFiltersButton.setOnClickListener {
+            if(filterTextView.visibility == View.GONE){
+                filterTextView.visibility = View.VISIBLE
+                expandFiltersArrow.animate().rotation(180f).start();
+            } else {
+                filterTextView.visibility = View.GONE
+                expandFiltersArrow.animate().rotation(0f).start();
+            }
         }
     }
 

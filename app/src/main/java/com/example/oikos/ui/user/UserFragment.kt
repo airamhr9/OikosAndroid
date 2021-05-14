@@ -46,15 +46,8 @@ class UserFragment : Fragment() {
         userTag = root.findViewById<EditText>(R.id.userTag)
         emailTag =  root.findViewById<EditText>(R.id.emailTag)
         avatar = root.findViewById(R.id.profileview)
-        var favCard = root.findViewById<CardView>(R.id.favCard)
         loadUser()
 
-
-        favCard.setOnClickListener{
-            val menuPref = Intent(context, VerFavoritosActivity :: class.java)
-
-            startActivity(menuPref)
-        }
         //loadingCircle = root.findViewById(R.id.loading_search2)
         //resultLayout = root.findViewById(R.id.preference_layout)
         //loadingCircle.visibility = View.VISIBLE

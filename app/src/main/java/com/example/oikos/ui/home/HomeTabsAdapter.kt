@@ -5,10 +5,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class HomeTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {
-        return if (position == 0) SavedSearchFragment() else SearchesFragment()
+        return when (position) {
+            0 -> SavedSearchFragment()
+            1 -> SearchesFragment()
+            else -> FavoritosFragment()
+        }
     }
 
 }

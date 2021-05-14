@@ -1,0 +1,67 @@
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_results_toolbar"
+        android:orientation="vertical"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listaFavoritos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imagenSinFavoritos"
+            android:layout_width="250dp"
+            android:layout_height="270dp"
+            android:src="@drawable/house" />
+
+        <TextView
+            android:id="@+id/textoSinFavoritos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha=".7"
+            android:text="No ha añadido ningún favorito"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/no_search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Hacer búsqueda"
+            android:textColor="@color/dark_blue" />
+    </LinearLayout>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/loading_search3"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"/>
+    />
+
+
+</RelativeLayout>
