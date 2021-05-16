@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.RecyclerView
 import com.androidnetworking.AndroidNetworking
@@ -89,12 +90,12 @@ class CustomAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val activ
                     ) { dialog, id ->
                         val query = AndroidNetworking.post("http://10.0.2.2:9000/api/favorito/")
                         query.addApplicationJsonBody(
-                                Favorito(
-                                        this.activity.loadUser(),
-                                        dataSet[position].toInmuebleWithModelo(),
-                                        notasFavorito.text.toString(),
-                                        0
-                                ).toJson()
+                            Favorito(
+                                this.activity.loadUser(),
+                                dataSet[position].toInmuebleWithModelo(),
+                                notasFavorito.text.toString(),
+                                0
+                            ).toJson()
                         )
                         query.setPriority(Priority.LOW)
                             .build()

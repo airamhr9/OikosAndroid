@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/search_results_toolbar"
         android:orientation="vertical"
+        android:layout_marginBottom="50dp"
         >
 
         <androidx.recyclerview.widget.RecyclerView

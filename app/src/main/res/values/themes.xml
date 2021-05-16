@@ -15,8 +15,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue</item>
         <!-- Customize your theme here. -->
+        <item name="popupMenuBackground">@drawable/custom_popupmenu_background</item>
     </style>
 
+    <style name="Widget.App.PopupMenu" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@drawable/custom_popupmenu_background</item>
+    </style>
 
     <!-- Base application theme. -->
     <style name="Theme.Oikos.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">

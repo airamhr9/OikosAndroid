@@ -19,12 +19,21 @@
         android:id="@+id/remove_image"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_baseline_close_24"
+        android:src="@drawable/ic_baseline_more_vert_24"
         android:background="@android:color/transparent"
         android:tint="@color/white"
         android:layout_gravity="end"
-        android:layout_margin="5dp"
-        />
+        android:layout_margin="5dp" />
+
+    <ImageView
+        android:id="@+id/main_image"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_baseline_favorite_24"
+        app:tint="@color/white"
+        android:layout_gravity="start"
+        android:visibility="invisible"
+        android:layout_margin="5dp" />
 
 
 </androidx.cardview.widget.CardView>

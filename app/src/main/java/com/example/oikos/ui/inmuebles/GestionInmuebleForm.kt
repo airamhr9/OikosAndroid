@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -60,6 +61,8 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
     var longitud : Double? = null
     var currentType = pisoPos
     lateinit var user : Usuario
+    var mainImage : View? = null
+    var mainUri : Uri? = null
 
     lateinit var numCompLayout : LinearLayout
     lateinit var habsLayout : LinearLayout
@@ -143,9 +146,11 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
                     fotoLayout.addView(newCard)
                     imageUris.add(selectedImageUri)
                     newCard.findViewById<ImageButton>(R.id.remove_image).setOnClickListener {
-                        fotoLayout.removeView(newCard)
-                        imageUris.remove(selectedImageUri)
+                        showMenu(newCard, selectedImageUri)
+                        //fotoLayout.removeView(newCard)
+                        //imageUris.remove(selectedImageUri)
                     }
+                    newCard.findViewById<ImageView>(R.id.main_image).visibility = View.GONE
                 }
             }
             else {
@@ -159,6 +164,34 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
         }
     }
 
+    fun showMenu(newCard : View, imageUri : Uri) {
+        val popup = PopupMenu(applicationContext, newCard)
+        popup.menuInflater.inflate(R.menu.image_menu, popup.menu)
+
+        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+            when (menuItem.itemId) {
+                R.id.set_main_image -> {
+                    println ("Hi")
+                    if (mainImage != null) {
+                        mainImage!!.findViewById<ImageView>(R.id.main_image).visibility = View.GONE
+                    }
+                    mainImage = newCard
+                    mainUri = imageUri
+                    mainImage!!.findViewById<ImageView>(R.id.main_image).visibility = View.VISIBLE
+                    true
+                }
+                R.id.delete -> {
+                    fotoLayout.removeView(newCard)
+                    imageUris.remove(imageUri)
+                    true
+                }
+                else ->  super.onContextItemSelected(menuItem)
+            }
+        }
+        popup.setOnDismissListener {
+        }
+        popup.show()
+    }
     private fun sendInmueble() {
         val inmuebleToSend = getFormData()
         if(inmuebleToSend != null) {
@@ -304,6 +337,10 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
 
     private fun processUris(uris: ArrayList<Uri>) : ArrayList<String> {
         val result = ArrayList<String>()
+        mainUri?.let {
+            uris.remove(mainUri)
+            uris.add(0, it)
+        }
         for(uri in uris) {
             val query = AndroidNetworking.post("http://10.0.2.2:9000/api/image/")
             val file = getFile(applicationContext, uri)

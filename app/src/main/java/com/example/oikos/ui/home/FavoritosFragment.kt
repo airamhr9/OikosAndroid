@@ -56,6 +56,13 @@ class FavoritosFragment : Fragment() {
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+        searchResults.clear()
+        getFilteredResults()
+        favAdapter.notifyDataSetChanged()
+    }
+
     private fun getFilteredResults(){
         if (isNetworkConnected()) {
             val query = AndroidNetworking.get("http://10.0.2.2:9000/api/favorito/")

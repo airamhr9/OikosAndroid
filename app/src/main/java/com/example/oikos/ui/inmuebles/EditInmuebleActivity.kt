@@ -3,6 +3,7 @@ package com.example.oikos.ui.inmuebles
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -21,6 +22,7 @@ import java.net.URL
 class EditInmuebleActivity : GestionInmuebleForm() {
 
     lateinit var inmuebleToEdit : InmuebleWithModelo
+    var miniaturaUrl : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,9 +125,40 @@ class EditInmuebleActivity : GestionInmuebleForm() {
         Glide.with(newCard).asBitmap().load(newUrl.toString()).into(imageView)
         fotoLayout.addView(newCard)
         newCard.findViewById<ImageButton>(R.id.remove_image).setOnClickListener {
-            fotoLayout.removeView(newCard)
-            inmuebleToEdit.inmueble.imagenes.remove(originalUrl)
+            //fotoLayout.removeView(newCard)
+            //inmuebleToEdit.inmueble.imagenes.remove(originalUrl)
+            showMenuInEdited(newCard, originalUrl)
         }
+    }
+
+    private fun showMenuInEdited (card : View, url : String) {
+        val popup = PopupMenu(applicationContext, card)
+        popup.menuInflater.inflate(R.menu.image_menu, popup.menu)
+
+        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+            when (menuItem.itemId) {
+                R.id.set_main_image -> {
+                    println ("Hi")
+                    if (mainImage != null) {
+                        mainImage!!.findViewById<ImageView>(R.id.main_image).visibility = View.GONE
+                    }
+                    mainImage = card
+                    mainUri = null
+                    miniaturaUrl = url
+                    mainImage!!.findViewById<ImageView>(R.id.main_image).visibility = View.VISIBLE
+                    true
+                }
+                R.id.delete -> {
+                    fotoLayout.removeView(card)
+                    inmuebleToEdit.inmueble.imagenes.remove(url)
+                    true
+                }
+                else ->  super.onContextItemSelected(menuItem)
+            }
+        }
+        popup.setOnDismissListener {
+        }
+        popup.show()
     }
 
     override fun numImages(): Int {
@@ -135,6 +168,10 @@ class EditInmuebleActivity : GestionInmuebleForm() {
     override fun processImages(): ArrayList<String> {
         val images = super.processImages()
         images.addAll(inmuebleToEdit.inmueble.imagenes)
+        miniaturaUrl?.let {
+            images.remove(miniaturaUrl)
+            images.add(0, miniaturaUrl!!)
+        }
         return images
     }
 
