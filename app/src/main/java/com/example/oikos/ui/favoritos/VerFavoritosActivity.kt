@@ -93,7 +93,8 @@ class VerFavoritosActivity : LoadUserActivity() {
            //val favorito =  response.getJSONObject(i)["favorito"].toString().toBoolean()
             val inmueble = InmuebleFactory().new(JsonParser.parseString(response.getJSONObject(i).getJSONObject("inmueble").toString()).asJsonObject, modelo)
             val nota =  response.getJSONObject(i)["notas"].toString()
-            searchResults.add(InmuebleModeloFav(inmueble, modelo, true, nota))
+            val orden =  response.getJSONObject(i)["orden"].toString().toInt()
+            searchResults.add(InmuebleModeloFav(inmueble, modelo, true, nota, orden))
 
             println("MODELO AGAIN IS " + modelo)
             i++

@@ -133,7 +133,7 @@ class SavedSearchFragment : Fragment() {
                             val modelo =  response.getJSONObject(i)["modelo"].toString()
                             val favorito =  response.getJSONObject(i)["favorito"].toString().toBoolean()
                             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
-                            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito, ""))
+                            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito, "", 0))
                             i++
                         }
                         customAdapter.notifyDataSetChanged()

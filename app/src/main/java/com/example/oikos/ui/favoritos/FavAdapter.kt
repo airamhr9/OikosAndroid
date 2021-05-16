@@ -49,7 +49,7 @@ class FavAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val activity
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.tarjeta_inmueblefav, viewGroup, false)
+            .inflate(R.layout.tarjeta_inmueble_fav, viewGroup, false)
 
         return ViewHolder(view)
     }

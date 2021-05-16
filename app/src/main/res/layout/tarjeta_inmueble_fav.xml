@@ -135,11 +135,27 @@
 
         </FrameLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="end|bottom">
+
+            <ImageButton
+                android:id="@+id/inmueble_fav_edit"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_baseline_edit_24"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                android:tint="@color/black"
+                android:alpha=".87"
+                />
+
         <xyz.hanks.library.bang.SmallBangView
             android:id="@+id/fav_image_animation"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/fav_image"
@@ -150,6 +166,8 @@
                 android:src="@drawable/heart_selector" />
 
         </xyz.hanks.library.bang.SmallBangView>
+
+        </LinearLayout>
 
         <!--
     <androidx.appcompat.widget.AppCompatButton

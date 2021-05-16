@@ -63,7 +63,7 @@ class FavoritosFragment : Fragment() {
         favAdapter.notifyDataSetChanged()
     }
 
-    private fun getFilteredResults(){
+    fun getFilteredResults(){
         if (isNetworkConnected()) {
             val query = AndroidNetworking.get("http://10.0.2.2:9000/api/favorito/")
             query.addQueryParameter("usuario", (activity as LoadUserActivity).loadUser().id.toString())
@@ -105,7 +105,8 @@ class FavoritosFragment : Fragment() {
             //val favorito =  response.getJSONObject(i)["favorito"].toString().toBoolean()
             val inmueble = InmuebleFactory().new(JsonParser.parseString(response.getJSONObject(i).getJSONObject("inmueble").toString()).asJsonObject, modelo)
             val nota =  response.getJSONObject(i)["notas"].toString()
-            searchResults.add(InmuebleModeloFav(inmueble, modelo, true, nota))
+            val orden =  response.getJSONObject(i)["orden"].toString().toInt()
+            searchResults.add(InmuebleModeloFav(inmueble, modelo, true, nota, orden))
 
             println("MODELO AGAIN IS " + modelo)
             i++

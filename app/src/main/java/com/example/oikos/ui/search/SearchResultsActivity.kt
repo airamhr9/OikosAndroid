@@ -179,7 +179,7 @@ class SearchResultsActivity : LoadUserActivity() {
         while(i < response.length()){
             val inmueble = InmuebleFactory().new(JsonParser.parseString(response[i].toString()).asJsonObject, modelo)
             val favorito : Boolean =  response.getJSONObject(i)["favorito"].toString().toBoolean()
-            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito, ""))
+            searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito, "", 0))
             println("MODELO AGAIN IS " + modelo)
             i++
         }

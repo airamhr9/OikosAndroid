@@ -62,4 +62,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     compileOnly 'com.google.android.wearable:wearable:2.6.0'
     implementation 'pub.hanks:smallbang:1.2.2'
+    implementation 'com.github.sephiroth74:NumberSlidingPicker:v1.0.3'
 }
