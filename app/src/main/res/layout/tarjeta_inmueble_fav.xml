@@ -129,6 +129,7 @@
                     android:id="@+id/notaFav"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxWidth="250dp"
                     android:text="Texto Nota"
                     android:textSize="14sp" />
             </LinearLayout>
