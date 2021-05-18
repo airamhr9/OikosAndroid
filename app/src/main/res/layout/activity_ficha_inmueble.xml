@@ -91,6 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="#4caf50"
+                    android:layout_gravity="center_vertical"
                     app:cardCornerRadius="5dp"
                     app:cardUseCompatPadding="true">
 
