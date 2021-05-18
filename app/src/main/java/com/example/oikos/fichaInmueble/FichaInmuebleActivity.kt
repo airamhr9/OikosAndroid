@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.oikos.R
-import com.example.oikos.agendaVisitas.AgendaPropietarioActivity
 import com.example.oikos.ui.search.FichaMapFragment
 import com.google.android.material.snackbar.Snackbar
 import objects.DatosInmueble

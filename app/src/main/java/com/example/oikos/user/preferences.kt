@@ -1,4 +1,4 @@
-package com.example.oikos.ui.user
+package com.example.oikos.user
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

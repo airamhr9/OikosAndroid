@@ -1,4 +1,4 @@
-package com.example.oikos.ui.user.ui.login
+package com.example.oikos.ui.login
 
 /**
  * Data validation state of the login form.

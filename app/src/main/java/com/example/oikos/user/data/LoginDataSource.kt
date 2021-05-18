@@ -1,6 +1,6 @@
-package com.example.oikos.ui.user.data
+package com.example.oikos.user.data
 
-import com.example.oikos.ui.user.data.model.LoggedInUser
+import com.example.oikos.user.data.model.LoggedInUser
 import java.io.IOException
 
 /**

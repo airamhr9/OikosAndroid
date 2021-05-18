@@ -21,9 +21,7 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.example.oikos.LoadUserActivity
 import com.example.oikos.R
-import com.example.oikos.ui.favoritos.FavAdapter
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.InmuebleFactory
 import objects.InmuebleModeloFav

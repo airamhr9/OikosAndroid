@@ -4,13 +4,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import androidx.navigation.Navigation
 import com.example.oikos.MainActivity
 import com.example.oikos.R
-import com.example.oikos.ui.user.registro
-import com.example.oikos.ui.user.ui.login.LoginActivity
+import com.example.oikos.ui.login.LoginActivity
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.Usuario

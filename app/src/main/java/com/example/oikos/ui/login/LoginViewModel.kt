@@ -1,26 +1,11 @@
-package com.example.oikos.ui.user.ui.login
+package com.example.oikos.ui.login
 
-import android.app.Application
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
-import com.androidnetworking.AndroidNetworking
-import com.androidnetworking.common.Priority
-import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.example.oikos.R
-import com.example.oikos.ui.user.data.LoginRepository
-import com.example.oikos.ui.user.data.Result
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import objects.Usuario
-import org.json.JSONObject
-import java.security.AccessController.getContext
+import com.example.oikos.user.data.LoginRepository
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 

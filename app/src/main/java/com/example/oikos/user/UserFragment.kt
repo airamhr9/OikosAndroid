@@ -1,4 +1,4 @@
-package com.example.oikos.ui.user
+package com.example.oikos.user
 
 import android.content.Context
 import android.os.Bundle
@@ -7,20 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.cardview.widget.CardView
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.oikos.R
-import com.example.oikos.ui.favoritos.VerFavoritosActivity
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.DatosInmueble
 import objects.Preferencia
 import objects.Usuario
-import android.content.Intent as Intent
 
 class UserFragment : Fragment() {
 

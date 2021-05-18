@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.androidnetworking.AndroidNetworking
@@ -22,7 +19,6 @@ import com.bumptech.glide.Glide
 import com.example.oikos.LoadUserActivity
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
-import com.example.oikos.ui.favoritos.VerFavoritosActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import it.sephiroth.android.library.numberpicker.NumberPicker

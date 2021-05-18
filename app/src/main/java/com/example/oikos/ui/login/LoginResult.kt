@@ -1,4 +1,4 @@
-package com.example.oikos.ui.user.ui.login
+package com.example.oikos.ui.login
 
 /**
  * Authentication result : success (user details) or error message.

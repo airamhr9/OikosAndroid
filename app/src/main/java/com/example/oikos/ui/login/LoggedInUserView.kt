@@ -1,4 +1,4 @@
-package com.example.oikos.ui.user.ui.login
+package com.example.oikos.ui.login
 
 /**
  * User details post authentication that is exposed to the UI

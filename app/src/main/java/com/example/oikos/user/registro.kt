@@ -1,45 +1,32 @@
-package com.example.oikos.ui.user
+package com.example.oikos.user
 
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.OpenableColumns
-import android.text.Editable
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.cardview.widget.CardView
 import androidx.core.widget.addTextChangedListener
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
-import com.androidnetworking.interfaces.OkHttpResponseListener
 import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.MainActivity
 import com.example.oikos.R
-import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import objects.GeoCoordsSerializable
 import objects.Usuario
-import okhttp3.Response
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import java.net.PasswordAuthentication
 import java.util.*
-import kotlin.collections.ArrayList
 
 class registro : AppCompatActivity() {
 

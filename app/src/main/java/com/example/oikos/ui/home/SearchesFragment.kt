@@ -1,7 +1,6 @@
 package com.example.oikos.ui.home
 
 import android.content.Context
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,20 +18,14 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
-import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.example.oikos.MainActivity
 import com.example.oikos.R
-import com.example.oikos.serverConnection.PlatformPositioningProvider
-import com.example.oikos.ui.search.CustomAdapter
-import com.example.oikos.ui.user.UserViewModel
+import com.example.oikos.user.UserViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.here.sdk.core.GeoCoordinates
 import objects.*
 import org.json.JSONArray
-import org.json.JSONObject
-import java.util.*
 import kotlin.collections.ArrayList
 
 class SearchesFragment : Fragment() {

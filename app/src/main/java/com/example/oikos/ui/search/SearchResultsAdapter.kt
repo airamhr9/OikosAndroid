@@ -5,13 +5,10 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.RecyclerView
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
@@ -23,15 +20,14 @@ import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import objects.Favorito
 import objects.InmuebleModeloFav
 import xyz.hanks.library.bang.SmallBangView
 import java.net.URL
 
 
-class CustomAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val activity: LoadUserActivity) :
-    RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class SearchResultsAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val activity: LoadUserActivity) :
+    RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val inmuebleCardView : CardView = view.findViewById(R.id.inmueble_card)

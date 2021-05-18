@@ -1,4 +1,4 @@
-package com.example.oikos.ui.user.ui.login
+package com.example.oikos.ui.login
 
 import android.app.Activity
 import android.content.Context
@@ -17,16 +17,13 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.example.oikos.MainActivity
 import com.example.oikos.R
-import com.example.oikos.ui.inmuebles.PublicarAnunciosActivity
-import com.example.oikos.ui.user.registro
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.oikos.user.registro
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import objects.Usuario

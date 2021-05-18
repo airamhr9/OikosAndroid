@@ -24,8 +24,8 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.example.oikos.LoadUserActivity
 import com.example.oikos.MainActivity
 import com.example.oikos.R
-import com.example.oikos.ui.search.CustomAdapter
-import com.example.oikos.ui.user.UserViewModel
+import com.example.oikos.ui.search.SearchResultsAdapter
+import com.example.oikos.user.UserViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -40,7 +40,7 @@ class SavedSearchFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var sharedPref : SharedPreferences
     lateinit var searchResults: ArrayList<InmuebleModeloFav>
-    lateinit var customAdapter: CustomAdapter
+    lateinit var searchResultsAdapter: SearchResultsAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var noSearchButon : AppCompatButton
@@ -74,8 +74,8 @@ class SavedSearchFragment : Fragment() {
         resultLayout.visibility = View.GONE
 
         val resultsRecycler = view.findViewById<View>(R.id.results_saved_recycler) as RecyclerView
-        customAdapter = CustomAdapter(searchResults, requireActivity() as LoadUserActivity)
-        resultsRecycler.adapter = customAdapter
+        searchResultsAdapter = SearchResultsAdapter(searchResults, requireActivity() as LoadUserActivity)
+        resultsRecycler.adapter = searchResultsAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(context)
 
         var savedSearch = (sharedPref.getString("saved_search", ""))
@@ -136,7 +136,7 @@ class SavedSearchFragment : Fragment() {
                             searchResults.add(InmuebleModeloFav(inmueble, modelo, favorito, "", 0))
                             i++
                         }
-                        customAdapter.notifyDataSetChanged()
+                        searchResultsAdapter.notifyDataSetChanged()
                         loadingCircle.visibility = View.GONE
                         resultLayout.visibility = View.VISIBLE
                         printFilters(preferences)

@@ -1,4 +1,4 @@
-package com.example.oikos.ui.user
+package com.example.oikos.user
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

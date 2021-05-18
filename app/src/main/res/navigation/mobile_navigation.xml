@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/navigation_user"
-        android:name="com.example.oikos.ui.user.UserFragment"
+        android:name="com.example.oikos.user.UserFragment"
         android:label="Usuario"
         tools:layout="@layout/fragment_user" />
 </navigation>

@@ -1,9 +1,9 @@
-package com.example.oikos.ui.user.ui.login
+package com.example.oikos.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.oikos.ui.user.data.LoginDataSource
-import com.example.oikos.ui.user.data.LoginRepository
+import com.example.oikos.user.data.LoginDataSource
+import com.example.oikos.user.data.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

@@ -36,7 +36,7 @@ import kotlin.collections.HashMap
 
 class SearchResultsActivity : LoadUserActivity() {
     lateinit var searchResults: ArrayList<InmuebleModeloFav>
-    lateinit var customAdapter: CustomAdapter
+    lateinit var searchResultsAdapter: SearchResultsAdapter
     lateinit var resultLayout : NestedScrollView
     lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var emptyLayout : LinearLayout
@@ -61,8 +61,8 @@ class SearchResultsActivity : LoadUserActivity() {
         getFilteredResults(filters)
 
         val resultsRecycler = findViewById<RecyclerView>(R.id.results_recycler)
-        customAdapter = CustomAdapter(searchResults, this)
-        resultsRecycler.adapter = customAdapter
+        searchResultsAdapter = SearchResultsAdapter(searchResults, this)
+        resultsRecycler.adapter = searchResultsAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(this)
 
         val saveBusquedaButton = findViewById<AppCompatImageButton>(R.id.save_busqueda_button)
@@ -183,7 +183,7 @@ class SearchResultsActivity : LoadUserActivity() {
             println("MODELO AGAIN IS " + modelo)
             i++
         }
-        customAdapter.notifyDataSetChanged()
+        searchResultsAdapter.notifyDataSetChanged()
         loadingCircle.visibility = View.GONE
         if(searchResults.size == 0){
             emptyLayout.visibility = View.VISIBLE

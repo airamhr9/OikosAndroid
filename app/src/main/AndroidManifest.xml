@@ -20,13 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Oikos"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".ui.favoritos.VerFavoritosActivity"
-            android:label="@string/title_activity_ver_favoritos"/>
-        <activity android:name=".agendaVisitas.AgendaPropietarioActivity" />
         <activity android:name=".ui.inmuebles.EditInmuebleActivity" />
-        <activity android:name=".ui.user.ui.login.LoginActivity" />
-        <activity android:name=".ui.user.registro" />
+        <activity android:name="com.example.oikos.ui.login.LoginActivity" />
+        <activity android:name="com.example.oikos.user.registro" />
         <activity android:name=".ui.inmuebles.SelectCoordinatesActivity" />
         <activity android:name=".ui.launcher.Launcher">
             <intent-filter>
@@ -37,7 +33,7 @@
         </activity>
         <activity android:name=".ui.inmuebles.PublicarAnunciosActivity" />
         <activity android:name=".ui.search.SearchResultsActivity" />
-        <activity android:name=".ui.user.preferences" />
+        <activity android:name="com.example.oikos.user.preferences" />
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.

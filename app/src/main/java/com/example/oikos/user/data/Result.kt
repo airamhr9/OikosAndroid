@@ -1,4 +1,4 @@
-package com.example.oikos.ui.user.data
+package com.example.oikos.user.data
 
 /**
  * A generic class that holds a value with its loading status.
