@@ -48,7 +48,6 @@ class FichaInmuebleFragment : Fragment() {
         val tabLayout : TabLayout = view.findViewById(R.id.tab_layout)
         imageViewPager.adapter = adapter
         tabLayout.setupWithViewPager(imageViewPager)
-
     }
 
 
