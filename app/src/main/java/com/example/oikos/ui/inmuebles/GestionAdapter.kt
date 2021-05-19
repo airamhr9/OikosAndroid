@@ -67,10 +67,11 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
             intent.putExtra("modelo", dataSet[position].modelo)
             viewHolder.itemView.context.startActivity(intent)
         }
-        var url = URL(dataSet[position].inmueble.imagenes.first())
-        url = URL("http://10.0.2.2:9000${url.path}")
-
-        Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
+        if (dataSet[position].inmueble.imagenes.isNotEmpty()) {
+            var url = URL(dataSet[position].inmueble.imagenes.first())
+            url = URL("http://10.0.2.2:9000${url.path}")
+            Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
+        }
 
         viewHolder.deleteButton.setOnClickListener {
             fragment.context?.let { it1 ->

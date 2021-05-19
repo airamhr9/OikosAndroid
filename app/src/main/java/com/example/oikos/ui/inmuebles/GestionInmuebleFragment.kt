@@ -197,7 +197,6 @@ class GestionInmuebleFragment : Fragment(), Originador {
         command.guardarInmuebles()
         if(visible) {
             visibleInmuebles.remove(inmuebleWithModelo)
-            inmuebleWithModelo.inmueble.disponible = false
             visibleAdapter.notifyDataSetChanged()
         } else {
             invisibleInmuebles.remove(inmuebleWithModelo)
@@ -281,7 +280,7 @@ class GestionInmuebleFragment : Fragment(), Originador {
     }
 
     override fun guardar(): Memento {
-        return MementoImuebles(this,  inmuebleAModificar, visibleInmuebles, invisibleInmuebles)
+        return MementoImuebles(this,  inmuebleAModificar, ArrayList(visibleInmuebles), ArrayList(invisibleInmuebles))
     }
 
     fun setState(visibleInmuebles : ArrayList<InmuebleWithModelo>,
@@ -295,7 +294,8 @@ class GestionInmuebleFragment : Fragment(), Originador {
             } else {
                 updateInDatabase(inmuebleModificado)
             }
-            this.visibleInmuebles = visibleInmuebles
+            this.visibleInmuebles.clear()
+            this.visibleInmuebles.addAll(visibleInmuebles)
             visibleAdapter.notifyDataSetChanged()
         } else {
             if (invisibleInmuebles.none { it.inmueble.id == inmuebleModificado.inmueble.id }) {
@@ -303,9 +303,11 @@ class GestionInmuebleFragment : Fragment(), Originador {
             } else {
                 updateInDatabase(inmuebleModificado)
             }
-            this.invisibleInmuebles = invisibleInmuebles
+            this.invisibleInmuebles.clear()
+            this.invisibleInmuebles.addAll(invisibleInmuebles)
             invisibleAdapter.notifyDataSetChanged()
         }
+
 
     }
 
