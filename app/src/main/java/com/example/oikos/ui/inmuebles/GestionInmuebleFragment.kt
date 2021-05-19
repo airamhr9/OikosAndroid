@@ -21,17 +21,21 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.R
+import com.example.oikos.ui.inmuebles.deshacer.Memento
+import com.example.oikos.ui.inmuebles.deshacer.MementoImuebles
+import com.example.oikos.ui.inmuebles.deshacer.Originador
+import com.example.oikos.ui.inmuebles.deshacer.UndoCommand
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import objects.DatosInmueble
 import objects.InmuebleFactory
 import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
 
-class GestionInmuebleFragment : Fragment() {
-
+class GestionInmuebleFragment : Fragment(), Originador {
     val PUBLISH_ACTIVITY = 15
     val EDIT_ACTIVITY = 35
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -42,17 +46,17 @@ class GestionInmuebleFragment : Fragment() {
     lateinit var invisibleAdapter : GestionAdapter
     lateinit var emptyLayout : LinearLayout
     lateinit var user : Usuario
-
     lateinit var visibleInmuebles : ArrayList<InmuebleWithModelo>
     lateinit var invisibleInmuebles : ArrayList<InmuebleWithModelo>
+    lateinit var inmuebleAModificar : InmuebleWithModelo
+
+    val command : UndoCommand = UndoCommand(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.fragment_gestion_inmueble, container, false)
-
-        loadUser()
         val publishFab = root.findViewById<FloatingActionButton>(R.id.publish_fab)
+        loadUser()
         publishFab.setOnClickListener {
             val intent = Intent(requireContext(), PublicarAnunciosActivity::class.java)
             startActivityForResult(intent, PUBLISH_ACTIVITY)
@@ -189,6 +193,8 @@ class GestionInmuebleFragment : Fragment() {
     }
 
     fun deleteInmueble(inmuebleWithModelo : InmuebleWithModelo, visible : Boolean){
+        inmuebleAModificar = inmuebleWithModelo
+        command.guardarInmuebles()
         if(visible) {
             visibleInmuebles.remove(inmuebleWithModelo)
             inmuebleWithModelo.inmueble.disponible = false
@@ -216,13 +222,15 @@ class GestionInmuebleFragment : Fragment() {
                                 "Inmueble eliminado con éxito",
                                 Snackbar.LENGTH_LONG
                         )
-                        snackbar.setAction("Deshacer") { deshacerMethod() }
+                        snackbar.setAction("Deshacer") {
+                            command.deshacer()
+                        }
                         snackbar.show()
                     }
                     override fun onError(error: ANError) {
                         Snackbar.make(
                                 requireView(),
-                                "Error actualizando inmueble",
+                                "Error eliminando inmueble",
                                 Snackbar.LENGTH_LONG
                         ).show()
                     }
@@ -230,6 +238,8 @@ class GestionInmuebleFragment : Fragment() {
     }
 
     fun startEditActivity(inmuebleWithModelo: InmuebleWithModelo) {
+        inmuebleAModificar = inmuebleWithModelo
+        command.guardarInmuebles()
         val intent = Intent(context, EditInmuebleActivity::class.java)
         intent.putExtra("inmueble", inmuebleWithModelo)
         startActivityForResult(intent, EDIT_ACTIVITY)
@@ -251,7 +261,9 @@ class GestionInmuebleFragment : Fragment() {
                         "Inmueble editado con éxito",
                         Snackbar.LENGTH_LONG
                 )
-                snackbar.setAction("Deshacer") { deshacerMethod() }
+                snackbar.setAction("Deshacer") {
+                    command.deshacer()
+                }
                 snackbar.show()
             }
 
@@ -261,10 +273,6 @@ class GestionInmuebleFragment : Fragment() {
         }
     }
 
-    private fun deshacerMethod() {
-        println("Deshacer")
-    }
-
     private fun loadUser(){
         val sharedPref = activity?.getSharedPreferences("user", Context.MODE_PRIVATE)
         val savedUser = (sharedPref?.getString("saved_user", ""))
@@ -272,4 +280,57 @@ class GestionInmuebleFragment : Fragment() {
         user = Usuario.fromJson(savedJsonUser)
     }
 
+    override fun guardar(): Memento {
+        return MementoImuebles(this,  inmuebleAModificar, visibleInmuebles, invisibleInmuebles)
+    }
+
+    fun setState(visibleInmuebles : ArrayList<InmuebleWithModelo>,
+                invisibleInmuebles : ArrayList<InmuebleWithModelo>,
+                inmuebleModificado : InmuebleWithModelo) {
+        inmuebleAModificar = inmuebleModificado
+
+        if (inmuebleModificado.inmueble.disponible) {
+            if (visibleInmuebles.none { it.inmueble.id == inmuebleModificado.inmueble.id }) {
+                postInmueble(inmuebleModificado.inmueble, inmuebleModificado.modelo)
+            } else {
+                updateInDatabase(inmuebleModificado)
+            }
+            this.visibleInmuebles = visibleInmuebles
+            visibleAdapter.notifyDataSetChanged()
+        } else {
+            if (invisibleInmuebles.none { it.inmueble.id == inmuebleModificado.inmueble.id }) {
+                postInmueble(inmuebleModificado.inmueble, inmuebleModificado.modelo)
+            } else {
+                updateInDatabase(inmuebleModificado)
+            }
+            this.invisibleInmuebles = invisibleInmuebles
+            invisibleAdapter.notifyDataSetChanged()
+        }
+
+    }
+
+    private fun postInmueble(inmueble: DatosInmueble, modelo : String){
+        val query = AndroidNetworking.post("http://10.0.2.2:9000/api/inmueble/")
+        query.addApplicationJsonBody(inmueble.toJson())
+        query.addQueryParameter("modelo", modelo)
+        query.setPriority(Priority.HIGH).build().getAsString(
+                object : StringRequestListener {
+                    override fun onResponse(response: String) {
+                        Snackbar.make(
+                                requireView(),
+                                "Inmueble recuperado",
+                                Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+
+                    override fun onError(error: ANError) {
+                        Snackbar.make(
+                                requireView(),
+                                "Error al deshacer acción",
+                                Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }
+        )
+    }
 }
