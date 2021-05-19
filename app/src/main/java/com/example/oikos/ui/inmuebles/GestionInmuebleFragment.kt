@@ -204,18 +204,20 @@ class GestionInmuebleFragment : Fragment() {
         deleteInDatabase(inmuebleWithModelo)
     }
 
-    fun deleteInDatabase(inmuebleWithModelo: InmuebleWithModelo) {
+    private fun deleteInDatabase(inmuebleWithModelo: InmuebleWithModelo) {
         val query = AndroidNetworking.delete("http://10.0.2.2:9000/api/inmueble/")
         query.addQueryParameter("id", inmuebleWithModelo.inmueble.id.toString())
         query.setPriority(Priority.MEDIUM)
                 .build()
                 .getAsString(object : StringRequestListener {
                     override fun onResponse(response: String) {
-                        Snackbar.make(
+                        val snackbar = Snackbar.make(
                                 requireView(),
                                 "Inmueble eliminado con éxito",
                                 Snackbar.LENGTH_LONG
-                        ).show()
+                        )
+                        snackbar.setAction("Deshacer") { deshacerMethod() }
+                        snackbar.show()
                     }
                     override fun onError(error: ANError) {
                         Snackbar.make(
@@ -244,17 +246,23 @@ class GestionInmuebleFragment : Fragment() {
                         Snackbar.LENGTH_LONG
                 ).show()
             } else {
-                Snackbar.make(
+                val snackbar = Snackbar.make(
                         requireView(),
                         "Inmueble editado con éxito",
                         Snackbar.LENGTH_LONG
-                ).show()
+                )
+                snackbar.setAction("Deshacer") { deshacerMethod() }
+                snackbar.show()
             }
 
             visibleInmuebles.clear()
             invisibleInmuebles.clear()
             getInmuebles()
         }
+    }
+
+    private fun deshacerMethod() {
+        println("Deshacer")
     }
 
     private fun loadUser(){

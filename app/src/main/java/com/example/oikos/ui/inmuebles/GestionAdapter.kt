@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
+import com.example.oikos.ui.inmuebles.deshacer.Memento
+import com.example.oikos.ui.inmuebles.deshacer.Originador
 import objects.InmuebleWithModelo
 import java.net.URL
 
 
-class GestionAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val visible: Boolean, val fragment: GestionInmuebleFragment) :
-        RecyclerView.Adapter<GestionAdapter.ViewHolder>() {
+class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val visible: Boolean, val fragment: GestionInmuebleFragment) :
+        RecyclerView.Adapter<GestionAdapter.ViewHolder>(), Originador {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val inmuebleCardView : CardView = view.findViewById(R.id.inmueble_card)
@@ -110,5 +112,13 @@ class GestionAdapter(private val dataSet: ArrayList<InmuebleWithModelo>, val vis
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
+
+    override fun guardar(): Memento {
+        TODO("Not yet implemented")
+    }
+
+    fun setDataSet (dataSet: ArrayList<InmuebleWithModelo>) {
+        this.dataSet = dataSet
+    }
 
 }
