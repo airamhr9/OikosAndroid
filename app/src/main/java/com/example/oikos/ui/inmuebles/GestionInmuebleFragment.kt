@@ -44,8 +44,10 @@ class GestionInmuebleFragment : Fragment(), Originador {
     lateinit var invisibleAdapter : GestionAdapter
     lateinit var emptyLayout : LinearLayout
     lateinit var user : Usuario
+
     lateinit var visibleInmuebles : ArrayList<InmuebleWithModelo>
     lateinit var invisibleInmuebles : ArrayList<InmuebleWithModelo>
+
     lateinit var inmuebleAModificar : InmuebleWithModelo
 
     val command : UndoCommand = UndoCommand(this)
