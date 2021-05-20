@@ -6,10 +6,10 @@ import objects.InmuebleWithModelo
 import kotlin.reflect.KProperty
 
 class UndoCommand (private val gestionFragmment: GestionInmuebleFragment){
-    private lateinit var mementoImueble : MementoImuebles
+    private lateinit var mementoImueble : GestionInmuebleFragment.MementoImuebles
 
     fun guardarInmuebles() {
-        mementoImueble = gestionFragmment.guardar() as MementoImuebles
+        mementoImueble = gestionFragmment.guardar() as GestionInmuebleFragment.MementoImuebles
     }
 
     fun deshacer() {

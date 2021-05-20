@@ -21,8 +21,6 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.R
-import com.example.oikos.ui.inmuebles.deshacer.Memento
-import com.example.oikos.ui.inmuebles.deshacer.MementoImuebles
 import com.example.oikos.ui.inmuebles.deshacer.Originador
 import com.example.oikos.ui.inmuebles.deshacer.UndoCommand
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -279,8 +277,8 @@ class GestionInmuebleFragment : Fragment(), Originador {
         user = Usuario.fromJson(savedJsonUser)
     }
 
-    override fun guardar(): Memento {
-        return MementoImuebles(this,  inmuebleAModificar, ArrayList(visibleInmuebles), ArrayList(invisibleInmuebles))
+    override fun guardar(): Originador.Memento {
+        return MementoImuebles(inmuebleAModificar, ArrayList(visibleInmuebles), ArrayList(invisibleInmuebles))
     }
 
     fun setState(visibleInmuebles : ArrayList<InmuebleWithModelo>,
@@ -334,5 +332,14 @@ class GestionInmuebleFragment : Fragment(), Originador {
                     }
                 }
         )
+    }
+
+    inner class MementoImuebles (private val inmuebleModificado : InmuebleWithModelo,
+                           private val visiblelistaInmuebles : ArrayList<InmuebleWithModelo>,
+                           private val invisiblelistaInmuebles : ArrayList<InmuebleWithModelo>) : Originador.Memento{
+
+        override fun restaurar() {
+            setState(visiblelistaInmuebles, invisiblelistaInmuebles, inmuebleModificado)
+        }
     }
 }

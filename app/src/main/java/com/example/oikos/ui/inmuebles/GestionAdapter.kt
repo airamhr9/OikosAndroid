@@ -14,10 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
-import com.example.oikos.ui.inmuebles.deshacer.Memento
-import com.example.oikos.ui.inmuebles.deshacer.MementoImuebles
-import com.example.oikos.ui.inmuebles.deshacer.Originador
-import com.example.oikos.ui.inmuebles.deshacer.UndoCommand
 import objects.InmuebleWithModelo
 import java.net.URL
 
