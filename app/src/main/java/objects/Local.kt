@@ -14,10 +14,12 @@ class Local(id: Int,
             ciudad: String,
             latitud: Double,
             longitud: Double,
+            fecha : String,
+            contadorVisitas: Int,
             imagenes: ArrayList<String>,
             var baños: Int,
 ) : Serializable, DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
-        direccion, ciudad, latitud, longitud, imagenes) {
+        direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imagenes) {
 
     override fun toJson(): JsonObject {
         val result = super.toJson()
@@ -39,7 +41,8 @@ class Local(id: Int,
             val ciudad = jsonObject.get("ciudad").asString
             val latitud = jsonObject.get("latitud").asDouble
             val longitud = jsonObject.get("longitud").asDouble
-
+            val fecha = jsonObject.get("fecha").asString
+            val contadorVisitas = jsonObject.get("contadorVisitas").asInt
             val imagenes = jsonObject.get("imagenes").asJsonArray
             val imageArray = ArrayList<String>()
             imagenes.forEach {
@@ -48,7 +51,7 @@ class Local(id: Int,
             val baños = jsonObject.get("baños").asInt
 
             return Local(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                    direccion, ciudad, latitud, longitud, imageArray, baños)
+                    direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imageArray, baños)
         }
     }
 

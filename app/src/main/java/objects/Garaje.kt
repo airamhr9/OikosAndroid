@@ -14,9 +14,11 @@ class Garaje(id: Int,
              ciudad: String,
              latitud: Double,
              longitud: Double,
+             fecha : String,
+             contadorVisitas : Int,
              imagenes: ArrayList<String>,
 ) : Serializable, DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
-        direccion, ciudad, latitud, longitud, imagenes) {
+        direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imagenes) {
 
     companion object {
         fun fromJson(jsonObject: JsonObject): Garaje {
@@ -31,6 +33,9 @@ class Garaje(id: Int,
             val ciudad = jsonObject.get("ciudad").asString
             val latitud = jsonObject.get("latitud").asDouble
             val longitud = jsonObject.get("longitud").asDouble
+            val fecha = jsonObject.get("fecha").asString
+
+            val contadorVisitas = jsonObject.get("contadorVisitas").asInt
 
             val imagenes = jsonObject.get("imagenes").asJsonArray
             val imageArray = ArrayList<String>()
@@ -39,7 +44,7 @@ class Garaje(id: Int,
             }
 
             return Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                    direccion, ciudad, latitud, longitud, imageArray)
+                    direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imageArray)
         }
     }
 

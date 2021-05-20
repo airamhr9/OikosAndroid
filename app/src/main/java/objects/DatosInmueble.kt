@@ -15,6 +15,8 @@ abstract class DatosInmueble(var id: Int,
                              var ciudad: String,
                              var latitud: Double,
                              var longitud: Double,
+                             var fecha: String,
+                             var contadorVisitas: Int,
                              var imagenes: ArrayList<String>,
 ) : Serializable {
 
@@ -37,6 +39,8 @@ abstract class DatosInmueble(var id: Int,
         result.addProperty("superficie", superficie)
         result.add("propietario", propietario.toJson())
         result.addProperty("descripcion", descripcion)
+        result.addProperty("fecha", fecha)
+        result.addProperty("contadorVisitas", contadorVisitas)
 
         val listaImagenes = JsonArray()
         for (imagen:String in imagenes) {

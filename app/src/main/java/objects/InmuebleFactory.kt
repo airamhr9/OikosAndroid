@@ -2,6 +2,7 @@ package objects
 
 import com.google.gson.JsonObject
 import java.lang.Exception
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -37,7 +38,7 @@ class InmuebleFactory {
             baños: Int, garaje: Boolean,
     ): Piso {
         return Piso(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje)
+                ciudad, latitud, longitud, LocalDateTime.now().toString(), 0, imagenes, habitaciones, baños, garaje)
     }
 
     fun new(id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
@@ -45,7 +46,7 @@ class InmuebleFactory {
             latitud: Double, longitud: Double, imagenes: ArrayList<String>, baños: Int,
     ) : Local {
         return Local(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imagenes, baños)
+                direccion, ciudad, latitud, longitud, LocalDateTime.now().toString(), 0, imagenes, baños)
 
     }
 
@@ -53,7 +54,7 @@ class InmuebleFactory {
             propietario: Usuario, descripcion: String, direccion: String, ciudad: String,
             latitud: Double, longitud: Double, imagenes: ArrayList<String>,) : Garaje {
         return Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imagenes)
+                direccion, ciudad, latitud, longitud, LocalDateTime.now().toString(), 0, imagenes)
     }
 
     fun new(id: Int, disponible: Boolean, tipo: String, superficie: Int, precio: Double,
@@ -62,7 +63,8 @@ class InmuebleFactory {
             baños: Int, garaje: Boolean, numCompañeros: Int,
     ) : Habitacion {
         return Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje, numCompañeros)
+                direccion, ciudad, latitud, longitud, LocalDateTime.now().toString(),
+                0, imagenes, habitaciones, baños, garaje, numCompañeros)
     }
 
     private fun fromJsonPiso(jsonObject: JsonObject): Piso {
@@ -77,7 +79,9 @@ class InmuebleFactory {
         val ciudad = jsonObject.get("ciudad").asString
         val latitud = jsonObject.get("latitud").asDouble
         val longitud = jsonObject.get("longitud").asDouble
+        val fecha = jsonObject.get("fecha").asString
         val imagenes = jsonObject.get("imagenes").asJsonArray
+        val contadorVisitas = jsonObject.get("contadorVisitas").asInt
         val imageArray = ArrayList<String>()
         imagenes.forEach {
             imageArray.add(it.asString)
@@ -87,7 +91,7 @@ class InmuebleFactory {
         val garaje = jsonObject.get("garaje").asBoolean
 
         return Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imageArray, habitaciones, baños, garaje)
+                direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imageArray, habitaciones, baños, garaje)
     }
 
     private fun fromJsonHabitacion(jsonObject: JsonObject): Habitacion {
@@ -102,7 +106,9 @@ class InmuebleFactory {
         val ciudad = jsonObject.get("ciudad").asString
         val latitud = jsonObject.get("latitud").asDouble
         val longitud = jsonObject.get("longitud").asDouble
+        val contadorVisitas = jsonObject.get("contadorVisitas").asInt
 
+        val fecha = jsonObject.get("fecha").asString
         val imagenes = jsonObject.get("imagenes").asJsonArray
         val imageArray = ArrayList<String>()
         imagenes.forEach {
@@ -115,7 +121,7 @@ class InmuebleFactory {
         val numCompañeros = jsonObject.get("numCompañeros").asInt
 
         return Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imageArray, habitaciones, baños, garaje, numCompañeros)
+                direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imageArray, habitaciones, baños, garaje, numCompañeros)
     }
 
     private fun fromJsonGaraje(jsonObject: JsonObject): Garaje {
@@ -127,9 +133,11 @@ class InmuebleFactory {
         val propietario = Usuario.fromJson(jsonObject.getAsJsonObject("propietario"))
         val descripcion = jsonObject.get("descripcion").asString.toString()
         val direccion = jsonObject.get("direccion").asString
+        val fecha = jsonObject.get("fecha").asString
         val ciudad = jsonObject.get("ciudad").asString
         val latitud = jsonObject.get("latitud").asDouble
         val longitud = jsonObject.get("longitud").asDouble
+        val contadorVisitas = jsonObject.get("contadorVisitas").asInt
 
         val imagenes = jsonObject.get("imagenes").asJsonArray
         val imageArray = ArrayList<String>()
@@ -138,7 +146,7 @@ class InmuebleFactory {
         }
 
         return Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imageArray)
+                direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imageArray)
     }
 
 
@@ -151,9 +159,11 @@ class InmuebleFactory {
         val propietario = Usuario.fromJson(jsonObject.getAsJsonObject("propietario"))
         val descripcion = jsonObject.get("descripcion").asString.toString()
         val direccion = jsonObject.get("direccion").asString
+        val fecha = jsonObject.get("fecha").asString
         val ciudad = jsonObject.get("ciudad").asString
         val latitud = jsonObject.get("latitud").asDouble
         val longitud = jsonObject.get("longitud").asDouble
+        val contadorVisitas = jsonObject.get("contadorVisitas").asInt
 
         val imagenes = jsonObject.get("imagenes").asJsonArray
         val imageArray = ArrayList<String>()
@@ -163,6 +173,6 @@ class InmuebleFactory {
         val baños = jsonObject.get("baños").asInt
 
         return Local(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imageArray, baños)
+                direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imageArray, baños)
     }
 }

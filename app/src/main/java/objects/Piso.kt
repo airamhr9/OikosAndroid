@@ -15,12 +15,14 @@ open class Piso(id: Int,
                 ciudad: String,
                 latitud: Double,
                 longitud: Double,
+                fecha: String,
+                contadorVisitas: Int,
                 imagenes: ArrayList<String>,
                 var habitaciones: Int,
                 var baños: Int,
                 var garaje: Boolean,
 ) : Serializable, DatosInmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
-        direccion, ciudad, latitud, longitud, imagenes) {
+        direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imagenes) {
 
     override fun toJson(): JsonObject {
         val result = super.toJson()
@@ -44,6 +46,8 @@ open class Piso(id: Int,
             val latitud = jsonObject.get("latitud").asDouble
             val longitud = jsonObject.get("longitud").asDouble
             val imagenes = jsonObject.get("imagenes").asJsonArray
+            val fecha = jsonObject.get("fecha").asString
+            val contadorVisitas = jsonObject.get("contadorVisitas").asInt
             val imageArray = ArrayList<String>()
             imagenes.forEach {
                 imageArray.add(it.asString)
@@ -53,7 +57,7 @@ open class Piso(id: Int,
             val garaje = jsonObject.get("garaje").asBoolean
 
             return Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                    direccion, ciudad, latitud, longitud, imageArray, habitaciones, baños, garaje)
+                    direccion, ciudad, latitud, longitud, fecha, contadorVisitas, imageArray, habitaciones, baños, garaje)
         }
     }
 }
