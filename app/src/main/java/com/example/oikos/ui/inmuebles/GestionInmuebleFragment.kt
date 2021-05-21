@@ -20,6 +20,7 @@ import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
+import com.example.oikos.LoadUserActivity
 import com.example.oikos.R
 import com.example.oikos.ui.inmuebles.deshacer.Originador
 import com.example.oikos.ui.inmuebles.deshacer.UndoCommand
@@ -47,7 +48,6 @@ class GestionInmuebleFragment : Fragment(), Originador {
 
     lateinit var visibleInmuebles : ArrayList<InmuebleWithModelo>
     lateinit var invisibleInmuebles : ArrayList<InmuebleWithModelo>
-
     lateinit var inmuebleAModificar : InmuebleWithModelo
 
     val command : UndoCommand = UndoCommand(this)
@@ -56,7 +56,7 @@ class GestionInmuebleFragment : Fragment(), Originador {
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_gestion_inmueble, container, false)
         val publishFab = root.findViewById<FloatingActionButton>(R.id.publish_fab)
-        loadUser()
+        user = (activity as LoadUserActivity).loadUser()
         publishFab.setOnClickListener {
             val intent = Intent(requireContext(), PublicarAnunciosActivity::class.java)
             startActivityForResult(intent, PUBLISH_ACTIVITY)
@@ -168,6 +168,7 @@ class GestionInmuebleFragment : Fragment(), Originador {
         invisibleAdapter.notifyDataSetChanged()
         updateInDatabase(inmuebleWithModelo)
     }
+
     private fun updateInDatabase(inmuebleWithModelo : InmuebleWithModelo) {
         val query = AndroidNetworking.put("http://10.0.2.2:9000/api/inmueble/")
         query.addApplicationJsonBody(inmuebleWithModelo.inmueble.toJson())
@@ -246,7 +247,6 @@ class GestionInmuebleFragment : Fragment(), Originador {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        println("RESULT CODE: $resultCode REQUEST CODE $requestCode")
         if(resultCode == Activity.RESULT_OK) {
             if(requestCode == PUBLISH_ACTIVITY) {
                 Snackbar.make(
@@ -270,13 +270,6 @@ class GestionInmuebleFragment : Fragment(), Originador {
             invisibleInmuebles.clear()
             getInmuebles()
         }
-    }
-
-    private fun loadUser(){
-        val sharedPref = activity?.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val savedUser = (sharedPref?.getString("saved_user", ""))
-        val savedJsonUser: JsonObject = JsonParser.parseString(savedUser).asJsonObject
-        user = Usuario.fromJson(savedJsonUser)
     }
 
     override fun guardar(): Originador.Memento {
@@ -307,8 +300,6 @@ class GestionInmuebleFragment : Fragment(), Originador {
             this.invisibleInmuebles.addAll(invisibleInmuebles)
             invisibleAdapter.notifyDataSetChanged()
         }
-
-
     }
 
     private fun postInmueble(inmueble: DatosInmueble, modelo : String){

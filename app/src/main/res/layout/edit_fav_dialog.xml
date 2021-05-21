@@ -42,13 +42,22 @@
         <it.sephiroth.android.library.numberpicker.NumberPicker
             android:id="@+id/fav_numberPicker"
             style="@style/NumberPicker.Outlined"
-            app:picker_max="500"
-            app:picker_min="0"
+            app:picker_max="2000"
+            app:picker_min="-500"
             app:picker_stepSize="1"
             app:picker_tracker="exponential"
             app:picker_orientation="vertical"
             android:layout_width="100dp"
             android:layout_height="40dp"
-/>
+        />
     </LinearLayout>
+    <TextView
+        android:id="@+id/orden_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="end"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:text="Orden debe ser mayor que 0"
+        android:textColor="@android:color/holo_red_light"/>
 </LinearLayout>

@@ -1,26 +1,23 @@
 package com.example.oikos.fichaInmueble
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager.widget.ViewPager
 import com.example.oikos.R
-import com.example.oikos.ui.search.FichaMapFragment
 import com.google.android.material.tabs.TabLayout
 import objects.DatosInmueble
 import objects.Habitacion
 import objects.Local
 import objects.Piso
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class FichaInmuebleFragment : Fragment() {
 
@@ -51,7 +48,7 @@ class FichaInmuebleFragment : Fragment() {
     }
 
 
-    fun setData(view : View, data: DatosInmueble, modelo : String){
+    fun setData(view: View, data: DatosInmueble, modelo: String){
         val priceText = view.findViewById<TextView>(R.id.ficha_precio)
         val addressText = view.findViewById<TextView>(R.id.ficha_direccion_completa)
         val typeCard = view.findViewById<CardView>(R.id.ficha_tipo_tarjeta)
@@ -60,6 +57,7 @@ class FichaInmuebleFragment : Fragment() {
         val description = view.findViewById<TextView>(R.id.ficha_descripcion)
         val landlordName = view.findViewById<TextView>(R.id.ficha_propietario_name)
         val landlordMail = view.findViewById<TextView>(R.id.ficha_propietario_mail)
+        val fechaTextview = view.findViewById<TextView>(R.id.ficha_fecha)
 
         priceText.text = "${data.precio}€"
         addressText.text = "${data.direccion}"
@@ -73,11 +71,16 @@ class FichaInmuebleFragment : Fragment() {
         description.text = data.descripcion
         landlordName.text = data.propietario.nombre
         landlordMail.text = data.propietario.mail
+        val spanishLocale = Locale("es", "ES")
+        var fecha : LocalDateTime = LocalDateTime.parse(data.fecha)
+        val formatter : DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy",spanishLocale)
+        val fechaFormatted = fecha.format(formatter)
+        fechaTextview.text = fechaFormatted
 
         setSpecificData(data, view, modelo)
     }
 
-    private fun setSpecificData(data: DatosInmueble , view: View, modelo: String){
+    private fun setSpecificData(data: DatosInmueble, view: View, modelo: String){
         val numComp = view.findViewById<TextView>(R.id.ficha_num_comp)
         val numBaths = view.findViewById<TextView>(R.id.ficha_baños)
         val numRooms = view.findViewById<TextView>(R.id.ficha_habitaciones)
@@ -92,7 +95,7 @@ class FichaInmuebleFragment : Fragment() {
                 val piso = data as Piso
                 numBaths.text = "Baños: ${piso.baños}"
                 numRooms.text = "Habitaciones: ${piso.habitaciones}"
-                hasGarage.text = if(piso.garaje) "Garaje: Sí" else "Garaje: No"
+                hasGarage.text = if (piso.garaje) "Garaje: Sí" else "Garaje: No"
                 numBaths.visibility = View.VISIBLE
                 numRooms.visibility = View.VISIBLE
                 hasGarage.visibility = View.VISIBLE
@@ -107,7 +110,7 @@ class FichaInmuebleFragment : Fragment() {
                 numBaths.text = "Baños: ${hab.baños}"
                 numRooms.text = "Habitaciones: ${hab.habitaciones}"
                 numComp.text = "Compañeros: ${hab.numCompañeros}"
-                hasGarage.text = if(hab.garaje) "Garaje: Sí" else "Garaje: No"
+                hasGarage.text = if (hab.garaje) "Garaje: Sí" else "Garaje: No"
                 numBaths.visibility = View.VISIBLE
                 numRooms.visibility = View.VISIBLE
                 hasGarage.visibility = View.VISIBLE

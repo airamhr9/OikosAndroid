@@ -198,10 +198,11 @@ class LocalizedSearch : AppCompatActivity() {
 
 
         //TODO(solo para emulador)
-        var url = URL(inmueble.imagenes.first())
-        url = URL("http://10.0.2.2:9000${url.path}")
-
-        Glide.with(this).asBitmap().load(url.toString()).into(imageView!!)
+        if(inmueble.imagenes.isNotEmpty()) {
+            var url = URL(inmueble.imagenes.first())
+            url = URL("http://10.0.2.2:9000${url.path}")
+            Glide.with(this).asBitmap().load(url.toString()).into(imageView!!)
+        }
 
         numImag?.text = "${inmueble.imagenes.size} imágenes"
         price?.text = "${inmueble.precio}€"

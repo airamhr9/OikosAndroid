@@ -25,6 +25,7 @@ import it.sephiroth.android.library.numberpicker.NumberPicker
 import it.sephiroth.android.library.numberpicker.doOnProgressChanged
 import objects.Favorito
 import objects.InmuebleModeloFav
+import org.w3c.dom.Text
 import xyz.hanks.library.bang.SmallBangView
 import java.net.URL
 
@@ -125,68 +126,70 @@ class FavoritosAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val fr
         }
 
         viewHolder.editButton.setOnClickListener {
-            val builder = AlertDialog.Builder(fragment.requireActivity())
             val activity = fragment.requireActivity() as LoadUserActivity
-            builder.setTitle("Editar favorito")
             val dialogView = activity.layoutInflater.inflate(R.layout.edit_fav_dialog, null)
-            builder.setView(dialogView)
             val notasFavoritoTextView = dialogView.findViewById<TextInputEditText>(R.id.notas_fav)
+            val ordenError : TextView = dialogView.findViewById(R.id.orden_error)
+            ordenError.visibility = View.GONE
             notasFavoritoTextView.setText(dataSet[position].nota)
             val ordenFavoritoPicker = dialogView.findViewById<NumberPicker>(R.id.fav_numberPicker)
             ordenFavoritoPicker.progress = dataSet[position].orden
-            var orden: Int
-            ordenFavoritoPicker.doOnProgressChanged { numberPicker, progress, formUser ->
-                orden = progress
-                println("ORDEN IS $orden")
-            }
-            builder.setPositiveButton(
-                            "Editar"
-                    ) { dialog, id ->
-                val query = AndroidNetworking.put("http://10.0.2.2:9000/api/favorito/")
-                ordenFavoritoPicker.clearFocus()
-                val editedFav = Favorito(
-                    (fragment.activity as LoadUserActivity).loadUser(),
-                    dataSet[position].toInmuebleWithModelo(),
-                    notasFavoritoTextView.text.toString(),
-                    ordenFavoritoPicker.progress
-                )
-                query.addApplicationJsonBody(
-                    editedFav.toJson()
-                )
-                query.setPriority(Priority.MEDIUM)
-                    .build()
-                    .getAsString(object : StringRequestListener {
-                        override fun onResponse(response: String) {
-                            dataSet[position] = InmuebleModeloFav(
-                                dataSet[position].inmueble,
-                                dataSet[position].modelo,
-                                true,
-                                editedFav.notas,
-                                editedFav.orden)
-                            dataSet.sortBy { it.orden }
-                            notifyDataSetChanged()
-                            Snackbar.make(
-                                activity.window.decorView.rootView,
-                                "Favorito actualizado",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                        }
+            val builder = AlertDialog.Builder(fragment.requireActivity())
+            .setTitle("Editar favorito")
+            .setView(dialogView)
+            .setPositiveButton("Editar", null)
+            .setNegativeButton("Cancelar", null)
+            .create()
+            builder.setOnShowListener {
+                builder.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    ordenFavoritoPicker.clearFocus()
+                    if (ordenFavoritoPicker.progress >= 0) {
+                        val query = AndroidNetworking.put("http://10.0.2.2:9000/api/favorito/")
+                        val editedFav = Favorito(
+                                (fragment.activity as LoadUserActivity).loadUser(),
+                                dataSet[position].toInmuebleWithModelo(),
+                                notasFavoritoTextView.text.toString(),
+                                ordenFavoritoPicker.progress
+                        )
+                        query.addApplicationJsonBody(
+                                editedFav.toJson()
+                        )
+                        query.setPriority(Priority.MEDIUM)
+                                .build()
+                                .getAsString(object : StringRequestListener {
+                                    override fun onResponse(response: String) {
+                                        dataSet[position] = InmuebleModeloFav(
+                                                dataSet[position].inmueble,
+                                                dataSet[position].modelo,
+                                                true,
+                                                editedFav.notas,
+                                                editedFav.orden)
+                                        dataSet.sortBy { it.orden }
+                                        notifyDataSetChanged()
+                                        Snackbar.make(
+                                                activity.window.decorView.rootView,
+                                                "Favorito actualizado",
+                                                Snackbar.LENGTH_LONG
+                                        ).show()
+                                    }
 
-                        override fun onError(error: ANError) {
-                            Snackbar.make(
-                                activity.window.decorView.rootView,
-                                "Error añadiendo favorito",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            viewHolder.favIcon.isSelected = false
-                        }
-                    })
-            }
-                    .setNegativeButton(
-                            "Cancelar"
-                    ) { dialog, id ->
-                        dialog.cancel()
+                                    override fun onError(error: ANError) {
+                                        Snackbar.make(
+                                                activity.window.decorView.rootView,
+                                                "Error añadiendo favorito",
+                                                Snackbar.LENGTH_LONG
+                                        ).show()
+                                        viewHolder.favIcon.isSelected = false
+                                    }
+                                })
+                            builder.dismiss()
+                    } else {
+                        ordenFavoritoPicker.progress = 0
+                        ordenError.visibility = View.VISIBLE
                     }
+                }
+                builder.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener { builder.dismiss() }
+            }
             builder.show()
         }
     }
