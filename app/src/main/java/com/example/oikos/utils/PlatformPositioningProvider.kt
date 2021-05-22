@@ -1,4 +1,4 @@
-package com.example.oikos.serverConnection
+package com.example.oikos.utils
 
 import android.Manifest
 import android.content.Context

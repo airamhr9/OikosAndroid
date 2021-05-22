@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.example.oikos.R
-import com.example.oikos.serverConnection.PlatformPositioningProvider
+import com.example.oikos.utils.PlatformPositioningProvider
 import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.core.Location
 import com.here.sdk.core.Point2D

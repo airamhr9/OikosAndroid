@@ -22,8 +22,6 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.StringRequestListener
 import com.example.oikos.LoadUserActivity
 import com.example.oikos.R
-import com.example.oikos.ui.inmuebles.deshacer.Originador
-import com.example.oikos.ui.inmuebles.deshacer.UndoCommand
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
@@ -34,7 +32,7 @@ import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
 
-class GestionInmuebleFragment : Fragment(), Originador {
+class GestionInmuebleFragment : Fragment() {
     val PUBLISH_ACTIVITY = 15
     val EDIT_ACTIVITY = 35
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -48,9 +46,10 @@ class GestionInmuebleFragment : Fragment(), Originador {
 
     lateinit var visibleInmuebles : ArrayList<InmuebleWithModelo>
     lateinit var invisibleInmuebles : ArrayList<InmuebleWithModelo>
-    lateinit var inmuebleAModificar : InmuebleWithModelo
+    lateinit var mementoVisibles : GestionAdapter.MementoImuebles
+    lateinit var mementoInvisibles : GestionAdapter.MementoImuebles
 
-    val command : UndoCommand = UndoCommand(this)
+    //val command : UndoCommand = UndoCommand(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -194,12 +193,12 @@ class GestionInmuebleFragment : Fragment(), Originador {
     }
 
     fun deleteInmueble(inmuebleWithModelo : InmuebleWithModelo, visible : Boolean){
-        inmuebleAModificar = inmuebleWithModelo
-        command.guardarInmuebles()
         if(visible) {
+            mementoVisibles = visibleAdapter.guardar() as GestionAdapter.MementoImuebles
             visibleInmuebles.remove(inmuebleWithModelo)
             visibleAdapter.notifyDataSetChanged()
         } else {
+            mementoInvisibles = invisibleAdapter.guardar() as GestionAdapter.MementoImuebles
             invisibleInmuebles.remove(inmuebleWithModelo)
             invisibleAdapter.notifyDataSetChanged()
         }
@@ -223,7 +222,9 @@ class GestionInmuebleFragment : Fragment(), Originador {
                                 Snackbar.LENGTH_LONG
                         )
                         snackbar.setAction("Deshacer") {
-                            command.deshacer()
+                            if(inmuebleWithModelo.inmueble.disponible)
+                                mementoVisibles.restaurar()
+                            else mementoInvisibles.restaurar()
                         }
                         snackbar.show()
                     }
@@ -238,8 +239,9 @@ class GestionInmuebleFragment : Fragment(), Originador {
     }
 
     fun startEditActivity(inmuebleWithModelo: InmuebleWithModelo) {
-        inmuebleAModificar = inmuebleWithModelo
-        command.guardarInmuebles()
+        if(inmuebleWithModelo.inmueble.disponible)
+            mementoVisibles = visibleAdapter.guardar() as GestionAdapter.MementoImuebles
+        else mementoInvisibles = invisibleAdapter.guardar() as GestionAdapter.MementoImuebles
         val intent = Intent(context, EditInmuebleActivity::class.java)
         intent.putExtra("inmueble", inmuebleWithModelo)
         startActivityForResult(intent, EDIT_ACTIVITY)
@@ -261,7 +263,10 @@ class GestionInmuebleFragment : Fragment(), Originador {
                         Snackbar.LENGTH_LONG
                 )
                 snackbar.setAction("Deshacer") {
-                    command.deshacer()
+                    val inmueble = data?.extras?.getSerializable("inmueble") as DatosInmueble
+                    if(inmueble.disponible)
+                        mementoVisibles.restaurar()
+                    else mementoInvisibles.restaurar()
                 }
                 snackbar.show()
             }
@@ -272,15 +277,9 @@ class GestionInmuebleFragment : Fragment(), Originador {
         }
     }
 
-    override fun guardar(): Originador.Memento {
-        return MementoImuebles(inmuebleAModificar, ArrayList(visibleInmuebles), ArrayList(invisibleInmuebles))
-    }
-
     fun setState(visibleInmuebles : ArrayList<InmuebleWithModelo>,
                 invisibleInmuebles : ArrayList<InmuebleWithModelo>,
                 inmuebleModificado : InmuebleWithModelo) {
-        inmuebleAModificar = inmuebleModificado
-
         if (inmuebleModificado.inmueble.disponible) {
             if (visibleInmuebles.none { it.inmueble.id == inmuebleModificado.inmueble.id }) {
                 postInmueble(inmuebleModificado.inmueble, inmuebleModificado.modelo)
@@ -327,12 +326,4 @@ class GestionInmuebleFragment : Fragment(), Originador {
         )
     }
 
-    inner class MementoImuebles (private val inmuebleModificado : InmuebleWithModelo,
-                           private val visiblelistaInmuebles : ArrayList<InmuebleWithModelo>,
-                           private val invisiblelistaInmuebles : ArrayList<InmuebleWithModelo>) : Originador.Memento{
-
-        override fun restaurar() {
-            setState(visiblelistaInmuebles, invisiblelistaInmuebles, inmuebleModificado)
-        }
     }
-}

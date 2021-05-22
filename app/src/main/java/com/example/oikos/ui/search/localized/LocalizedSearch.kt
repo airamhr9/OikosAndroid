@@ -18,7 +18,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.bumptech.glide.Glide
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
-import com.example.oikos.serverConnection.PlatformPositioningProvider
+import com.example.oikos.utils.PlatformPositioningProvider
 import com.google.gson.JsonParser
 import com.here.sdk.core.*
 import com.here.sdk.gestures.TapListener

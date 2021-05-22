@@ -188,7 +188,8 @@ class EditInmuebleActivity : GestionInmuebleForm() {
                         "Editado con éxito",
                         Snackbar.LENGTH_LONG
                     ).show()
-                    setResult(Activity.RESULT_OK)
+                    intent.putExtra("inmueble", inmueble)
+                    setResult(Activity.RESULT_OK, intent)
                     finish()
                 }
 

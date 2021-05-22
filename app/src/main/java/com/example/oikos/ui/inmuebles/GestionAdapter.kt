@@ -14,24 +14,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
+import com.example.oikos.ui.inmuebles.deshacer.Originador
 import objects.InmuebleWithModelo
 import java.net.URL
 
 
 class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val visible: Boolean, val fragment: GestionInmuebleFragment) :
-        RecyclerView.Adapter<GestionAdapter.ViewHolder>() {
+        RecyclerView.Adapter<GestionAdapter.ViewHolder>(), Originador {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val inmuebleCardView : CardView = view.findViewById(R.id.inmueble_card)
-        val priceText : TextView = view.findViewById(R.id.inmueble_card_price)
-        val addressText : TextView = view.findViewById(R.id.inmueble_card_address)
-        val tipoTextView : TextView = view.findViewById(R.id.inmueble_card_tipo)
-        val tipoCardView : CardView = view.findViewById(R.id.inmueble_card_tipo_card)
-        val numImagenes : TextView = view.findViewById(R.id.inmueble_card_num_images)
-        val imagen : ImageView = view.findViewById(R.id.inmueble_card_image)
-        val visibilityButton : ImageButton = view.findViewById(R.id.inmueble_card_visible)
-        val deleteButton : ImageButton = view.findViewById(R.id.inmueble_card_delete)
-        val editButton : ImageButton = view.findViewById(R.id.inmueble_card_edit)
+        val inmuebleCardView: CardView = view.findViewById(R.id.inmueble_card)
+        val priceText: TextView = view.findViewById(R.id.inmueble_card_price)
+        val addressText: TextView = view.findViewById(R.id.inmueble_card_address)
+        val tipoTextView: TextView = view.findViewById(R.id.inmueble_card_tipo)
+        val tipoCardView: CardView = view.findViewById(R.id.inmueble_card_tipo_card)
+        val numImagenes: TextView = view.findViewById(R.id.inmueble_card_num_images)
+        val imagen: ImageView = view.findViewById(R.id.inmueble_card_image)
+        val visibilityButton: ImageButton = view.findViewById(R.id.inmueble_card_visible)
+        val deleteButton: ImageButton = view.findViewById(R.id.inmueble_card_delete)
+        val editButton: ImageButton = view.findViewById(R.id.inmueble_card_edit)
     }
 
     // Create new views (invoked by the layout manager)
@@ -39,7 +40,7 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
         // Create a new view, which defines the UI of the list item
         val view = if (visible) LayoutInflater.from(viewGroup.context)
                 .inflate(R.layout.tarjeta_inmueble_gestion, viewGroup, false)
-                else LayoutInflater.from(viewGroup.context)
+        else LayoutInflater.from(viewGroup.context)
                 .inflate(R.layout.tarjeta_inmueble_gestion_no_visible, viewGroup, false)
 
         return ViewHolder(view)
@@ -53,7 +54,7 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
         viewHolder.priceText.text = "${dataSet[position].inmueble.precio}€"
         viewHolder.addressText.text = dataSet[position].inmueble.direccion
         viewHolder.tipoTextView.text = dataSet[position].inmueble.tipo
-        if(dataSet[position].inmueble.tipo == "Alquiler")
+        if (dataSet[position].inmueble.tipo == "Alquiler")
             viewHolder.tipoCardView.setCardBackgroundColor(Color.parseColor("#42a5f5"))
         viewHolder.numImagenes.text = "${dataSet[position].inmueble.imagenes.size} imágenes"
 
@@ -72,27 +73,27 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
         viewHolder.deleteButton.setOnClickListener {
             fragment.context?.let { it1 ->
                 AlertDialog.Builder(it1)
-                    .setIcon(android.R.drawable.ic_menu_search)
-                    .setTitle("Eliminar Inmueble")
-                    .setMessage("¿Desea eliminar este inmueble?")
-                    .setPositiveButton("Si"
-                    ) { _, _ -> deleteInmueble(position) }
-                    .setNegativeButton("No"){ _,_ ->
+                        .setIcon(android.R.drawable.ic_menu_search)
+                        .setTitle("Eliminar Inmueble")
+                        .setMessage("¿Desea eliminar este inmueble?")
+                        .setPositiveButton("Si"
+                        ) { _, _ -> deleteInmueble(position) }
+                        .setNegativeButton("No") { _, _ ->
 
-                    }.show()
+                        }.show()
             }
         }
         viewHolder.visibilityButton.setOnClickListener {
             fragment.context?.let { it1 ->
                 AlertDialog.Builder(it1)
-                    .setIcon(android.R.drawable.ic_menu_search)
-                    .setTitle("Cambiar visibilidad")
-                    .setMessage("¿Desea cambiar la visibilidad del inmueble?")
-                    .setPositiveButton("Si"
-                    ) { _, _ -> updateVisibility(position) }
-                    .setNegativeButton("No"){ _,_ ->
+                        .setIcon(android.R.drawable.ic_menu_search)
+                        .setTitle("Cambiar visibilidad")
+                        .setMessage("¿Desea cambiar la visibilidad del inmueble?")
+                        .setPositiveButton("Si"
+                        ) { _, _ -> updateVisibility(position) }
+                        .setNegativeButton("No") { _, _ ->
 
-                    }.show()
+                        }.show()
             }
         }
 
@@ -100,11 +101,12 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
             fragment.startEditActivity(dataSet[position])
         }
     }
-    private  fun deleteInmueble(pos : Int){
+
+    private fun deleteInmueble(pos: Int) {
         fragment.deleteInmueble(dataSet[pos], visible)
     }
 
-    private fun updateVisibility(pos : Int){
+    private fun updateVisibility(pos: Int) {
         fragment.updateInmueble(dataSet[pos], visible)
     }
 
@@ -112,5 +114,18 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
     override fun getItemCount() = dataSet.size
 
 
+    override fun guardar(): Originador.Memento {
+        return MementoImuebles(dataSet)
+    }
 
+    private fun setState(mementoImuebles: MementoImuebles) {
+        dataSet.clear()
+        dataSet.addAll(mementoImuebles.listaInmuebles)
+    }
+
+    inner class MementoImuebles(val listaInmuebles: ArrayList<InmuebleWithModelo>) : Originador.Memento {
+        override fun restaurar() {
+            setState(this)
+        }
+    }
 }

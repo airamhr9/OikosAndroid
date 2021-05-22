@@ -1,9 +1,6 @@
 package com.example.oikos.ui.search
 
-import android.content.Context
 import android.content.Intent
-import android.opengl.Visibility
-import android.location.Location as LocationAndroid
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,36 +11,11 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
-import androidx.core.widget.ContentLoadingProgressBar
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.androidnetworking.AndroidNetworking
-import com.androidnetworking.common.Priority
-import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONArrayRequestListener
-import com.androidnetworking.interfaces.JSONObjectRequestListener
-import com.example.oikos.MainActivity
 import com.example.oikos.R
-import com.example.oikos.fichaInmueble.FichaInmuebleActivity
-import com.example.oikos.serverConnection.PlatformPositioningProvider
-import com.example.oikos.serverConnection.PlatformPositioningProvider.PlatformLocationListener
 import com.example.oikos.ui.search.localized.LocalizedSearch
 import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import com.here.sdk.core.GeoCoordinates
-import com.here.sdk.core.Location
-import objects.DatosInmueble
-import objects.Preferencia
-import objects.Usuario
-import org.json.JSONArray
-import org.json.JSONObject
-import org.w3c.dom.Text
-import java.lang.NumberFormatException
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {

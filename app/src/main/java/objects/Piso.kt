@@ -1,6 +1,5 @@
 package objects
 
-import com.example.oikos.serverConnection.ServerConnection
 import com.google.gson.JsonObject
 import java.io.Serializable
 
