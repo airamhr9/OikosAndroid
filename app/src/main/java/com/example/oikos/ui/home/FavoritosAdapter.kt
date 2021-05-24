@@ -39,6 +39,7 @@ class FavoritosAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val fr
         val tipoTextView : TextView = view.findViewById(R.id.inmueble_card_tipo)
         val tipoCardView : CardView = view.findViewById(R.id.inmueble_card_tipo_card)
         val numImagenes : TextView = view.findViewById(R.id.inmueble_card_num_images)
+        val numVisitas : TextView = view.findViewById(R.id.inmueble_card_num_visitas)
         val imagen : ImageView = view.findViewById(R.id.inmueble_card_image)
         val favIcon : SmallBangView = view.findViewById(R.id.fav_image_animation)
         val notaFav : TextView = view.findViewById(R.id.notaFav)
@@ -62,12 +63,36 @@ class FavoritosAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, val fr
         viewHolder.priceText.text = "${dataSet[position].inmueble.precio}€"
         viewHolder.addressText.text = dataSet[position].inmueble.direccion
         viewHolder.tipoTextView.text = dataSet[position].inmueble.tipo
+        viewHolder.numVisitas.text = dataSet[position].inmueble.contadorVisitas.toString() + " visitas"
         viewHolder.notaFav.text = dataSet[position].nota
         if(dataSet[position].inmueble.tipo == "Alquiler")
             viewHolder.tipoCardView.setCardBackgroundColor(Color.parseColor("#42a5f5"))
         viewHolder.numImagenes.text = "${dataSet[position].inmueble.imagenes.size} imágenes"
 
         viewHolder.inmuebleCardView.setOnClickListener {
+            val activity = fragment.requireActivity() as LoadUserActivity
+
+            if(dataSet[position].inmueble.propietario.mail != activity.loadUser().mail ) {
+                var id = dataSet[position].inmueble.id.toString()
+                println("inmueble id" + id)
+                val query = AndroidNetworking.put("http://10.0.2.2:9000/api/visitas/")
+                query.addQueryParameter("id", id)
+
+                query.setPriority(Priority.HIGH).build().getAsString(
+                    object : StringRequestListener {
+                        override fun onResponse(response: String) {
+                            println("put visita conseguido")
+
+                        }
+
+                        override fun onError(error: ANError) {
+                            println("put visita fallido")
+                        }
+                    }
+                )
+            }
+
+
             val intent = Intent(viewHolder.itemView.context, FichaInmuebleActivity::class.java)
             intent.putExtra("inmueble", dataSet[position].inmueble)
             intent.putExtra("modelo", dataSet[position].modelo)

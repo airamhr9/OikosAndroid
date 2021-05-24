@@ -11,11 +11,17 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.StringRequestListener
 import com.bumptech.glide.Glide
+import com.example.oikos.LoadUserActivity
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.example.oikos.ui.inmuebles.deshacer.Originador
 import objects.InmuebleWithModelo
+import objects.Usuario
 import java.net.URL
 
 
@@ -29,10 +35,12 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
         val tipoTextView: TextView = view.findViewById(R.id.inmueble_card_tipo)
         val tipoCardView: CardView = view.findViewById(R.id.inmueble_card_tipo_card)
         val numImagenes: TextView = view.findViewById(R.id.inmueble_card_num_images)
+        val numVisitas : TextView = view.findViewById(R.id.inmueble_card_num_visitas)
         val imagen: ImageView = view.findViewById(R.id.inmueble_card_image)
         val visibilityButton: ImageButton = view.findViewById(R.id.inmueble_card_visible)
         val deleteButton: ImageButton = view.findViewById(R.id.inmueble_card_delete)
         val editButton: ImageButton = view.findViewById(R.id.inmueble_card_edit)
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -53,12 +61,38 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
         println("ON BIND MODELO IS " + dataSet[position].modelo)
         viewHolder.priceText.text = "${dataSet[position].inmueble.precio}€"
         viewHolder.addressText.text = dataSet[position].inmueble.direccion
+        viewHolder.numVisitas.text = dataSet[position].inmueble.contadorVisitas.toString() + " visitas"
         viewHolder.tipoTextView.text = dataSet[position].inmueble.tipo
         if (dataSet[position].inmueble.tipo == "Alquiler")
             viewHolder.tipoCardView.setCardBackgroundColor(Color.parseColor("#42a5f5"))
         viewHolder.numImagenes.text = "${dataSet[position].inmueble.imagenes.size} imágenes"
 
         viewHolder.inmuebleCardView.setOnClickListener {
+            //Arreglar herencia de obtener usuario
+
+
+            val activity = fragment.requireActivity() as LoadUserActivity
+
+            if(dataSet[position].inmueble.propietario.mail != activity.loadUser().mail ) {
+                var id = dataSet[position].inmueble.id.toString()
+                println("inmueble id" + id)
+                val query = AndroidNetworking.put("http://10.0.2.2:9000/api/visitas/")
+                query.addQueryParameter("id", id)
+
+                query.setPriority(Priority.HIGH).build().getAsString(
+                    object : StringRequestListener {
+                        override fun onResponse(response: String) {
+                            println("put visita conseguido")
+
+                        }
+
+                        override fun onError(error: ANError) {
+                            println("put visita fallido")
+                        }
+                    }
+                )
+            }
+
             val intent = Intent(viewHolder.itemView.context, FichaInmuebleActivity::class.java)
             intent.putExtra("inmueble", dataSet[position].inmueble)
             intent.putExtra("modelo", dataSet[position].modelo)

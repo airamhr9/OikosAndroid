@@ -1,5 +1,6 @@
 package com.example.oikos.ui.search
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import objects.DatosInmueble
 import objects.Favorito
 import objects.InmuebleModeloFav
 import xyz.hanks.library.bang.SmallBangView
@@ -36,6 +38,7 @@ class SearchResultsAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, va
         val tipoTextView : TextView = view.findViewById(R.id.inmueble_card_tipo)
         val tipoCardView : CardView = view.findViewById(R.id.inmueble_card_tipo_card)
         val numImagenes : TextView = view.findViewById(R.id.inmueble_card_num_images)
+        val numVisitas : TextView = view.findViewById(R.id.inmueble_card_num_visitas)
         val imagen : ImageView = view.findViewById(R.id.inmueble_card_image)
         val favIcon : SmallBangView = view.findViewById(R.id.fav_image_animation)
     }
@@ -49,6 +52,13 @@ class SearchResultsAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, va
         return ViewHolder(view)
     }
 
+
+
+
+
+
+
+
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
@@ -57,11 +67,33 @@ class SearchResultsAdapter(private val dataSet: ArrayList<InmuebleModeloFav>, va
         viewHolder.priceText.text = "${dataSet[position].inmueble.precio}€"
         viewHolder.addressText.text = dataSet[position].inmueble.direccion
         viewHolder.tipoTextView.text = dataSet[position].inmueble.tipo
+        viewHolder.numVisitas.text = dataSet[position].inmueble.contadorVisitas.toString() + " visitas"
         if(dataSet[position].inmueble.tipo == "Alquiler")
             viewHolder.tipoCardView.setCardBackgroundColor(Color.parseColor("#42a5f5"))
         viewHolder.numImagenes.text = "${dataSet[position].inmueble.imagenes.size} imágenes"
 
         viewHolder.inmuebleCardView.setOnClickListener {
+
+            if(dataSet[position].inmueble.propietario.mail != this.activity.loadUser().mail ) {
+            var id = dataSet[position].inmueble.id.toString()
+            println("inmueble id" + id)
+            val query = AndroidNetworking.put("http://10.0.2.2:9000/api/visitas/")
+            query.addQueryParameter("id", id)
+
+            query.setPriority(Priority.HIGH).build().getAsString(
+                object : StringRequestListener {
+                    override fun onResponse(response: String) {
+                        println("put visita conseguido")
+
+                    }
+
+                    override fun onError(error: ANError) {
+                        println("put visita fallido")
+                    }
+                }
+            )
+        }
+
             val intent = Intent(viewHolder.itemView.context, FichaInmuebleActivity::class.java)
             intent.putExtra("inmueble", dataSet[position].inmueble)
             intent.putExtra("modelo", dataSet[position].modelo)

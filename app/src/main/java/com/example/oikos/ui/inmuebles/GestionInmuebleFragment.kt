@@ -32,7 +32,7 @@ import objects.InmuebleWithModelo
 import objects.Usuario
 import org.json.JSONArray
 
-class GestionInmuebleFragment : Fragment() {
+class GestionInmuebleFragment : Fragment()  {
     val PUBLISH_ACTIVITY = 15
     val EDIT_ACTIVITY = 35
     lateinit var loadingCircle : ContentLoadingProgressBar
@@ -58,6 +58,7 @@ class GestionInmuebleFragment : Fragment() {
         user = (activity as LoadUserActivity).loadUser()
         publishFab.setOnClickListener {
             val intent = Intent(requireContext(), PublicarAnunciosActivity::class.java)
+
             startActivityForResult(intent, PUBLISH_ACTIVITY)
         }
         loadingCircle = root.findViewById(R.id.loading_search)

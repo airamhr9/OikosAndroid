@@ -33,6 +33,42 @@
                 android:textColor="@color/white"/>
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="5dp"
+            android:alpha=".8"
+            app:cardBackgroundColor="@color/black"
+            android:layout_gravity="start">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="23dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="4dp"
+                    app:srcCompat="@drawable/profits__1_" />
+
+                <TextView
+                    android:id="@+id/inmueble_card_num_visitas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="100 visitas"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
         <ImageView
             android:id="@+id/inmueble_card_image"
             android:layout_width="match_parent"
