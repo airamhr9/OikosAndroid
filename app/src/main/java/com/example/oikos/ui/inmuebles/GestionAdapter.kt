@@ -21,12 +21,15 @@ import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.example.oikos.ui.inmuebles.deshacer.Originador
 import objects.InmuebleWithModelo
-import objects.Usuario
+import java.lang.Exception
+import java.lang.reflect.InvocationTargetException
+import java.net.URI
 import java.net.URL
 
 
 class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val visible: Boolean, val fragment: GestionInmuebleFragment) :
         RecyclerView.Adapter<GestionAdapter.ViewHolder>(), Originador {
+    lateinit var inmuebleAModificar : InmuebleWithModelo
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val inmuebleCardView: CardView = view.findViewById(R.id.inmueble_card)
@@ -58,7 +61,6 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        println("ON BIND MODELO IS " + dataSet[position].modelo)
         viewHolder.priceText.text = "${dataSet[position].inmueble.precio}€"
         viewHolder.addressText.text = dataSet[position].inmueble.direccion
         viewHolder.numVisitas.text = dataSet[position].inmueble.contadorVisitas.toString() + " visitas"
@@ -99,12 +101,24 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
             viewHolder.itemView.context.startActivity(intent)
         }
         if (dataSet[position].inmueble.imagenes.isNotEmpty()) {
-            var url = URL(dataSet[position].inmueble.imagenes.first())
-            url = URL("http://10.0.2.2:9000${url.path}")
-            Glide.with(viewHolder.itemView).asBitmap().load(url.toString()).into(viewHolder.imagen)
+            println(dataSet[position].inmueble.imagenes.first())
+            try {
+                var url = URL(dataSet[position].inmueble.imagenes.first())
+                url = URL("http://10.0.2.2:9000${url.path}")
+                Glide.with(viewHolder.itemView).asBitmap().load(url.toString())
+                    .into(viewHolder.imagen)
+            } catch (e : Exception) {
+                dataSet[position].inmueble.imagenes.mapIndexed { index, s ->
+                    dataSet[position].inmueble.imagenes[index] = "http://10.0.2.2:9000/api/imagen/$s"
+                }
+                Glide.with(viewHolder.itemView).asBitmap()
+                    .load(dataSet[position].inmueble.imagenes.first())
+                    .into(viewHolder.imagen)
+            }
         }
 
         viewHolder.deleteButton.setOnClickListener {
+            inmuebleAModificar = dataSet[position]
             fragment.context?.let { it1 ->
                 AlertDialog.Builder(it1)
                         .setIcon(android.R.drawable.ic_menu_search)
@@ -132,6 +146,7 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
         }
 
         viewHolder.editButton.setOnClickListener {
+            inmuebleAModificar = dataSet[position]
             fragment.startEditActivity(dataSet[position])
         }
     }
@@ -149,15 +164,33 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
 
 
     override fun guardar(): Originador.Memento {
-        return MementoImuebles(dataSet)
+        return MementoImuebles(ArrayList(dataSet), inmuebleAModificar)
     }
 
     private fun setState(mementoImuebles: MementoImuebles) {
+        if (dataSet.none { it.inmueble.id == mementoImuebles.inmuebleModificado.inmueble.id}) {
+            val inmuebleToSend = proccessImages(mementoImuebles.inmuebleModificado)
+            fragment.postInmueble(inmuebleToSend.inmueble,inmuebleToSend.modelo)
+        } else {
+            val inmuebleToSend = proccessImages(mementoImuebles.inmuebleModificado)
+            fragment.updateInDatabase(inmuebleToSend)
+        }
         dataSet.clear()
         dataSet.addAll(mementoImuebles.listaInmuebles)
+        notifyDataSetChanged()
     }
 
-    inner class MementoImuebles(val listaInmuebles: ArrayList<InmuebleWithModelo>) : Originador.Memento {
+    private fun proccessImages(inmuebleWithModelo: InmuebleWithModelo): InmuebleWithModelo {
+        repeat(inmuebleWithModelo.inmueble.imagenes.size) {
+            val imageName = inmuebleWithModelo.inmueble.imagenes[it].substring(inmuebleWithModelo.inmueble.imagenes[it].lastIndexOf('/') + 1)
+            inmuebleWithModelo.inmueble.imagenes[it] = imageName
+        }
+
+        return inmuebleWithModelo
+    }
+
+    inner class MementoImuebles(val listaInmuebles: ArrayList<InmuebleWithModelo>,
+                                val inmuebleModificado : InmuebleWithModelo) : Originador.Memento {
         override fun restaurar() {
             setState(this)
         }

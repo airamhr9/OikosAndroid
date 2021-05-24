@@ -50,5 +50,29 @@ abstract class DatosInmueble(var id: Int,
 
         return result
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DatosInmueble
+
+        if (id != other.id) return false
+        if (disponible != other.disponible) return false
+        if (tipo != other.tipo) return false
+        if (superficie != other.superficie) return false
+        if (precio != other.precio) return false
+        if (propietario != other.propietario) return false
+        if (descripcion != other.descripcion) return false
+        if (direccion != other.direccion) return false
+        if (ciudad != other.ciudad) return false
+        if (latitud != other.latitud) return false
+        if (longitud != other.longitud) return false
+        if (fecha != other.fecha) return false
+        if (contadorVisitas != other.contadorVisitas) return false
+        if (imagenes != other.imagenes) return false
+
+        return true
+    }
 }
 

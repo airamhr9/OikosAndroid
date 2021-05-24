@@ -169,7 +169,7 @@ class GestionInmuebleFragment : Fragment()  {
         updateInDatabase(inmuebleWithModelo)
     }
 
-    private fun updateInDatabase(inmuebleWithModelo : InmuebleWithModelo) {
+    fun updateInDatabase(inmuebleWithModelo : InmuebleWithModelo) {
         val query = AndroidNetworking.put("http://10.0.2.2:9000/api/inmueble/")
         query.addApplicationJsonBody(inmuebleWithModelo.inmueble.toJson())
         query.addQueryParameter("modelo", inmuebleWithModelo.modelo)
@@ -278,31 +278,7 @@ class GestionInmuebleFragment : Fragment()  {
         }
     }
 
-    fun setState(visibleInmuebles : ArrayList<InmuebleWithModelo>,
-                invisibleInmuebles : ArrayList<InmuebleWithModelo>,
-                inmuebleModificado : InmuebleWithModelo) {
-        if (inmuebleModificado.inmueble.disponible) {
-            if (visibleInmuebles.none { it.inmueble.id == inmuebleModificado.inmueble.id }) {
-                postInmueble(inmuebleModificado.inmueble, inmuebleModificado.modelo)
-            } else {
-                updateInDatabase(inmuebleModificado)
-            }
-            this.visibleInmuebles.clear()
-            this.visibleInmuebles.addAll(visibleInmuebles)
-            visibleAdapter.notifyDataSetChanged()
-        } else {
-            if (invisibleInmuebles.none { it.inmueble.id == inmuebleModificado.inmueble.id }) {
-                postInmueble(inmuebleModificado.inmueble, inmuebleModificado.modelo)
-            } else {
-                updateInDatabase(inmuebleModificado)
-            }
-            this.invisibleInmuebles.clear()
-            this.invisibleInmuebles.addAll(invisibleInmuebles)
-            invisibleAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun postInmueble(inmueble: DatosInmueble, modelo : String){
+    fun postInmueble(inmueble: DatosInmueble, modelo : String){
         val query = AndroidNetworking.post("http://10.0.2.2:9000/api/inmueble/")
         query.addApplicationJsonBody(inmueble.toJson())
         query.addQueryParameter("modelo", modelo)

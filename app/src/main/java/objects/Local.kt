@@ -27,6 +27,18 @@ class Local(id: Int,
         return result
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        if (!super.equals(other)) return false
+
+        other as Local
+
+        if (baños != other.baños) return false
+
+        return true
+    }
+
 
     companion object {
         fun fromJson(jsonObject: JsonObject): Local {

@@ -31,6 +31,20 @@ open class Piso(id: Int,
         return result
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        if (!super.equals(other)) return false
+
+        other as Piso
+
+        if (habitaciones != other.habitaciones) return false
+        if (baños != other.baños) return false
+        if (garaje != other.garaje) return false
+
+        return true
+    }
+
     companion object {
         fun fromJson(jsonObject: JsonObject): Piso {
             val id = jsonObject.get("id").asInt
