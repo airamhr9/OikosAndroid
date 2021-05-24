@@ -192,6 +192,7 @@ abstract class GestionInmuebleForm : AppCompatActivity(), AdapterView.OnItemSele
         }
         popup.show()
     }
+
     private fun sendInmueble() {
         val inmuebleToSend = getFormData()
         if(inmuebleToSend != null) {

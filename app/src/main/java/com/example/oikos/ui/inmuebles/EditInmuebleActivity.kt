@@ -178,6 +178,7 @@ class EditInmuebleActivity : GestionInmuebleForm() {
     override fun sendToDB(inmueble: DatosInmueble, modelo: String) {
         val query = AndroidNetworking.put("http://10.0.2.2:9000/api/inmueble/")
         inmueble.id = inmuebleToEdit.inmueble.id
+        inmueble.contadorVisitas = inmuebleToEdit.inmueble.contadorVisitas
         query.addApplicationJsonBody(inmueble.toJson())
         query.addQueryParameter("modelo", modelo)
         query.setPriority(Priority.HIGH).build().getAsString(
