@@ -61,7 +61,7 @@ class FavoritosFragment : Fragment() {
         favAdapter.notifyDataSetChanged()
     }
 
-    fun getFilteredResults(){
+    private fun getFilteredResults(){
         if (isNetworkConnected()) {
             val query = AndroidNetworking.get("http://10.0.2.2:9000/api/favorito/")
             query.addQueryParameter("usuario", (activity as LoadUserActivity).loadUser().id.toString())
@@ -113,7 +113,7 @@ class FavoritosFragment : Fragment() {
         loadingCircle.visibility = View.GONE
         if(searchResults.size == 0){
             emptyLayout.visibility = View.VISIBLE
-        } //else resultLayout.visibility = View.VISIBLE
+        } else emptyLayout.visibility = View.INVISIBLE
     }
 
     private fun isNetworkConnected(): Boolean {
@@ -127,5 +127,8 @@ class FavoritosFragment : Fragment() {
     fun eliminarFavorito(pos : Int) {
         searchResults.removeAt(pos)
         favAdapter.notifyDataSetChanged()
+        if (searchResults.size == 0) {
+            emptyLayout.visibility = View.VISIBLE
+        }
     }
 }
