@@ -13,8 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.androidnetworking.AndroidNetworking
-import com.example.oikos.ui.search.MapSearchFragment
-import objects.DatosInmueble
 
 class MainActivity : LoadUserActivity() {
 
@@ -38,19 +36,6 @@ class MainActivity : LoadUserActivity() {
         AndroidNetworking.initialize(applicationContext)
     }
 
-
-    fun changeToMapFragment(view: View, listaInmueble : ArrayList<DatosInmueble>){
-        val mapFragment: Fragment = MapSearchFragment()
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-        val bundle = Bundle()
-        bundle.putSerializable("inmueble", listaInmueble)
-        mapFragment.arguments = bundle
-
-        transaction.replace(R.id.nav_host_fragment, mapFragment)
-        transaction.addToBackStack(null)
-
-        transaction.commit()
-    }
 
     fun isNetworkConnected(): Boolean {
         val connectivityManager = this.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

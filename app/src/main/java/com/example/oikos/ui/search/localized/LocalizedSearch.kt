@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.example.oikos.R
 import com.example.oikos.fichaInmueble.FichaInmuebleActivity
 import com.example.oikos.utils.PlatformPositioningProvider
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonParser
 import com.here.sdk.core.*
 import com.here.sdk.gestures.TapListener
@@ -195,6 +196,7 @@ class LocalizedSearch : AppCompatActivity() {
         val type = findViewById<TextView>(R.id.map_card_localized_type)
         val typeCard = findViewById<CardView>(R.id.map_card_localized_type_card)
         val imageView = findViewById<ImageView>(R.id.map_card_localized_image)
+        val numVisitas = findViewById<TextView>(R.id.map_card_num_visitas)
 
 
         //TODO(solo para emulador)
@@ -207,6 +209,7 @@ class LocalizedSearch : AppCompatActivity() {
         numImag?.text = "${inmueble.imagenes.size} imágenes"
         price?.text = "${inmueble.precio}€"
         type?.text = inmueble.tipo
+        numVisitas?.text = "${inmueble.contadorVisitas} visitas"
         if(type?.text == "Alquiler"){
             typeCard?.setCardBackgroundColor(android.graphics.Color.parseColor("#42a5f5"))
         } else {
@@ -294,26 +297,20 @@ class LocalizedSearch : AppCompatActivity() {
                                 }
                                 inmueblesDisplayed = true
                                 loadMapData()
-                                if(listaInmuebles.size > 0)
+                                if(listaInmuebles.isNotEmpty())
                                 mapView.camera.lookAt(
                                     GeoCoordinates(
                                         listaInmuebles.first().inmueble.latitud,
                                         listaInmuebles.first().inmueble.longitud
                                     ), (1000 * 10).toDouble()
                                 )
-                                /*
-                                customAdapter.notifyDataSetChanged()
-                                seeInMapButton.isEnabled = true
-                                loadingCircle.visibility = View.GONE
-                                resultLayout.visibility = View.VISIBLE
-                                 */
                             }
 
                             override fun onError(error: ANError) {
-                                Toast.makeText(
-                                    applicationContext,
+                                Snackbar.make(
+                                    mapView,
                                     "Error cargando inmuebles",
-                                    Toast.LENGTH_LONG
+                                    Snackbar.LENGTH_LONG
                                 ).show()
                                 inmueblesDisplayed = false
                             }
@@ -322,7 +319,9 @@ class LocalizedSearch : AppCompatActivity() {
             })
             if(!located){
                     AndroidNetworking.get("http://10.0.2.2:9000/api/inmueble/")
-                        .addQueryParameter("default", "true")
+                        .addQueryParameter("coordenada", "true")
+                        .addQueryParameter("x", "40.4167")
+                        .addQueryParameter("y", "-3.70325")
                         .setPriority(Priority.HIGH)
                         .build()
                         .getAsJSONArray(object : JSONArrayRequestListener {
@@ -347,19 +346,20 @@ class LocalizedSearch : AppCompatActivity() {
                                 }
                                 loadMapData()
                                 inmueblesDisplayed = true
-                                /*
-                                customAdapter.notifyDataSetChanged()
-                                seeInMapButton.isEnabled = true
-                                loadingCircle.visibility = View.GONE
-                                resultLayout.visibility = View.VISIBLE
-                                 */
+                                if(listaInmuebles.isNotEmpty())
+                                    mapView.camera.lookAt(
+                                        GeoCoordinates(
+                                            listaInmuebles.first().inmueble.latitud,
+                                            listaInmuebles.first().inmueble.longitud
+                                        ), (1000 * 10).toDouble()
+                                    )
                             }
 
                             override fun onError(error: ANError) {
-                                Toast.makeText(
-                                    applicationContext,
+                                Snackbar.make(
+                                    mapView,
                                     "Error cargando inmuebles",
-                                    Toast.LENGTH_LONG
+                                    Snackbar.LENGTH_LONG
                                 ).show()
                                 inmueblesDisplayed = false
                             }

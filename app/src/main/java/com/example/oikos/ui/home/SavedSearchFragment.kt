@@ -36,7 +36,6 @@ import org.json.JSONArray
 
 
 class SavedSearchFragment : Fragment() {
-
     private lateinit var userViewModel: UserViewModel
     private lateinit var sharedPref : SharedPreferences
     lateinit var searchResults: ArrayList<InmuebleModeloFav>

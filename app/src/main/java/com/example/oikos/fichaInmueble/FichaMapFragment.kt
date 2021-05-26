@@ -17,7 +17,6 @@ class FichaMapFragment : Fragment() {
 
     private lateinit var mapSearchViewModel: MapSearchViewModel
     private lateinit var mapView : MapView
-    private lateinit var mapCard : CardView
     private lateinit var inmueble: DatosInmueble
 
     override fun onCreateView(
@@ -30,14 +29,6 @@ class FichaMapFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_map_search, container, false)
 
         inmueble = requireArguments().getSerializable("inmueble") as DatosInmueble
-
-        mapCard = root.findViewById(R.id.map_card)
-        mapCard.visibility = View.INVISIBLE
-        setCardData(root, inmueble)
-        
-        mapCard.setOnClickListener {
-            parentFragmentManager.popBackStackImmediate()
-        }
 
         mapView = root.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
@@ -90,20 +81,4 @@ class FichaMapFragment : Fragment() {
         super.onDestroy()
         mapView.onDestroy()
     }
-
-
-    fun setCardData(view: View, data: DatosInmueble){
-        val priceText = view.findViewById<TextView>(R.id.map_card_price)
-        val tipoText = view.findViewById<TextView>(R.id.map_card_type)
-        val tipoCard = view.findViewById<CardView>(R.id.map_card_type_card)
-        val numImageText = view.findViewById<TextView>(R.id.map_card_num_imag)
-
-        priceText.text = "${data.precio}€"
-        if(data.tipo == "Alquiler") {
-            tipoCard.setCardBackgroundColor(android.graphics.Color.parseColor("#4caf50"))
-        }
-        tipoText.text = data.tipo
-        numImageText.text = "${data.imagenes.size} imágenes"
-    }
-
 }
