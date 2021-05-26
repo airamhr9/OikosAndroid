@@ -133,10 +133,11 @@ class GestionAdapter(private var dataSet: ArrayList<InmuebleWithModelo>, val vis
         }
         viewHolder.visibilityButton.setOnClickListener {
             fragment.context?.let { it1 ->
-                AlertDialog.Builder(it1)
-                        .setIcon(android.R.drawable.ic_menu_search)
-                        .setTitle("Cambiar visibilidad")
-                        .setMessage("¿Desea cambiar la visibilidad del inmueble?")
+                val builder = AlertDialog.Builder(it1)
+                if (visible) builder.setTitle("¿Despublicar inmueble?")
+                else builder.setTitle("¿Publicar inmueble?")
+                builder.setIcon(android.R.drawable.ic_menu_search)
+                        .setMessage("¿Cambiar la disponibilidad del inmueble?")
                         .setPositiveButton("Si"
                         ) { _, _ -> updateVisibility(position) }
                         .setNegativeButton("No") { _, _ ->
