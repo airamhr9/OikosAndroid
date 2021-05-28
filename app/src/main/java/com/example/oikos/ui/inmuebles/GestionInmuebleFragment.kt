@@ -49,8 +49,6 @@ class GestionInmuebleFragment : Fragment()  {
     lateinit var mementoVisibles : GestionAdapter.MementoImuebles
     lateinit var mementoInvisibles : GestionAdapter.MementoImuebles
 
-    //val command : UndoCommand = UndoCommand(this)
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_gestion_inmueble, container, false)
@@ -240,9 +238,11 @@ class GestionInmuebleFragment : Fragment()  {
     }
 
     fun startEditActivity(inmuebleWithModelo: InmuebleWithModelo) {
-        if(inmuebleWithModelo.inmueble.disponible)
+        if(inmuebleWithModelo.inmueble.disponible) {
             mementoVisibles = visibleAdapter.guardar() as GestionAdapter.MementoImuebles
-        else mementoInvisibles = invisibleAdapter.guardar() as GestionAdapter.MementoImuebles
+        } else {
+            mementoInvisibles = invisibleAdapter.guardar() as GestionAdapter.MementoImuebles
+        }
         val intent = Intent(context, EditInmuebleActivity::class.java)
         intent.putExtra("inmueble", inmuebleWithModelo)
         startActivityForResult(intent, EDIT_ACTIVITY)

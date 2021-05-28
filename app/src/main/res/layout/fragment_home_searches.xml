@@ -42,22 +42,24 @@
         style="?android:attr/progressBarStyleLarge"
         android:indeterminate="true"/>
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:id="@+id/results_searches"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_margin="10dp"
+        android:paddingBottom="50dp"
         tools:context=".ui.home.SearchesFragment">
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/results_searches_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
                 />
 
 
-    </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
 </RelativeLayout>

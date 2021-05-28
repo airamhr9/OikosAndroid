@@ -33,7 +33,7 @@ class SearchesFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     lateinit var searchResults: ArrayList<Busqueda>
     lateinit var adapter : SearchAdapter
-    lateinit var resultLayout : NestedScrollView
+    lateinit var resultLayout : LinearLayout
     lateinit var loadingCircle : ContentLoadingProgressBar
     lateinit var emptyLayout : LinearLayout
     lateinit var noSearchButon : AppCompatButton
